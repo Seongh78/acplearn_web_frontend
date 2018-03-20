@@ -225,6 +225,17 @@ const router = new VueRouter({
                     },
                 },
 
+                {// 종료 강의
+                    path: 'end',
+                    name:'lectures_end',
+                    component : Lecture.LectureEnd,
+                    meta: {
+                        requiresAuth: true,
+                        redirectUrl:'/login',
+                        aplAuth: true
+                    },
+                },
+
                 {// 강의상세보기
                     path: 'temp',
                     name:'lectures_temp',

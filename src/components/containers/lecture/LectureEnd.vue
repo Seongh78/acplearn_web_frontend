@@ -6,8 +6,8 @@
         <div class="ui secondary  menu" style="padding:0;">
             <router-link href="#" class="item" tag="a" :to="{ name: 'lectures_processes'}">진행강의</router-link>
             <router-link class="item" tag="a" :to="{ name: 'lectures_wait'}">승인대기강의</router-link>
-            <a class="item active" >개설대기강의</a>
-            <router-link class="item" tag="a" :to="{ name: 'lectures_end'}">종료강의</router-link>
+            <router-link class="item" tag="a" :to="{ name: 'lectures_cwait'}">개설대기강의</router-link>
+            <a class="item active" >종료강의</a>
 
             <div class="right menu" style="padding:0;">
                 <div class="item" style="padding:0;">
@@ -67,14 +67,14 @@
             <tbody v-if="lectures.length<1">
                 <tr>
                     <td class="center aligned" colspan="6">
-                        <h4>임시저장 중인 강의가 없습니다.</h4>
+                        <h4>종료된 강의가 없습니다.</h4>
                     </td>
                 </tr>
             </tbody>
             <tbody v-else>
                 <tr v-for="lec in lectures">
                     <td>
-                        <h5 class="ui center aligned header" v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'grey' : (lec.lec_flag==='종료')? 'grey':'red' )">{{ lec.lec_flag }}</h5>
+                        <h5 class="ui center aligned header" v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'black' : (lec.lec_flag==='종료')? 'grey':'red' )">{{ lec.lec_flag }}</h5>
                     </td>
                     <td class="single line">
                         <router-link tag="a" :to="{path:'/lectures/cwait/'+lec.lec_idx}">{{ lec.lec_title }}</router-link>
@@ -124,7 +124,7 @@
 
 <!-- Script -->
 <script>
-const page = 'LectureCWait';
+const page = 'LectureEnd';
 
 export default {
     name: page,
@@ -145,7 +145,7 @@ export default {
 
     methods: {
         getLectures() {
-            this.$http.get('/api/lectures?lecType=임시저장')
+            this.$http.get('/api/lectures?lecType=종료')
             .then(resp=>{
                 // console.log(resp.data.data);
                 this.$set(this, 'lectures', resp.data.data)

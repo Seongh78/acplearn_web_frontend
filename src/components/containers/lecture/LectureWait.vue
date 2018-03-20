@@ -7,6 +7,7 @@
             <router-link href="#" class="item" tag="a" :to="{ name: 'lectures_processes'}">진행강의</router-link>
             <a class="item active">승인대기강의</a>
             <router-link class="item" tag="a" :to="{ name: 'lectures_cwait'}">개설대기강의</router-link>
+            <router-link class="item" tag="a" :to="{ name: 'lectures_end'}">종료강의</router-link>
 
             <div class="right menu" style="padding:0;">
                 <div class="item" style="padding:0;">
@@ -73,7 +74,7 @@
             <tbody v-else>
                 <tr v-for="lec in lectures">
                     <td>
-                        <h5 class="ui center aligned header" v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'grey' : 'red' )">{{ lec.lec_flag }}</h5>
+                        <h5 class="ui center aligned header" v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'black' : (lec.lec_flag==='종료')? 'grey':'red' )">{{ lec.lec_flag }}</h5>
                     </td>
                     <td class="single line">
                         <router-link tag="a" :to="{path:'/lectures/wait/'+lec.lec_idx}">{{ lec.lec_title }}</router-link>

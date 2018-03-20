@@ -141,7 +141,7 @@ export default {
             // console.log(step);
             if ( confirm('현재 페이지에서 저장하지 않은 데이터는 초기화 됩니다. 페이지를 이동하시겠습니까?') ) {
                 this.selector = step;
-                this.$ro.push({path:'/lectures/new/'+step})
+                this.$ro.push({path:'/new/'+step})
                 return
             }
         }

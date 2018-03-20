@@ -902,7 +902,7 @@ export default {
 
 
         goTo(){
-            this.$ro.push({ path: '/lectures/new/students' })
+            this.$ro.push({ path: '/new/students' })
         }
 
 

@@ -35,13 +35,17 @@
             </thead>
             <tbody>
 
-            <tr  v-for="(lec, ii) in lectures">
+            <tr v-if="templates.length<1">
+                <td class="center aligned" colspan="3">저장된 템플릿이 없습니다.</td>
+            </tr>
+            <tr  v-for="(tem, ii) in templates">
                 <td class="center aligned">{{ ii+1 }}</td>
-                <td class="single line"><a>{{ lec.title }}</a></td>
+                <td class="single line"><a>{{ tem.title }}</a></td>
                 <td class="center aligned">2017.01.05 </td>
             </tr>
 
             </tbody>
+
         </table>
 
 
@@ -84,73 +88,27 @@ export default {
     data () {
         return {
             msg: page,
-            lectures: [
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "진행중",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "진행중",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "종료",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "진행중",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "종료",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "종료",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "종료",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "종료",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                },
-                {
-                    title: "감성안전을 위한 우리조직 안전리더십 개발",
-                    status: "종료",
-                    dateTerm: "2017년01월01일 ~ 2017년01월05일",
-                    count: 4,
-                    person: 150
-                }
-            ]
+            templates:[] , // template List
         }
-    }
+    }, // Data
+
+
+
+
+    //
+    methods: {
+
+        getTemplates(){
+            this.$http.get('/api/templates')
+            .then(resp=>{
+                this.$set(this, 'templates', resp.data.templates)
+            })
+            .catch(err=>{
+                alert('Error -')
+            })
+        }, // getTemplates
+
+    }// methods
 }
 </script>
 

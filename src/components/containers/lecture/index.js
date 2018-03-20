@@ -6,6 +6,7 @@ import LectureInsert from './LectureInsert'
 import LectureProcess from './LectureProcess'
 import LectureWait from './LectureWait'
 import LectureCWait from './LectureCWait'
+import LectureEnd from './LectureEnd'
 
 export {
     LectureContainer,
@@ -15,5 +16,6 @@ export {
     LectureInsert,
     LectureProcess,
     LectureWait,
-    LectureCWait
+    LectureCWait,
+    LectureEnd
 }

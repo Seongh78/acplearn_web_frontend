@@ -388,6 +388,9 @@ export default {
                         this.tempLectures.splice(rid, 1)
                     else
                         this.tempLectures.pop()
+
+                    // Modal OFF
+                    this.$set(this.modal , 'tempLecture', false)
                 })
                 .catch(err=>{
                     alert('Error ')
@@ -459,7 +462,7 @@ export default {
                 alert('저장 후 이동 가능합니다.')
                 return
             }
-            this.$ro.push({ path: '/lectures/new/aplterm' })
+            this.$ro.push({ path: '/new/aplterm' })
         }// goTo
 
     } // methods

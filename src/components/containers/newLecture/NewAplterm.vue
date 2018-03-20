@@ -367,7 +367,7 @@ export default {
                 alert('저장 후 이동 가능합니다.')
                 return
             }
-            this.$ro.push({ path: '/lectures/new/timetable' })
+            this.$ro.push({ path: '/new/timetable' })
         }// goTo
 
     } // methods
