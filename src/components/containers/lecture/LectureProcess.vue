@@ -99,7 +99,7 @@
                   </a>
                 </div>
 
-                <router-link tag="a" :to="{path:'/lectures/new/summary'}">
+                <router-link tag="a" :to="{path:'/new/summary'}">
                 <div class="ui  animated button" tabindex="0" style="position:absolute; right:25px; height:40px; background:#4374D9; color: #fff;">
                   <div class="visible content ">강의개설</div>
                   <div class="hidden content">

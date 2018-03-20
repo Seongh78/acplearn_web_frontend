@@ -302,7 +302,7 @@ const router = new VueRouter({
 
 
         {//신규강의 등록
-            path: '/lectures/new',
+            path: '/new',
             component: LectureCreateContainer,
             // props: true,
             children: [
