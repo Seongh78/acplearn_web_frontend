@@ -144,7 +144,7 @@ export default {
 
         // 초기데이터 - KPI 목록
         initialData() {
-            this.$http.get('/api/lectures/initial')
+            this.$http.get('/api/lectures/kpi')
             .then(resp=>{
                 // console.log(resp.data);
                 // var category = resp.data.category

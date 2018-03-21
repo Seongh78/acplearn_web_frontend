@@ -870,10 +870,16 @@ export default {
                 temp = JSON.parse(stds[ii].stu_attendance)
                 sum+=temp[sid] ? 1 : 0
             }
-            var ff = (all/sum) * 1
+            var ff = (sum/all) * 100
 
-            return ff.toFixed(1)
-        },
+            // 결과가 0일경우 소수점 X
+            if (ff==0) {
+                return ff.toFixed(0)
+            }else{
+                return ff.toFixed(1)
+            }//else
+            
+        }, // attendancePercent
 
 
 

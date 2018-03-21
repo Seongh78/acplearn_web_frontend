@@ -517,8 +517,14 @@ export default {
 
 
 
+
+
+
+
+
     // ============ created ============ //
     created() {
+
         // 강의아이디
         const id = sessionStorage.getItem('lecture-idx')
         this.$set(this, 'lec_idx', id ? id : -1)
@@ -527,8 +533,14 @@ export default {
         var term = JSON.parse(sessionStorage.getItem('lecture-term'));
         var timetable = JSON.parse(sessionStorage.getItem('lecture-timetables'));
 
+        console.log("term ㄱ");
+        console.log(term);
+
         // APL Term 존재 여부 확인
-        if (timetable || term) {
+        if (
+            // (timetable.length > 0  &&  timetable!=undefined) ||
+            (term.sessionDetail.length > 0  &&  term!=undefined)
+        ) {
             this.$set(this, 'sessionDetail', term)
             this.$set(this, 'timetables', term.sessionDetail)
             console.log(this.timetables);
@@ -536,6 +548,10 @@ export default {
                 this.timetables = timetable;
             }
         }else{
+            console.log(this.$router);
+            alert('APL기간 설정이 완료되지 않았습니다. ')
+            this.$router.push({ path: '/new/aplterm' })
+            return
             // if ( !confirm('APL기간 설정없이 진행하시겠습니까?') ) {
             //     this.$ro.push({path : '/lectures/new/aplterm'})
             //     return

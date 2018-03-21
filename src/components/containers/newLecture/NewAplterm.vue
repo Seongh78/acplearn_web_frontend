@@ -182,10 +182,15 @@ export default {
 
         if(term){
             this.$set(this, 'terms', JSON.parse(term))
-            console.log(this.terms);
+            // console.log(this.terms);
             this.cc = this.terms.sessionCount = count;
-            this.fixedDate()
-        }
+
+            // 차시가 존재하는경우 고정데이트 설정
+            if(this.terms.sessionDetail.length>0){
+                this.fixedDate()
+            }
+
+        }// if
 
 
 
@@ -204,7 +209,6 @@ export default {
         fixedDate(){
             var L = this.terms.sessionDetail.length-1 < 0 ? 0 : this.terms.sessionDetail.length-1
             // console.log('LLLL: ', L);
-            this.$set( this, 'cc', L) // 시작날짜 고정
             this.$set( this.terms.sessionDetail[L], 'ls_endDate', this.date.endDate) // 시작날짜 고정
             this.$set( this.terms.sessionDetail[0], 'ls_startDate', this.date.startDate) // 종료날짜 고정
         },

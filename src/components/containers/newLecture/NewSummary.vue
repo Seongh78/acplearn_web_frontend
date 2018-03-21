@@ -32,7 +32,7 @@
                 <tr>
                     <th>강의제목</th>
                     <td>
-                        <input type="text" placeholder="제목을 입력해 주세요" style="width:95%;" v-model="summary.lec_title">
+                        <input type="text" placeholder="제목을 입력해 주세요" style="width:95%;" v-model="summary.lec_title"  >
                     </td>
                 </tr>
 
@@ -220,10 +220,11 @@ export default {
             summaryImport:null, // 임시저장 선택
             closeMsg:'적용',
             summary: {
-                lec_title: '',
-                lec_content : '',
-                lec_goal : '',
-                lec_effect : '',
+                lec_title: '산업안전을 위한 우리조직 안전리더십 개발 - 테스트',
+                lec_content : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                lec_goal : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                lec_effect : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                lec_target: '건설현장 현장직 근무자 대상',
                 lec_startDate : '2018-02-16',
                 lec_endDate : '2018-03-22'
             }, // 강의개요
