@@ -40,12 +40,6 @@
 
 
         <div class="cardbox" style="margin:0; padding:25px; ">
-                <!-- <div class="ui bottom attached segment">
-                  <p></p>
-                </div> -->
-
-
-            <!-- <h3>회차 정보</h3> -->
 
                 <div
                     class="ui bottom tab"
@@ -90,9 +84,6 @@
 
 
         <br>
-        <!-- <br> -->
-
-
 
 
 
@@ -128,6 +119,7 @@
         <!-- ======================== 상세시간표 ============================ -->
         <div class="cardbox viewAnimate" style="margin:10px 0; padding:25px; ">
 
+            <!-- ==== 시간표 활성화 플래그 ==== -->
             <div class="">
                 <div class="ui ">
                     <div class="field" style="">
@@ -139,6 +131,9 @@
                   </div>
             </div>
             <hr style="opacity:.4; margin-top:10px; margin-bottom:20px;">
+            <!-- ==== 시간표 활성화 플래그 ==== -->
+
+
 
 
             <div  v-if="!timetableFlag">
@@ -151,128 +146,136 @@
             <!-- timeflag -->
             <div v-if="timetableFlag">
             <h3>상세시간표</h3>
-            <div v-if="viewFlag"><!-- viewFlag -->
+                <div v-if="viewFlag"><!-- viewFlag -->
 
-                <div v-if=" timetables[thisTab].timetables=='' ">
-                    <div class="ui warning message">
-                          <div class="header">
-                            아직 등록된 시간표가 없습니다.
-                          </div>
-                        </div>
-                    <br>
-                </div>
+                    <div v-if=" timetables[thisTab].timetables=='' ">
+                        <div class="ui warning message"><div class="header">아직 등록된 시간표가 없습니다.</div></div>
+                        <br>
+                    </div>
 
-                <!-- 시간표 템플릿 -->
-                <timeline class="session viewAnimate" v-for="(timetable, timetableIndex) in timetables[thisTab].timetables" :key="timetableIndex">
-                <table class="ui celled table form timetable ">
-                    <colgroup>
-                        <col width="40%">
-                        <col width="15%">
-                        <col width="15%">
-                        <col width="10%">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th style="border-left:1px solid #f2f2f2;">주제</th>
-                            <th>시작시간</th>
-                            <th>종료시간</th>
-                            <th>시간</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="border-left:1px solid #f2f2f2;">
-                                <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="timetable.lt_title">
-                            </td>
-                            <td>
-                                {{ timetable.lt_startTime }}
-                            </td>
-                            <td>
-                                {{ timetable.lt_endTime }}
-                            </td>
-                            <!-- <td>{{ timeCount(timetable.start ,  timetable.end) }}</td> -->
-                            <td>{{ timeCount(timetable.lt_startTime ,  timetable.lt_endTime) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" style="border-left:1px solid #f2f2f2;">
-                                <h4>강의모듈</h4>
-                                <!-- 모듈없을때 -->
-                                <p v-if="timetable.modules==undefined">생성된 강의모듈이 없습니다.</p>
-                                <!-- 모듈리스트 -->
-                                <div v-else class="ui icon small message" v-for="(module, moduleIndex) in timetable.modules">
-                                    <!-- 플래그 -->
-                                    <div class="ui right pointing  basic label large" style="margin-right:20px;" v-bind:class="[(module.lm_type=='lecture' ? 'blue' :  (module.lm_type=='mission'?'green':'orange')) ]">
-                                        {{ (module.lm_type=='lecture' ? '강의' : (module.lm_type=='mission' ? '미션' : '토론')) }}
-                                    </div>
-                                    <div class="content">
-                                        <div class="header">
-                                            {{ module.lm_title }}  &nbsp;&nbsp;&nbsp;
-                                            <a v-on:click.prevent="modal.editModule=true, tempModule = timetables[thisTab].timetables[timetableIndex].modules[moduleIndex]">[수정]</a>&nbsp;
-                                            <a v-on:click.prevent="removeModule(timetableIndex,moduleIndex)"> [삭제] </a>
-                                        </div>
-                                        <p v-if="module.lm_text">
-                                            {{module.lm_text}} <br>
-                                            {{ module.lm_startTime }} ~ {{ module.lm_endTime }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <button type="button" class="ui primary button addModule" @click.prevent="modal.addModule=true, thisSession=timetableIndex">모듈추가</button>
-                                <button type="button" class="ui red button addModule right floated column" v-on:click.prevent="removeSession(timetableIndex)" v-if="timetableIndex==timetables[thisTab].timetables.length-1">세션삭제</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <br>
-                </timeline>
+                    <!-- 시간표 템플릿 -->
+                    <timeline
+                        class="session viewAnimate"
+                        v-for="(timetable, timetableIndex) in timetables[thisTab].timetables"
+                        :key="timetableIndex" >
 
-
-
-                <!-- 시간표 템플릿 입력 폼 -->
-                    <div>
-                        <table class="ui celled table form timetable" style="border:1px solid #3781bf">
+                        <table class="ui celled table form timetable ">
                             <colgroup>
-                                <col width="50%">
-                                <col width="16%">
-                                <col width="16%">
+                                <col width="40%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="10%">
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="border-left:1px solid #f2f2f2;"><label for="">주제</label></th>
-                                    <th><label for="">시작시간</label></th>
-                                    <th><label for="">종료시간</label></th>
+                                    <th style="border-left:1px solid #f2f2f2;">주제</th>
+                                    <th>시작시간</th>
+                                    <th>종료시간</th>
+                                    <th>시간</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr>
                                     <td style="border-left:1px solid #f2f2f2;">
-                                        <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="tempTable.lt_title">
+                                        <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="timetable.lt_title">
                                     </td>
-                                    <td>
-                                        <time-picker
-                                            flag="tempStart"
-                                            v-bind:defaultTime="tempTable.lt_startTime" />
-                                    </td>
-                                    <td>
-                                        <time-picker
-                                            flag="tempEnd"
-                                            v-bind:defaultTime="tempTable.lt_endTime" />
-                                    </td>
+                                    <td>{{ timetable.lt_startTime }}</td>
+                                    <td>{{ timetable.lt_endTime }}</td>
+                                    <!-- <td>{{ timeCount(timetable.start ,  timetable.end) }}</td> -->
+                                    <td>{{ timeCount(timetable.lt_startTime ,  timetable.lt_endTime) }}</td>
                                 </tr>
-
                                 <tr>
-                                    <td colspan="4" style="border:none; padding:0;">
-                                        <button type="button" class="ui primary medium button" style="width:100%;  border-radius:0 0 1px 1px;" @click.prevent="addSession">세션등록</button>
+                                    <td colspan="4" style="border-left:1px solid #f2f2f2;">
+                                        <h4>강의모듈</h4>
+                                        <!-- 모듈없을때 -->
+                                        <p v-if="timetable.modules==undefined">생성된 강의모듈이 없습니다.</p>
+
+                                        <!-- 모듈리스트 -->
+                                        <div
+                                            v-else
+                                            class="ui icon small message"
+                                            v-for="(module, moduleIndex) in timetable.modules">
+
+                                            <!-- 플래그 -->
+                                            <div
+                                                class="ui right pointing basic label large"
+                                                style="margin-right:20px;"
+                                                v-bind:class="[(module.lm_type=='lecture' ? 'blue' :  (module.lm_type=='mission'?'green':'orange')) ]">
+
+                                                {{ (module.lm_type=='lecture' ? '강의' : (module.lm_type=='mission' ? '미션' : '토론')) }}
+                                            </div><!-- 플래그 -->
+
+                                            <div class="content">
+                                                <div class="header">
+                                                    {{ module.lm_title }}  &nbsp;&nbsp;&nbsp;
+                                                    <a v-on:click.prevent="modal.editModule=true, tempModule = timetables[thisTab].timetables[timetableIndex].modules[moduleIndex]">[수정]</a>&nbsp;
+                                                    <a v-on:click.prevent="removeModule(timetableIndex,moduleIndex)"> [삭제] </a>
+                                                </div>
+                                                <p v-if="module.lm_text">
+                                                    {{module.lm_text}} <br>
+                                                    {{ module.lm_startTime }} ~ {{ module.lm_endTime }}
+                                                </p>
+                                            </div>
+                                        </div> <!-- 모듈리스트 -->
+
+                                        <button type="button" class="ui primary button addModule" @click.prevent="modal.addModule=true, thisSession=timetableIndex">모듈추가</button>
+                                        <button type="button" class="ui red button addModule right floated column" v-on:click.prevent="removeSession(timetableIndex)" v-if="timetableIndex==timetables[thisTab].timetables.length-1">세션삭제</button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    <br>
+                    <br>
+                    </timeline>
+
+
+
                     <!-- 시간표 템플릿 입력 폼 -->
+                        <div>
+                            <table class="ui celled table form timetable" style="border:1px solid #3781bf">
+                                <colgroup>
+                                    <col width="50%">
+                                    <col width="16%">
+                                    <col width="16%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th style="border-left:1px solid #f2f2f2;"><label for="">주제</label></th>
+                                        <th><label for="">시작시간</label></th>
+                                        <th><label for="">종료시간</label></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td style="border-left:1px solid #f2f2f2;">
+                                            <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="tempTable.lt_title">
+                                        </td>
+                                        <td>
+                                            <time-picker
+                                                flag="tempStart"
+                                                v-bind:defaultTime="tempTable.lt_startTime" />
+                                        </td>
+                                        <td>
+                                            <time-picker
+                                                flag="tempEnd"
+                                                v-bind:defaultTime="tempTable.lt_endTime" />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="4" style="border:none; padding:0;">
+                                            <button type="button" class="ui primary medium button" style="width:100%;  border-radius:0 0 1px 1px;" @click.prevent="addSession">세션등록</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 시간표 템플릿 입력 폼 -->
 
 
-            </div>
+                </div>
             <!-- viewFlag -->
 
             <!-- 차시가 없을때 -->

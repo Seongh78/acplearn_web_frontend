@@ -321,14 +321,14 @@
                     <td>
                         <div class="ui basic olive progress" style="margin:0;">
                             <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
-                                <div class="progress">{{ attendancePercent(sid) }}%</div>
+                                <div class="progress">{{ lecture.sessions[sid].apa=attendancePercent(sid) }}%</div>
                             </div>
                         </div>
                     </td>
                     <td v-if="sid==0" v-bind:rowspan="lecture.sessions.length" style="text-align:center;">
                         <div class="ui statistic">
                           <div class="label">평균 출석률</div>
-                          <div class="value">94%</div>
+                          <div class="value">  {{ attendancePercentAvg() }}%</div>
                         </div>
                     </td>
                 </tr>
@@ -784,7 +784,7 @@ export default {
           companyTab:0,
           tab:0, // 현재 활성화 탭
           attendanceCount : 0, // 출석 카운트
-          avgAttendancePercent : 50 // 평균출석률
+          avgAttendancePercent : 0 // 평균출석률
         }
     },// data
 
@@ -813,6 +813,11 @@ export default {
         // $On
         this.$EventBus.$on('addTeam', this.addTeam)
     },
+
+
+
+
+
 
     methods: {
 
@@ -878,8 +883,25 @@ export default {
             }else{
                 return ff.toFixed(1)
             }//else
-            
+
         }, // attendancePercent
+
+
+
+
+        // 평균 출석률
+        attendancePercentAvg(){
+            var sum=0,avg=0; // 합, 평균
+            var leng = this.lecture.sessions.length // 차시 수
+            var keys = Object.keys(this.lecture.sessions) // 키
+
+            for(var i=0;  i<keys.length; i++){
+                sum += this.lecture.sessions[i].apa
+            }
+
+            avg = sum/leng
+            return avg.toFixed(1)
+        }, // attendancePercentAvg
 
 
 
