@@ -310,14 +310,14 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th>차시/인원</th>
-                    <th>차시</th>
-                    <th>전체</th>
+                    <th class="center aligned">차시/인원</th>
+                    <th class="center aligned">출석률</th>
+                    <th class="center aligned">전체평균</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(sess,sid)  in  lecture.sessions">
-                    <td>1차 - 총 145명</td>
+                    <td class="center aligned">1차 - 총 145명</td>
                     <td>
                         <div class="ui basic olive progress" style="margin:0;">
                             <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
@@ -325,9 +325,12 @@
                             </div>
                         </div>
                     </td>
-                    <td v-if="sid==0" v-bind:rowspan="lecture.sessions.length" style="text-align:center;">
-                        <div class="ui statistic">
-                          <div class="label">평균 출석률</div>
+                    <td
+                        v-if="sid==0"
+                        v-bind:rowspan="lecture.sessions.length"
+                        style="text-align:center;">
+                        <div class="ui small statistic">
+                          <!-- <div class="label">평균 출석률</div> -->
                           <div class="value">  {{ attendancePercentAvg() }}%</div>
                         </div>
                     </td>
@@ -368,22 +371,25 @@
                     <h3>{{ groupTab=='' ? '전체' : '조별' }} 수강생</h3>
                     <table class="ui celled table">
                         <colgroup>
-                            <col width="15%">
+                            <col width="13%">
                             <col width="18%">
-                            <col width="12%">
+                            <col width="15%">
                             <col width="7%">
                             <col width="12%">
-                            <col width="7%">
+                            <col width="5%">
                         </colgroup>
                         <thead>
                             <tr>
-                                <th>팀</th>
-                                <th>소속</th>
-                                <th>부서</th>
-                                <th class="center aligned">직급</th>
-                                <th class="center aligned">이름</th>
-                                <th class="center aligned">성별</th>
+                                <th rowspan="2">팀</th>
+                                <th rowspan="2">소속</th>
+                                <th rowspan="2">부서</th>
+                                <th rowspan="2" class="center aligned">직급</th>
+                                <th rowspan="2" class="center aligned">이름</th>
+                                <th rowspan="2" class="center aligned">성별</th>
                                 <th class="center aligned" v-bind:colspan="lecture.sessions.length">강의출결 </th>
+                            </tr>
+                            <tr>
+                                <th class="center aligned" style="border-left:1px solid #e1e1e1;" v-for="(c1, c2)  in  (lecture.sessions)">{{c2+1}}차시</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -396,10 +402,10 @@
                                 <td class="center aligned">-</td>
                                 <td class="center aligned ui form" v-for="(atd, atdId)  in  JSON.parse(std.stu_attendance)">
                                     <div class="inline field">
-                                    <div class="ui checkbox " @click.prevent="attendanceCheck(stdId, atdId)">
-                                        <input type="checkbox" tabindex="0" class="hidden" :checked="atd">
-                                        <label></label>
-                                    </div>
+                                        <div class="ui checkbox " @click.prevent="attendanceCheck(stdId, atdId)">
+                                            <input type="checkbox" tabindex="0" class="hidden" :checked="atd">
+                                            <label></label>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -878,7 +884,7 @@ export default {
             var ff = (sum/all) * 100
 
             // 결과가 0일경우 소수점 X
-            if (ff==0) {
+            if (ff==0 || ff==100.0) {
                 return ff.toFixed(0)
             }else{
                 return ff.toFixed(1)
@@ -896,11 +902,15 @@ export default {
             var keys = Object.keys(this.lecture.sessions) // 키
 
             for(var i=0;  i<keys.length; i++){
-                sum += this.lecture.sessions[i].apa
+                sum += Number(this.lecture.sessions[i].apa)
             }
 
             avg = sum/leng
-            return avg.toFixed(1)
+            if (avg==0 || avg==100.0) {
+                return avg.toFixed(0)
+            }else{
+                return avg.toFixed(1)
+            }//else
         }, // attendancePercentAvg
 
 

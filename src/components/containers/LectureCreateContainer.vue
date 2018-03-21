@@ -104,15 +104,15 @@ export default {
 
 
 
+    beforeCreate(){
+        sessionStorage.clear();
+    },
 
 
 
 
     created() {
 
-
-        // var ss = window.sessionStorage;
-        // sessionStorage.clear();
 
         // 초기 스텝설정
         var path = this.$ro.history.current.path.split('/')
