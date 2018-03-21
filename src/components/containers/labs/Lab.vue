@@ -29,6 +29,12 @@
         <time-picker flag="dateTest" v-bind:defaultTime="tdtd" />
 
 
+
+        <hr>
+        <h4>Rating TEST</h4>
+        <rating />
+
+
     </page-layout>
 
 
@@ -39,7 +45,15 @@
 </template>
 
 <script>
-import { Navbar, Card, PageTitle, TopLayout, PageLayout } from '@/components/components'
+import {
+    Navbar,
+    Card,
+    PageTitle,
+    TopLayout,
+    PageLayout ,
+    Rating
+} from '@/components/components'
+
 import Eventbus from './Eventbus'
 import Reactivity from './Reactivity'
 import Timepicker from './Timepicker'
@@ -55,7 +69,8 @@ export default {
         'page-layout' : PageLayout,
         'event-bus' : Eventbus,
         'react' : Reactivity,
-        'time-picker' : Timepicker
+        'time-picker' : Timepicker,
+        'rating': Rating
     },
 
     data () {

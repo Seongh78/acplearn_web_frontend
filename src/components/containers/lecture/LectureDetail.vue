@@ -359,8 +359,7 @@
                     </a>
                     <a class="item" v-bind:class="[groupTab==null?'active':'']" @click.prevent="chooseGroup(null)">팀미지정</a>
                     <a class="tiny button ui blue active" style="width:100%;" @click.prevent="$EventBus.$emit('onModal', 'addGroup', true)" >
-                        <i class="icon plus square
-"></i>팀생성</a>
+                        <i class="icon plus square"></i>팀생성</a>
                 </div>
             </div>
 
@@ -660,15 +659,125 @@
 
 
 
+
+
+
+
+
+
+    <!-- ======================== 액션플랜 ============================ -->
     <div class="ui bottom attached tab segment" v-bind:class="[tab==5?'active viewAnimate':'']" >
-        <br>
-        <br>
-        <div class="container" style="text-align:center;">
-            <no-contents header-text="액션플랜 컨텐즈를 준비중입니다." icon="calendar minus outline" />
+        <div class="ui form">
+            <div class="inline fields" style="font-size:1.1em;">
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="fruit" checked="" tabindex="0" class="hidden">
+                        <label>전체</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="fruit" tabindex="0" class="hidden">
+                        <label>팀별</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="fruit" tabindex="0" class="hidden">
+                        <label>기업별</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="fruit" tabindex="0" class="hidden">
+                        <label>개인별</label>
+                    </div>
+                </div>
+            </div>
+
         </div>
+        <hr style="opacity:.2;">
+
         <br>
         <br>
+
+        <div class="ui grid">
+            <!-- 팀목록 -->
+            <div class="three wide column">
+                <h3>수강생</h3>
+                <hr style="opacity:.2;">
+                <div class="ui list secondary vertical menu actionPlanUserList" style="width:100%;">
+                    <div class="item" v-for="(std, sid)  in  students">
+                        <img class="ui avatar image" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_female2-64.png">
+                        <div class="content">
+                            <div class="header">{{ std.stu_name }}</div>
+                            <div class="description">{{ std.stu_department }} {{ std.stu_position }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--수강생목록 -->
+            <div class="thirteen wide column">
+                <!-- <div class=""  v-if="groupTab==-1"> -->
+                <div class=""  >
+                    <h3>플랜리스트</h3>
+                    <table class="ui table actionPlan selectable single line cardbox" style="padding:0;">
+                        <colgroup>
+                            <col>
+                            <col width="15%">
+                            <col width="15%">
+                            <col width="10%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th >플랜명</th>
+                                <th class="center aligned">KPI</th>
+                                <th class="center aligned">평점</th>
+                                <th class="center aligned">응원</th>
+                                <th class="center aligned">진행률</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="1>0">
+                            <tr @click.prevent="$EventBus.$emit('actionPlan', true)">
+                                <td><a>일 1회 배선점검/전원분리</a> </td>
+                                <td class="center aligned"><div class="ui basic label">산업안전</div></td>
+                                <td class="center aligned">
+                                    <rating privat="true" score="3" />
+                                </td>
+                                <td class="center aligned">12개</td>
+                                <td class="center aligned">72%</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="5"class="center aligned">
+                                    <no-contents header-text="수강생을 선택해 주세요" sub-text="Plan list" icon="users" size="size1" />
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
     </div>
+    <!-- ======================== 액션플랜 ============================ -->
+
+
+
+
+
+
+
+
+
+
+
 
     <div class="ui bottom attached tab segment" v-bind:class="[tab==6?'active viewAnimate':'']" >
         <br>
@@ -679,6 +788,15 @@
         <br>
         <br>
     </div>
+
+
+
+
+
+
+
+
+
 
     <div class="ui bottom attached tab segment" v-bind:class="[tab==7?'active viewAnimate':'']" >
         <br>
@@ -704,39 +822,7 @@
 
 
 
-<!--  -->
-<!-- 팀생성 모달 -->
-<modal v-if="modal.aadd" @close="modal.aadd = false" w="w-30" h="" style="position:fixed;">
-    <h3 slot="header">기업정보</h3>
-    <div slot="body" class="ui form">
 
-        <table width="100%">
-            <colgroup>
-                <col width="10%">
-            </colgroup>
-            <tr>
-                <td>팀명</td>
-                <td class="field">
-                      <input type="text" placeholder="미 입력시 생성된 순서의 번호로 자동생성됩니다." >
-                </td>
-            </tr>
-            <tr>
-                <td>설명</td>
-                <td class="field">
-                      <textarea rows="2"></textarea>
-                </td>
-            </tr>
-        </table>
-
-    </div>
-    <div slot="footer">
-        <div class="ui two bottom attached buttons">
-            <div class="ui button" @click.prevent="modal.aadd=false">닫기</div>
-            <div class="ui button blue" >등록</div>
-        </div>
-    </div>
-</modal>
-<!--  -->
 
 
 
@@ -756,7 +842,8 @@ import {
     CardTitle,
     Timeline ,
     TestFeed ,
-    NoContents
+    NoContents,
+    Rating
 } from '../../components'
 
 export default {
@@ -767,7 +854,8 @@ export default {
         'search-form' : SearchForm,
         'timeline' : Timeline,
         'test-feed' : TestFeed,
-        'no-contents' : NoContents
+        'no-contents' : NoContents,
+        'rating' : Rating
     },
 
     data () {
@@ -788,7 +876,7 @@ export default {
           groupTab:'' , // 선택한 그룹아이디
           chooseTeam:{}, // 선택한 그룹 정보
           companyTab:0,
-          tab:0, // 현재 활성화 탭
+          tab:5, // 현재 활성화 탭
           attendanceCount : 0, // 출석 카운트
           avgAttendancePercent : 0 // 평균출석률
         }
@@ -1078,6 +1166,27 @@ th{
         right:0;
         z-index: 99;
     }
+
+
+
+
+    .actionPlan td{
+        padding:20px 18px;
+        cursor: pointer;
+    }
+
+
+
+
+
+    .actionPlanUserList .item{
+        cursor: pointer;
+    }
+    .actionPlanUserList .item:hover{
+        background: #f1f1f1;
+    }
+
+
 
 
 </style>

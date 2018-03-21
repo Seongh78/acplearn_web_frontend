@@ -129,6 +129,116 @@
                 </div>
             </modal>
 
+
+
+
+
+
+
+
+
+
+
+
+            <!-- 플랜상세 모달 -->
+            <modal v-if="modal.actionPlan" @close="modal.actionPlan = false" w="w-40" h="">
+                <h3 slot="header">플랜정보</h3>
+                <div slot="body" class="ui form">
+
+                    <table class="ui table celled" style="padding:0;">
+                        <colgroup>
+                            <col width="15%">
+                            <col width="38%">
+                            <col width="15%">
+                            <col width="32%">
+                        </colgroup>
+                        <tr>
+                            <th class="borderTop">플랜명</th>
+                            <td colspan="3">일 1회 배선점검/전원분리</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop">KPI</th>
+                            <td><div class="ui basic label">산업안전</div></td>
+                            <th class="borderTop">진행율</th>
+                            <td>72%</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop">평점</th>
+                            <td>
+                                <rating  />
+                            </td>
+                            <th class="borderTop">평가진행</th>
+                            <td>3명 / 5명</td>
+                        </tr>
+                        <tr>
+                            <th class="center aligned borderTop" colspan="4">점수표</th>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="padding:0;">
+                                <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
+                                    <colgroup><col width="15%"></colgroup>
+                                    <tr>
+                                        <th class="borderTop">자가평가</th>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="borderTop">GAP</th>
+                                        <td class="center aligned">-</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="borderTop">팀원평가</th>
+                                        <td class="center aligned">-</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                        <td class="center aligned">2</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                    <br>
+
+                    <h3 class="ui header">Comments</h3>
+                    <hr style="opacity:.2;">
+                    <div class="ui comments">
+                        <div class="comment">
+                            <a class="avatar">
+                              <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                            </a>
+                            <div class="content">
+                              <a class="author">Matt</a>
+                              <div class="metadata">
+                                <span class="date">Today at 5:42PM</span>
+                              </div>
+                              <div class="text">
+                                How artistic!
+                              </div>
+                              <div class="actions">
+                                <a class="reply">Reply</a>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+
+                </div>
+                <div slot="footer">
+                    <div class="ui two bottom attached buttons">
+                        <div class="ui button" @click.prevent="modal.actionPlan=false">확인</div>
+                    </div>
+                </div>
+            </modal>
+
         <!-- ======================== Modal ============================ -->
 
 
@@ -136,7 +246,17 @@
 </template>
 
 <script>
-import { Navbar, Card, PageTitle, TopLayout, PageLayout, SideNavi, Footer, Modal } from '../components'
+import {
+    Navbar,
+    Card,
+    PageTitle,
+    TopLayout,
+    PageLayout,
+    SideNavi,
+    Footer,
+    Modal ,
+    Rating,
+} from '../components'
 
 export default {
   name: 'SideBarContainer',
@@ -148,7 +268,8 @@ export default {
       'page-layout' : PageLayout,
       'side-navi' : SideNavi,
       "foot-bar":Footer,
-      "modal":Modal
+      "modal":Modal,
+      'rating' : Rating
   },
     data () {
         return {
@@ -156,7 +277,8 @@ export default {
             modal :{
               addGroup : false,
               companyDetail : false,
-              groupScoreModal : false
+              groupScoreModal : false,
+              actionPlan : false,
             }
         }
     }, // data
@@ -169,6 +291,8 @@ export default {
 
         // 기업상세 모달 ON
         this.$EventBus.$on('companyDetail', this.companyInfo)
+        // 플랜상세 모달 ON
+        this.$EventBus.$on('actionPlan', (v)=>{ this.$set(this.modal, 'actionPlan', v) })
 
 
         // groupScoreModal ON
@@ -220,5 +344,38 @@ export default {
         min-height: 700px !important;
     }
 
+
+
+    th{
+        background: #F9FAFB;
+        padding:0.92857143em 0.78571429em;
+    }
+    .borderBottom{
+        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+    }
+    .borderTop{
+        border-top: 1px solid rgba(34, 36, 38, 0.1);
+    }
+
+
+    .tempRow{ cursor: pointer; }
+    .tempRow:hover{ background: #f9f9f9 !important; }
+
+
+
+
+    .ratingScore{
+        color:#F2CB61;
+        font-size:1.35em;
+        margin:0;
+        padding:0;
+    }
+    .ratingScore.outline{
+        color:#D5D5D5;
+    }
+
+    .ratingScore:hover{
+        color:#FFE08C;
+    }
 
 </style>

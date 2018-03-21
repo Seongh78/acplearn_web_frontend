@@ -15,6 +15,7 @@ import Timepicker from './Timepicker'
 import Timeline from './Timeline'
 import TestFeed from './TestContent/Feed'
 import NoContents from './NoContents'
+import Rating from './Rating'
 
 
 export {
@@ -34,5 +35,6 @@ export {
     Timepicker,
     Timeline,
     TestFeed,
-    NoContents
+    NoContents,
+    Rating
 }
