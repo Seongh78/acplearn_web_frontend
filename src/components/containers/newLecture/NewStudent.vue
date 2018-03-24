@@ -571,6 +571,13 @@ export default {
         // 임시저장 데이터 불러오기
         var com = JSON.parse(sessionStorage.getItem('lecture-companies'));
         var stds = JSON.parse(sessionStorage.getItem('lecture-students'));
+
+        // if (stds==null) {
+        //     alert('기업, 수강생 등록이 안료되지 않았습니다.')
+        //     this.$router.push({ path: '/new/students' })
+        //     return
+        // }
+
         this.$set(this, 'companies',        (com ==null) ? [] : com)
         this.$set(this, 'tempStudents',   (stds ==null) ? [] : stds )
 

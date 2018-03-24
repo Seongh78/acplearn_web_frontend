@@ -1,5 +1,5 @@
 <template>
-    <div class="hash" style="background:#f7f7f7;">
+    <div style="background:#f7f7f7;">
 
         <!-- Navbar -->
         <top-layout bg="false">
@@ -14,7 +14,11 @@
             <side-navi  />
             <!-- Main content -->
             <div class="thirteen wide column centered rightContents " >
-                <router-view class="viewLoadAnimation"/>
+                <!-- <router-view class="viewLoadAnimation"/> -->
+                <router-view class=""/>
+                <!--
+                viewLoadAnimation : 있을때 모달이 안먹힘!!!!!
+                -->
             </div>
 
         </div>
@@ -140,104 +144,7 @@
 
 
 
-            <!-- 플랜상세 모달 -->
-            <modal v-if="modal.actionPlan" @close="modal.actionPlan = false" w="w-40" h="">
-                <h3 slot="header">플랜정보</h3>
-                <div slot="body" class="ui form">
-
-                    <table class="ui table celled" style="padding:0;">
-                        <colgroup>
-                            <col width="15%">
-                            <col width="38%">
-                            <col width="15%">
-                            <col width="32%">
-                        </colgroup>
-                        <tr>
-                            <th class="borderTop">플랜명</th>
-                            <td colspan="3">일 1회 배선점검/전원분리</td>
-                        </tr>
-                        <tr>
-                            <th class="borderTop">KPI</th>
-                            <td><div class="ui basic label">산업안전</div></td>
-                            <th class="borderTop">진행율</th>
-                            <td>72%</td>
-                        </tr>
-                        <tr>
-                            <th class="borderTop">평점</th>
-                            <td>
-                                <rating  />
-                            </td>
-                            <th class="borderTop">평가진행</th>
-                            <td>3명 / 5명</td>
-                        </tr>
-                        <tr>
-                            <th class="center aligned borderTop" colspan="4">점수표</th>
-                        </tr>
-                        <tr>
-                            <td colspan="4" style="padding:0;">
-                                <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
-                                    <colgroup><col width="15%"></colgroup>
-                                    <tr>
-                                        <th class="borderTop">자가평가</th>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="borderTop">GAP</th>
-                                        <td class="center aligned">-</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="borderTop">팀원평가</th>
-                                        <td class="center aligned">-</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                        <td class="center aligned">2</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-
-                    </table>
-                    <br>
-
-                    <h3 class="ui header">Comments</h3>
-                    <hr style="opacity:.2;">
-                    <div class="ui comments">
-                        <div class="comment">
-                            <a class="avatar">
-                              <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
-                            </a>
-                            <div class="content">
-                              <a class="author">Matt</a>
-                              <div class="metadata">
-                                <span class="date">Today at 5:42PM</span>
-                              </div>
-                              <div class="text">
-                                How artistic!
-                              </div>
-                              <div class="actions">
-                                <a class="reply">Reply</a>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-
-                </div>
-                <div slot="footer">
-                    <div class="ui two bottom attached buttons">
-                        <div class="ui button" @click.prevent="modal.actionPlan=false">확인</div>
-                    </div>
-                </div>
-            </modal>
+            
 
         <!-- ======================== Modal ============================ -->
 
@@ -275,11 +182,15 @@ export default {
         return {
             msg: 'LectureContainer',
             modal :{
-              addGroup : false,
-              companyDetail : false,
-              groupScoreModal : false,
-              actionPlan : false,
-            }
+                addGroup : false,
+                companyDetail : false,
+                groupScoreModal : false,
+                actionPlan : false,
+            },// modal
+
+            // ==== 액션플랜 데이터 ==== //
+            plan:{}, // 플랜상세보기
+            // ==== 액션플랜 데이터 ==== //
         }
     }, // data
 
@@ -289,10 +200,16 @@ export default {
             this.$set(this.modal, name+'', flag)
         })
 
+
         // 기업상세 모달 ON
         this.$EventBus.$on('companyDetail', this.companyInfo)
+
+
         // 플랜상세 모달 ON
-        this.$EventBus.$on('actionPlan', (v)=>{ this.$set(this.modal, 'actionPlan', v) })
+        this.$EventBus.$on('actionPlan', (v)=>{
+            this.$set(this, 'plan', v)
+            this.$set(this.modal, 'actionPlan', true)
+        })
 
 
         // groupScoreModal ON
@@ -320,6 +237,9 @@ export default {
             })
 
         }, //companyInfo
+
+
+
 
 
     }, // methods

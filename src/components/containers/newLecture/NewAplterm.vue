@@ -262,6 +262,7 @@ export default {
             데이터가 있을 경우 기존데이터의 데이터 유지 후 추가/삭제
             */
 
+
             // 삭제기준
             if(this.cc > this.terms.sessionDetail.length)
                 this.$set(this, 'deleteFlag', false)
@@ -272,16 +273,19 @@ export default {
             this.$set(this.terms, 'sessionCount', this.cc)
             this.terms.sessionDetail = []
 
+            var tempData;
             for(var ii=0;   ii<this.cc;  ii++){
-                this.terms.sessionDetail.push({
+                tempData = {
                     id: ii,
                     ls_startDate:'0000-00-00', //시작일
                     ls_endDate:'0000-00-00', // 종료일
                     ls_startTime:'', //시작시간
                     ls_endTime: '', // 종료시간
                     sessions:new Array(),
-                    ls_idx: this.ls_idx+ii
-                })
+                    ls_idx: this.ls_idx+ii,
+                    lec_seq: ii+1,
+                }
+                this.terms.sessionDetail.push(tempData)
             }// for
 
             this.fixedDate()
@@ -293,6 +297,7 @@ export default {
         save(){ //저장
             // console.log("this.terms.sessionDetail[0].ls_idx : ");
             // console.log("this.terms.sessionCount: ",this.terms.sessionCount);
+            // console.log(this.terms.sessionDetail);
             // return
 
             if (this.terms.sessionDetail==''  ||  this.terms.sessionDetail==null  ||  this.terms.sessionDetail==undefined) {

@@ -50,10 +50,10 @@ export default {
     //     this.$set(this, section, this.score)
     // },
     created(){
-        this.$set(this, 'selection', this.score)
+        this.$set(this, 'selection', Number(this.score))
     },
     updated(){
-        this.$set(this, 'selection', this.score)
+        this.$set(this, 'selection', Number(this.score))
     },
 
 

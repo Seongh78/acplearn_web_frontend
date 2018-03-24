@@ -318,7 +318,6 @@ export default {
             // 불러오기
             this.$http.get('/api/lectures/dt/'+id)
             .then(resp=>{
-                console.log(resp.data);
                 var tempLec = resp.data.lecture
                 var tempKpi = resp.data.kpi
                 var da = [ new Date(tempLec.lec_startDate) , new Date(tempLec.lec_endDate) ]
@@ -348,13 +347,17 @@ export default {
                 this.$set(this, 'lec_idx', id)
                 sessionStorage.setItem('lecture-idx', id)
 
-                if(tempLec.sessions){
+                // 불러온 데이터 푸시
+                // #강의 차시
+                if(tempLec.sessions.length>0){
                     sessionStorage.setItem('lecture-term', JSON.stringify({ sessionDetail:tempLec.sessions }))
                     sessionStorage.setItem('lecture-sessionCount', tempLec.sessions.length)
                 }
+                // 상세시간표
                 if(tempLec.timetables){
                     sessionStorage.setItem('lecture-timetables', JSON.stringify(tempLec.timetables))
                 }
+                // KPI
                 if(tempKpi){
                     sessionStorage.setItem('lecture-kpi', JSON.stringify(tempKpi))
                 }

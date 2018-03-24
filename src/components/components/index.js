@@ -16,6 +16,7 @@ import Timeline from './Timeline'
 import TestFeed from './TestContent/Feed'
 import NoContents from './NoContents'
 import Rating from './Rating'
+import Pagination from './Pagination'
 
 
 export {
@@ -36,5 +37,6 @@ export {
     Timeline,
     TestFeed,
     NoContents,
-    Rating
+    Rating,
+    Pagination
 }

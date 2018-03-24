@@ -386,15 +386,24 @@ export default {
         var storageData = JSON.parse(sessionStorage.getItem('lecture-teamBuilding'))
         var stds = JSON.parse(sessionStorage.getItem('lecture-students')) // 수강생
 
-        // 세션스토리지에 저장되어있을 경우
-        if(storageData){
+        console.log(storageData==null);
+        console.log(stds);
+
+        // 세션스토리지에 저장되어있을 경우 -> 스토리지 우선
+        if(storageData!=null){
             this.$set(this, 'teams', storageData.teams)
             this.$set(this, 'students', storageData.students)
             this.$set(this, 'students_temp', stds)
             return
+
+        }else if( stds!=null ){
+            this.$set(this, 'students', stds)
+            console.log('!!!!!!!!!!');
+            return
         }
+
         //
-        this.$set(this, 'students', stds)
+
 
     }, // created
     // ============ created ============ //

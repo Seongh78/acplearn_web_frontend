@@ -66,7 +66,7 @@
 
                 <a href="/lectures/new/summary">
                 <div class="ui  animated button" tabindex="0" style="position:absolute; right:25px; height:40px; background:#4374D9; color: #fff;">
-                  <div class="visible content ">강의개설</div>
+                  <div class="visible content ">템플릿생성</div>
                   <div class="hidden content">
                     <i class="right arrow icon"></i>
                   </div>

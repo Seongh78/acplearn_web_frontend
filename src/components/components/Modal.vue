@@ -1,8 +1,9 @@
 <template>
 
-<div name="modal" id="modal-template">
+<div >
     <div class="modal-mask">
         <div class="modal-wrapper" >
+
             <div class="modal-container viewLoadAnimationTop" v-bind:class="w" >
 
                 <div class="modalCon" v-bind:class="h">
@@ -65,14 +66,14 @@ export default {
 
     .modal-mask {
         position: fixed !important;
-        z-index: 9999;
+        z-index: 9998;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
         background-color: rgba(0, 0, 0, .5);
         display: table;
-        transition: opacity .3s ease;
+        transition: opacity .2s ease;
     }
 
     .modal-wrapper {

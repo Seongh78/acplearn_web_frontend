@@ -9,6 +9,22 @@
 
 
     <page-layout>
+
+
+
+        <h4>페이징 테스트</h4>
+        <paging />
+        <hr>
+
+
+
+        <br>
+        <br>
+        <br>
+
+
+
+
         <button type="button" class="ui green button" @click="callTest">call test{{ddd}}</button>
         <button type="button" class="ui blue button" @click="callTest2">call test2 {{ddd}}</button>
         <button type="button" class="ui red button" @click="$EventBus.$emit('close')">to child</button>
@@ -51,7 +67,8 @@ import {
     PageTitle,
     TopLayout,
     PageLayout ,
-    Rating
+    Rating,
+    Pagination
 } from '@/components/components'
 
 import Eventbus from './Eventbus'
@@ -70,7 +87,8 @@ export default {
         'event-bus' : Eventbus,
         'react' : Reactivity,
         'time-picker' : Timepicker,
-        'rating': Rating
+        'rating': Rating,
+        'paging' : Pagination
     },
 
     data () {

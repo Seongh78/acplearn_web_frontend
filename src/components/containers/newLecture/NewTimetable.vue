@@ -537,20 +537,10 @@ export default {
         var timetable = JSON.parse(sessionStorage.getItem('lecture-timetables'));
 
         console.log("term ㄱ");
-        console.log(term);
+        console.log(term==null);
 
         // APL Term 존재 여부 확인
-        if (
-            // (timetable.length > 0  &&  timetable!=undefined) ||
-            (term.sessionDetail.length > 0  &&  term!=undefined)
-        ) {
-            this.$set(this, 'sessionDetail', term)
-            this.$set(this, 'timetables', term.sessionDetail)
-            console.log(this.timetables);
-            if (timetable){
-                this.timetables = timetable;
-            }
-        }else{
+        if(term==null){
             console.log(this.$router);
             alert('APL기간 설정이 완료되지 않았습니다. ')
             this.$router.push({ path: '/new/aplterm' })
@@ -559,6 +549,13 @@ export default {
             //     this.$ro.push({path : '/lectures/new/aplterm'})
             //     return
             // }
+        }else {
+            this.$set(this, 'sessionDetail', term)
+            this.$set(this, 'timetables', term.sessionDetail)
+            console.log(this.timetables);
+            if (timetable){
+                this.timetables = timetable;
+            }
         }// if
 
 
@@ -921,7 +918,7 @@ export default {
 
 
         goTo(){
-            this.$ro.push({ path: '/new/students' })
+            this.$ro.push({ path: '/new/kpi' })
         }
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="hash">
+  <div >
 
 
 
@@ -111,7 +111,7 @@
 
 
     <!-- ======================== 강의개요 ============================ -->
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==0?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==0?'active viewAnimate':'']" >
 
 
         <h3><i class="align left icon"></i> 강의목표</h3>
@@ -139,7 +139,7 @@
 
 
     <!-- ======================== 세션/시간표 ============================ -->
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==1?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==1?'active viewAnimate':'']" >
         <h3>
             <i class="align left icon"></i> 강의정보
         </h3>
@@ -296,7 +296,7 @@
 
 
     <!-- ======================== 팀/수강생 ============================ -->
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==2?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==2?'active viewAnimate':'']" >
         <h3><i class="align left icon"></i> 출석률</h3>
         <div class="ui basic message container" style="text-align:center;" v-if="students.length < 1">
             <no-contents header-text="등록된 수강생이 없습니다." />
@@ -431,7 +431,7 @@
 
 
     <!-- ======================== 교육진행 ============================ -->
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==3?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==3?'active viewAnimate':'']" >
         <h3>
             <i class="align left icon"></i> 교육진행
         </h3>
@@ -542,23 +542,23 @@
 
 
     <!-- ======================== 참여점수 ============================ -->
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==4?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==4?'active viewAnimate':'']" >
         <h3>참여점수</h3>
         <table class="ui celled padded table">
             <colgroup>
                 <col width="20%">
                 <col>
-                <col>
-                <col>
+                <!-- <col> -->
                 <col width="47%">
+                <col width="8%">
             </colgroup>
             <thead>
                 <tr>
                     <th class="single line center aligned">팀명</th>
                     <th class="single line center aligned">팀점수</th>
-                    <th class="single line center aligned">개인합계</th>
-                    <th class="single line center aligned">전체합계</th>
+                    <!-- <th class="single line center aligned">전체합계</th> -->
                     <th>개별점수</th>
+                    <th class="single line center aligned">개인합계</th>
                 </tr>
             </thead>
             <tbody>
@@ -566,49 +566,50 @@
                 <tr  v-for="(group, gid)  in  groups" :key="gid" >
                     <td class="single line center aligned">
                         <h3 class="ui center aligned header grey">{{ group.group_name }}</h3>
+                        <!-- {{ group }} -->
                     </td>
                     <td class="single line center aligned">
-                        <h4 class="ui header grey">{{gid+24}}점</h4>
+                        <h4 class="ui header grey">{{ group.group_score }}점</h4>
                         <div class="ui basic buttons mini icon ">
-                            <div class="ui button">1점</div>
-                            <div class="ui button">2점</div>
-                            <div class="ui button">3점</div>
-                            <div class="ui button">4점</div>
-                            <div class="ui button active">5점</div>
+                            <div class="ui button" @click.prevent="plusScore('group', group.group_idx, 1)">1점</div>
+                            <div class="ui button" @click.prevent="plusScore('group', group.group_idx, 2)">2점</div>
+                            <div class="ui button" @click.prevent="plusScore('group', group.group_idx, 3)">3점</div>
+                            <div class="ui button" @click.prevent="plusScore('group', group.group_idx, 4)">4점</div>
+                            <div class="ui button" @click.prevent="plusScore('group', group.group_idx, 5)">5점</div>
                         </div>
                     </td>
-                    <td class="single line center aligned">
-                        <h4 class="ui header grey">{{gid+24}}점</h4>
-                    </td>
-                    <td class="center aligned">
+                    <!-- <td class="center aligned">
                         <h4 class="ui header grey">{{gid+54}}점</h4>
-                    </td>
+                    </td> -->
                     <td>
 
                         <div class="ui middle aligned divided list">
                             <div class="item"  v-for="(std, stdId)  in  students" v-if="std.group_idx==group.group_idx ">
                                 <div class="right floated content">
                                     <div class="ui basic buttons mini icon ">
-                                        <div class="ui button">1점</div>
-                                        <div class="ui button">2점</div>
-                                        <div class="ui button">3점</div>
-                                        <div class="ui button">4점</div>
-                                        <div class="ui button active">5점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 1)">1점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 2)">2점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 3)">3점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 4)">4점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 5)">5점</div>
                                     </div>
                                 </div>
-                                <i class="large user circle middle aligned icon" style="color:rgba(0,0,0,0.35)"></i>
+                                <i class="  middle aligned icon" style="color:#BDBDBD; margin-right:17px;">
+                                    <b>{{ std.stu_score<10?'0':'' }}{{ std.stu_score }}</b>점
+                                </i>
                                 <div class="content">
                                     <div class="header">{{std.stu_name}}</div>
-                                    {{std.stu_company}} ({{std.stu_department}}  {{std.stu_position}})
+                                    {{std.stu_company}} {{std.stu_department}} - {{std.stu_position}}
                                 </div>
                             </div>
                         </div>
-
-
+                    </td>
+                    <td class="single line center aligned">
+                        <h4 class="ui header grey"></h4>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="single line center aligned">
+                    <td colspan="2" class="single line center aligned">
                         <h4 class="ui center aligned header grey">팀 미지정</h4>
                     </td>
                     <td>
@@ -617,22 +618,25 @@
                             <div class="item"  v-for="(std, stdId)  in  students" v-if="std.group_idx==undefined || std.group_idx==''">
                                 <div class="right floated content">
                                     <div class="ui basic buttons mini icon ">
-                                        <div class="ui button">1점</div>
-                                        <div class="ui button">2점</div>
-                                        <div class="ui button">3점</div>
-                                        <div class="ui button">4점</div>
-                                        <div class="ui button active">5점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 1)">1점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 2)">2점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 3)">3점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 4)">4점</div>
+                                        <div class="ui button" @click.prevent="plusScore('registration', std.stu_idx, 5)">5점</div>
                                     </div>
                                 </div>
-                                <i class="large user circle middle aligned icon" style="color:rgba(0,0,0,0.35)"></i>
+                                <i class="  middle aligned icon" style="color:#BDBDBD; margin-right:17px;">
+                                    <b>{{ std.stu_score<10?'0':'' }}{{ std.stu_score }}</b>점
+                                </i>
+                                </i>
                                 <div class="content">
                                     <div class="header">{{std.stu_name}}</div>
                                     {{std.stu_department}} - {{std.stu_position}}
                                 </div>
                             </div>
                         </div>
-
                     </td>
+                    <td class="center aligned">0</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -641,7 +645,6 @@
                     <th class="center aligned">100</th>
                     <th class="center aligned">100</th>
                     <th class="center aligned">100</th>
-                    <th class="center aligned"></th>
                 </tr>
             </tfoot>
         </table>
@@ -666,8 +669,9 @@
 
 
     <!-- ======================== 액션플랜 ============================ -->
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==5?'active viewAnimate':'']" >
-        <div class="ui form">
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
+
+        <!-- <div class="ui form">
             <div class="inline fields" style="font-size:1.1em;">
                 <div class="field">
                     <div class="ui radio checkbox">
@@ -699,15 +703,19 @@
         <hr style="opacity:.2;">
 
         <br>
-        <br>
+        <br>-->
 
         <div class="ui grid">
-            <!-- 팀목록 -->
+            <!-- Registration목록 -->
             <div class="three wide column">
-                <h3>수강생</h3>
+                <h3><i class="align left icon"></i> 수강생</h3>
                 <hr style="opacity:.2;">
                 <div class="ui list secondary vertical menu actionPlanUserList" style="width:100%;">
-                    <div class="item" v-for="(std, sid)  in  students">
+                    <div
+                    class="item"
+                    v-for="(std, sid)  in  students"
+                    v-bind:class="[std.stu_idx==selectedStudent?'active':'']"
+                    @click.prevent="getActionPlan(std.stu_idx)">
                         <img class="ui avatar image" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_female2-64.png">
                         <div class="content">
                             <div class="header">{{ std.stu_name }}</div>
@@ -717,47 +725,69 @@
                 </div>
             </div>
 
-            <!--수강생목록 -->
+            <!--PLAN목록 -->
             <div class="thirteen wide column">
                 <!-- <div class=""  v-if="groupTab==-1"> -->
                 <div class=""  >
-                    <h3>플랜리스트</h3>
+                    <!-- 탭메뉴 -->
+                    <div class="ui top secondary pointing menu">
+                        <a class="item" v-bind:class="[actionplanSessionTab < 0?'active':'']" @click.prevent="actionplanSessionTab=(-1)">전체</a>
+                        <a class="item" v-for="(sess, jj) in lecture.sessions" v-bind:class="[actionplanSessionTab==jj+1?'active':'']" @click.prevent="actionplanSessionTab=(jj+1)">{{ jj+1 }}회</a>
+                    </div>
+
+
+
+                    <!-- <h3>플랜리스트</h3> -->
                     <table class="ui table actionPlan selectable single line cardbox" style="padding:0;">
                         <colgroup>
                             <col>
+                            <col width="17%">
+                            <col width="17%">
                             <col width="15%">
-                            <col width="15%">
-                            <col width="10%">
-                            <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th >플랜명</th>
                                 <th class="center aligned">KPI</th>
                                 <th class="center aligned">평점</th>
-                                <th class="center aligned">응원</th>
                                 <th class="center aligned">진행률</th>
                             </tr>
                         </thead>
-                        <tbody v-if="1>0">
-                            <tr @click.prevent="$EventBus.$emit('actionPlan', true)">
-                                <td><a>일 1회 배선점검/전원분리</a> </td>
-                                <td class="center aligned"><div class="ui basic label">산업안전</div></td>
+                        <tbody v-if="plans.length>0" >
+                            <tr class="viewLoadAnimation"
+                            v-for="(plan, pid)  in  plans"
+                            :key="pid"
+                            @click.prevent="selectPlan(plan.lap_idx)"
+                            v-if="actionplanSessionTab==plan.lec_seq || actionplanSessionTab<0">
+                                <td><a>{{ plan.lap_text }}</a> </td>
+                                <td class="center aligned"><div class="ui basic label">{{ plan.cc2_name }}</div></td>
                                 <td class="center aligned">
-                                    <rating privat="true" score="3" />
+                                    <rating privat="true" v-bind:score="plan.lap_othersAverage" />
                                 </td>
-                                <td class="center aligned">12개</td>
                                 <td class="center aligned">72%</td>
+                            </tr>
+                            <tr class="viewLoadAnimation" v-else>
+                                <td colspan="5"class="center aligned">
+                                    <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
+                                </td>
                             </tr>
                         </tbody>
 
-                        <tbody v-else>
+                        <tbody class="viewLoadAnimation" v-else>
                             <tr>
                                 <td colspan="5"class="center aligned">
-                                    <no-contents header-text="수강생을 선택해 주세요" sub-text="Plan list" icon="users" size="size1" />
+                                    <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
                                 </td>
                             </tr>
                         </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" style="padding:0;">
+                                    <button type="button" class="ui button fluid blue" @click.prevent="modal.addActionPlan=true">플랜추가</button>
+                                </td>
+                            </tr>
+                        </tfoot>
 
                     </table>
                 </div>
@@ -779,7 +809,7 @@
 
 
 
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==6?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==6?'active viewAnimate':'']" >
         <br>
         <br>
         <div class="container" style="text-align:center;">
@@ -798,7 +828,7 @@
 
 
 
-    <div class="ui bottom attached tab segment" v-bind:class="[tab==7?'active viewAnimate':'']" >
+    <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==7?'active viewAnimate':'']" >
         <br>
         <br>
         <div class="container" style="text-align:center;">
@@ -822,10 +852,150 @@
 
 
 
+<!-- ======================== Modal ============================ -->
+
+<!-- 플랜상세 모달 -->
+<modal v-if="modal.actionPlan" @close="modal.actionPlan = false" w="w-40" h="">
+    <h3 slot="header">플랜정보</h3>
+    <div slot="body" class="ui form">
+
+        <table class="ui table celled" style="padding:0;">
+            <colgroup>
+                <col width="15%">
+                <col width="38%">
+                <col width="15%">
+                <col width="32%">
+            </colgroup>
+            <tr>
+                <th class="borderTop">플랜명</th>
+                <td colspan="3">{{ plan.lap_text }}</td>
+            </tr>
+            <tr>
+                <th class="borderTop">KPI</th>
+                <td><div class="ui basic label">{{ plan.cc2_name }}</div></td>
+                <th class="borderTop">진행율</th>
+                <td>72%</td>
+            </tr>
+            <tr>
+                <th class="borderTop">평점</th>
+                <td>
+                    <rating v-bind:score="Number(plan.lap_othersAverage)" />
+                </td>
+                <th class="borderTop">평가진행</th>
+                <td>3명 / 5명</td>
+            </tr>
+            <tr>
+                <th class="center aligned borderTop" colspan="4">점수표</th>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:0;">
+                    <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
+                        <colgroup><col width="15%"></colgroup>
+                        <tr>
+                            <th class="borderTop">자가평가</th>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop">GAP</th>
+                            <td class="center aligned">-</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop">팀원평가</th>
+                            <td class="center aligned">-</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                            <td class="center aligned">2</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        <br>
+
+        <h3 class="ui header">Comments</h3>
+        <div class="ui grid">
+            <div class="thirteen wide column" style="padding-right:0;">
+                <textarea name="name" rows="3" cols="80" style="border-radius:0" placeholder="내용을 입력해 주세요"></textarea>
+            </div>
+            <div class="three wide column" style="padding-left:0;">
+                <button type="button" class="ui blue button" style="width:100%; height:100%; border-radius:0;">등록</button>
+            </div>
+        </div>
+
+        <div class="ui comments">
+            <div class="comment">
+                <a class="avatar">
+                  <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                </a>
+                <div class="content">
+                  <a class="author">Matt</a>
+                  <div class="metadata">
+                    <span class="date">Today at 5:42PM</span>
+                  </div>
+                  <div class="text">
+                    How artistic!
+                  </div>
+                  <div class="actions">
+                    <a class="reply">Reply</a>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.actionPlan=false">확인</div>
+        </div>
+    </div>
+</modal>
+
+<!-- 플랜추가 모달 -->
+<modal v-if="modal.addActionPlan" @close="modal.addActionPlan = false" w="w-40" h="">
+    <h3 slot="header">신규 플랜</h3>
+    <div slot="body" class="ui form">
 
 
+        <div class="ui comments">
+            <div class="comment">
+                <a class="avatar">
+                  <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                </a>
+                <div class="content">
+                  <a class="author">Matt</a>
+                  <div class="metadata">
+                    <span class="date">Today at 5:42PM</span>
+                  </div>
+                  <div class="text">
+                    How artistic!
+                  </div>
+                  <div class="actions">
+                    <a class="reply">Reply</a>
+                  </div>
+                </div>
+              </div>
+        </div>
 
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.addActionPlan=false">확인</div>
+        </div>
+    </div>
+</modal>
 
+<!-- ======================== Modal ============================ -->
 
 
   </div>
@@ -861,7 +1031,9 @@ export default {
     data () {
         return {
             modal: {
-                aadd:false
+                aadd:false, // 테스트모달
+                actionPlan : false, //액션플랜 상세보기
+                addActionPlan : false, //액션플랜 추가 상세보기
             },
           msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
           lec_idx:null,
@@ -878,7 +1050,23 @@ export default {
           companyTab:0,
           tab:5, // 현재 활성화 탭
           attendanceCount : 0, // 출석 카운트
-          avgAttendancePercent : 0 // 평균출석률
+          avgAttendancePercent : 0, // 평균출석률
+
+
+          // === 교육진행 === //
+
+          // === 교육진행 === //
+
+
+
+
+          // === 액션플랜 === //
+          actionplanSessionTab : -1, // 세션탭
+          selectedStudent:-1, // 선택된 수강생
+          plans : [], // 선택된 수강생의 플랜들
+          plan : {}, // 선택된 수강생의 상세플랜
+          // === 액션플랜 === //
+
         }
     },// data
 
@@ -1043,9 +1231,6 @@ export default {
 
 
 
-
-
-
         // 팀 추가
         addTeam(){
             alert(1)
@@ -1069,6 +1254,101 @@ export default {
                 alert('Error - r')
             })
         },// removeLecture()
+
+
+
+
+
+
+
+
+
+        // ===== 액션플랜 ===== //
+
+        // 점수추가
+        plusScore(table, id, score){
+            /*
+            table   :   유형 ( ex- group, student )
+            id        :   바꿀데이터 아이디
+            score  :   점수
+            */
+            if ( !confirm(score+'점을 추가하시겠습니까?') ) {
+                return
+            }
+
+            var url = '/api/students/score'
+            this.$http.put(url, { table, id, score })
+            .then(resp => {
+
+                switch (table) {
+                    case 'group':
+                        // 점수표시 변경
+                        var rid = this.groups.findIndex(group=>{
+                            return group.group_idx == id
+                        })
+                        //점수누적
+                        this.$set(this.groups[rid], 'group_score', this.groups[rid].group_score+score)
+                        break;
+
+                    case 'registration':
+                        // 점수표시 변경
+                        var rid = this.students.findIndex(std=>{
+                            return std.stu_idx == id
+                        })
+                        //점수누적
+                        this.$set(this.students[rid], 'stu_score', this.students[rid].stu_score+score)
+                        break;
+                }// switch
+
+            })
+            .catch(err => {
+                console.log(err);
+                alert('error')
+            })
+        },// 점수추가
+
+        // ===== 액션플랜 ===== //
+
+
+
+
+
+
+
+        // ===== 액션플랜 ===== //
+
+        // 액션플랜 목록 조회
+        getActionPlan( stu_idx ){
+            this.$set(this, 'selectedStudent', stu_idx)
+            var url = '/api/plans/'+this.lec_idx+'/'+stu_idx
+            this.$http.get(url)
+            .then(resp=>{
+                this.$set(this, 'plans', resp.data.plans)
+            })
+            .catch(err=>{
+                alert('error')
+            })
+        },
+
+
+        // 액션플랜 상세
+        selectPlan( id ) {
+            this.$http.get('/api/plans/detail/'+id)
+            .then(resp=>{
+                console.log(resp.data);
+                this.$set(this, 'plan', resp.data.plan)
+                this.$set(this.modal, 'actionPlan', true)
+            })
+            .catch(err=>{
+                alert('Error - ')
+            })
+        },// 액션플랜 상세
+
+
+        // ===== 액션플랜 ===== //
+
+
+
 
 
 

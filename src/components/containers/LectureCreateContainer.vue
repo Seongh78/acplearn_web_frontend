@@ -105,7 +105,7 @@ export default {
 
 
     beforeCreate(){
-        sessionStorage.clear();
+        // sessionStorage.clear();
     },
 
 
@@ -129,6 +129,14 @@ export default {
     updated() {
         var path = this.$ro.history.current.path.split('/')
         this.selector = path[path.length-1]
+    },
+
+
+
+
+
+    destroyed(){
+        sessionStorage.clear();
     },
 
 

@@ -35,9 +35,9 @@
         <router-link class="item" tag="a" :to="{ path : '/statistics'}">
             통계 <i class="bar chart icon"></i>
         </router-link>
-        <router-link class="item" tag="a" :to="{ path : '/settings'}">
+        <!-- <router-link class="item" tag="a" :to="{ path : '/settings'}">
             환경설정 <i class="options icon"></i>
-        </router-link>
+        </router-link> -->
 
 
 
@@ -126,6 +126,7 @@ export default {
     }
     .profileEdit{
         font-size:0.85em;
+        color : #4374D9 !important;
     }
         .profileEdit:hover{
             text-decoration:underline;
