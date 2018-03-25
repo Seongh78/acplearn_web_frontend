@@ -202,7 +202,7 @@
                     <table class="ui table celled structured">
                         <colgroup>
                             <col width="12%">
-                            <col width="40%">
+                            <col width="27%">
                         </colgroup>
                         <thead>
                             <tr>

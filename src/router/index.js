@@ -273,6 +273,10 @@ const router = new VueRouter({
 
 
 
+
+        // ==========   템플릿관리   ========== //
+
+
         { // 강의템플릿관리
             path: '/templates',
             component: SideBarContainer,
@@ -280,9 +284,27 @@ const router = new VueRouter({
                 {// 강의목록
                     path: '',
                     component : Template.TemplateList
+                },
+
+                {
+                    path : '/new',
+                    component : Template.TemplateList
+                },
+
+                {
+                    path : '/type/:id',
+                    component : Template.TemplateList
                 }
-            ]
+            ]// children
         },
+
+
+        // ==========   템플릿관리   ========== //
+
+
+
+
+
 
 
 
