@@ -25,6 +25,7 @@ import * as NewLecture from '@/components/containers/newLecture'
 import * as Template from '@/components/containers/template'
 import * as Company from '@/components/containers/company'
 import * as Recruitment from '@/components/containers/recruitment'
+import * as User from '@/components/containers/user'
 
 // 테스트 컴포넌트
 import Lab from '@/components/containers/labs/Lab'
@@ -385,12 +386,12 @@ const router = new VueRouter({
 
 
         { // 내정보
-            path: '/my',
+            path: '/profile',
             component: SideBarContainer,
             children: [
                 {// 강의목록
                     path: '',
-                    component : NoContentPage
+                    component : User.Profile
                 }
             ]
         },

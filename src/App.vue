@@ -95,6 +95,18 @@
 
 
 
+    th{
+        background: #F9FAFB;
+        padding:0.92857143em 0.78571429em;
+    }
+    .borderBottom{
+        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+    }
+    .borderTop{
+        border-top: 1px solid rgba(34, 36, 38, 0.1);
+    }
+
+
 
     .viewLoadAnimation {
         animation:fade-in-fwd .55s cubic-bezier(.39,.575,.565,1.000) both

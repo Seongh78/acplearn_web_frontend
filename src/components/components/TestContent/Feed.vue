@@ -54,7 +54,7 @@
             Jenny Hess
             </a> added you as a friend
             <div class="date">
-            2 Days Ago
+            2018-01-01
             </div>
             </div>
             <div class="meta">

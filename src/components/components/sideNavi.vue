@@ -41,7 +41,7 @@
 
 
 
-        <router-link class="item" tag="a" :to="{ path : '/my'}">
+        <router-link class="item" tag="a" :to="{ path : '/profile'}">
             내 정보 관리 <i class="user circle icon"></i></i>
         </router-link>
     </div>

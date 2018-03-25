@@ -4,15 +4,48 @@
         <!-- ======================== 페이지 타이릍 ============================ -->
         <div class="cardbox" style="margin:10px 0; padding:25px; ">
             <h2>
-                결제
-                <button class="ui icon button tiny" v-bind:class="(term?'green':'basic')" style="margin: 4px 0 0 5px; padding:7px; font-size:.5em; position:absolute;" @click.prevent="modal.agree=true">
+                약관동의 및 결제
+                <!-- <button class="ui icon button tiny" v-bind:class="(term?'green':'basic')" style="margin: 4px 0 0 5px; padding:7px; font-size:.5em; position:absolute;" @click.prevent="modal.agree=true">
                     <i class="check circle outline icon" v-if="!term"></i>
                     <i class="check circle icon" v-else></i>
                     약관보기
-                </button>
+                </button> -->
             </h2>
         </div>
+        <br>
         <!-- ======================== /페이지 타이릍 ============================ -->
+
+        <div class="cardbox " style="margin:0; padding:25px;">
+            <!-- <h3>이용약관</h3>
+            <hr style="opacity:0.35;"> -->
+            <h4>이용안내</h4>
+            <div class="" style=" overflow:auto; padding:15px 10px; background:#f5f5f5; height:150px;">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+            <h4>개인정보 취급방침</h4>
+            <div class="" style=" overflow:auto; padding:15px 10px; background:#f5f5f5; height:150px;">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+
+
+
+            <div class="ui segment">
+                <div class="field" style="">
+                    <div class="ui toggle checkbox " v-bind:class="[ term ? 'checked' : '' ]" @click="term = !term">
+                        <input type="checkbox" name="gift" tabindex="0" class="hidden" v-model="term" style="background:red;">
+                        <label>위 약관에 모두 동의합니다.</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+
+
 
         <div class="cardbox ui grid" style="margin:0; padding:25px;">
 
@@ -144,14 +177,6 @@
                       </div>
                     </div>
                   </div>
-                   <div class="ui segment">
-                    <div class="field">
-                      <div class="ui toggle checkbox">
-                        <input type="checkbox" name="gift" tabindex="0" class="hidden">
-                        <label>Do not include a receipt in the package</label>
-                      </div>
-                    </div>
-                  </div>
                 </form>
 
 
@@ -274,18 +299,26 @@ export default {
             lec_idx:0, // lecture id
             msg: page,
             modal:{
-                agree:true
+                // agree : true
+                agree : false
             },
             term:false // 약관동의 플래그
         }
     }, // data
 
 
+
+
+
+
+
+
+
     created() {
         const id = sessionStorage.getItem('lecture-idx')
         this.$set(this, 'lec_idx', id ? id : -1)
 
-        this.$set(this.modal, 'agree', (this.term?false:true))
+        // this.$set(this.modal, 'agree', (this.term?false:true))
 
         this.$http.get('/api/users/session')
         .then(resp=>{
@@ -311,11 +344,30 @@ export default {
         complete() {
 
             // 입력전 예외처리
-            var lec={}
-            lec.summary         = sessionStorage.getItem('lecture-summary')
-            lec.terms               = sessionStorage.getItem('lecture-term')
-            lec.timetables       = sessionStorage.getItem('lecture-timetables')
-            lec.companies       = sessionStorage.getItem('lecture-companies')
+            var lec=[
+                sessionStorage.getItem('lecture-summary'),
+                sessionStorage.getItem('lecture-term'),
+                sessionStorage.getItem('lecture-timetables'),
+                sessionStorage.getItem('lecture-companies'),
+                sessionStorage.getItem('lecture-teamBuilding'),
+                sessionStorage.getItem('lecture-students'),
+            ]
+
+
+            var conf = false // 빈값체크 플래그
+            var keys = Object.keys(lec)
+
+            for(var ii  in  keys){
+                if (lec[ii] == null  ||  lec[ii]==undefined) {
+                    conf=true
+                }// if
+            }// for
+
+            if (conf) {
+                 alert('모든 챕터를 작성해 주세요')
+                 this.$set(this, 'term', false)
+                    return
+            }// if
 
 
 

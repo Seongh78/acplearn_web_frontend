@@ -23,7 +23,7 @@
               <div class="ui button basic green " v-if="lecture.lec_flag=='임시저장'">
                   <i class="icon check circle"></i>승인요청
               </div>
-              <router-link tag="div" class="ui button" :to="{ path:'/lectures/new/summary', query:{flag:lec_idx} }">
+              <router-link tag="div" class="ui button" :to="{ path:'/new/summary', query:{flag:lec_idx} }">
                   <i class="icon edit"></i>수정
                   <!-- , query: {flag:'edit'} -->
               </router-link>
@@ -430,6 +430,8 @@
 
 
 
+
+
     <!-- ======================== 교육진행 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==3?'active viewAnimate':'']" >
         <h3>
@@ -504,8 +506,7 @@
                                 <th class="borderTop">활동내용</th>
                                 <td class="borderBottom">
                                     <!--  -->
-                                    <test-feed />
-                                    <br>
+                                    <feed table="feedback" v-bind:idx="lec_idx" />
                                     <br>
                                     <button class="fluid ui button small">피드 더 보기</button>
                                 </td>
@@ -1011,7 +1012,7 @@ import {
     SearchForm,
     CardTitle,
     Timeline ,
-    TestFeed ,
+    Feed ,
     NoContents,
     Rating
 } from '../../components'
@@ -1020,12 +1021,12 @@ export default {
     name: 'LectureDetail',
 
     components : {
-        'modal' : Modal,
-        'search-form' : SearchForm,
-        'timeline' : Timeline,
-        'test-feed' : TestFeed,
-        'no-contents' : NoContents,
-        'rating' : Rating
+        'modal'             : Modal,
+        'search-form'   : SearchForm,
+        'timeline'          : Timeline,
+        'feed'                : Feed,
+        'no-contents'    : NoContents,
+        'rating'              : Rating
     },
 
     data () {
@@ -1085,11 +1086,9 @@ export default {
 
 
     created(){
-        console.log(this.$ro.history.current.query);
-
         var id = this.$ro.history.current.params.id
         this.$set(this, 'lec_idx', id)
-        // console.log(this.lec_idx);
+
         this.getLecture(id)
 
         // $On

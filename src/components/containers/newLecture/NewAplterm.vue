@@ -283,7 +283,7 @@ export default {
                     ls_endTime: '', // 종료시간
                     sessions:new Array(),
                     ls_idx: this.ls_idx+ii,
-                    lec_seq: ii+1,
+                    ls_seq: ii+1,
                 }
                 this.terms.sessionDetail.push(tempData)
             }// for

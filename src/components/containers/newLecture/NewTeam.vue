@@ -43,13 +43,13 @@
                         </tbody>
                         <tbody v-else>
                             <tr v-for="(team, ii) in teams" v-bind:class="[colorAnimate==ii ? 'color-change-2x':'']">
-                                <td >{{ team.name }}</td>
+                                <td >{{ team.group_name }}</td>
                                 <td class="center aligned">{{ (team.students==undefined? '0명' : team.students.length+'명') }}</td>
                                 <td class="center aligned" style="padding-right:0; padding-left:5px;">
-                                    <button type="button" class="tiny basic ui button teamEdit" @click.prevent="editTeam(team.id)">수정</button>
-                                    <button type="button" class="tiny basic red ui button teamEdit" @click.prevent="removeTeam(team.id)">삭제</button>
+                                    <button type="button" class="tiny basic ui button teamEdit" @click.prevent="editTeam(team.group_idx)">수정</button>
+                                    <button type="button" class="tiny basic red ui button teamEdit" @click.prevent="removeTeam(team.group_idx)">삭제</button>
                                 </td>
-                                <td class="center aligned"><input type="radio" name="" v-bind:value="team.id" v-model="selectTeam"></td>
+                                <td class="center aligned"><input type="radio" name="" v-bind:value="team.group_idx" v-model="selectTeam"></td>
                             </tr>
                             <tr>
                                 <td colspan="4" class="center aligned">
@@ -109,7 +109,7 @@
                         </thead>
                         <tbody>
                             <!-- selectable positive -->
-                            <tr v-for="(std, i) in students" :key="i" class="trhover" v-bind:class="[]" @click="onSelect(std)">
+                            <tr v-for="(std, i) in students" :key="i" class="trhover" v-bind:class="[]" >
                                 <label for="i" v-bind:for="i">
                                 <td class="center aligned">
                                     <input type="checkbox" v-bind:id="i" v-bind:name="std" v-bind:value="std" v-model="checkedStudents">
@@ -177,7 +177,7 @@
                 <tr>
                     <td>팀명</td>
                     <td class="field">
-                          <input type="text" placeholder="미 입력시 생성된 순서의 번호로 자동생성됩니다." v-model="teamInfo.name">
+                          <input type="text" placeholder="미 입력시 생성된 순서의 번호로 자동생성됩니다." v-model="teamInfo.group_name">
                     </td>
                 </tr>
                 <tr>
@@ -349,7 +349,7 @@ export default {
             },
             colorAnimate: -1,
             teamInfo:{ // 팀정보
-                id: '', name: '', description: ''
+                group_idx: '', group_name: '', group_text: ''
             },
             teams:[], // 팀목록
             selectTeam: -1, // 선택 팀
@@ -384,19 +384,36 @@ export default {
 
         // 저장데이터확인
         var storageData = JSON.parse(sessionStorage.getItem('lecture-teamBuilding'))
+        console.log(storageData);
+        var teams =( storageData==null) ? [] : storageData.teams
         var stds = JSON.parse(sessionStorage.getItem('lecture-students')) // 수강생
 
-        console.log(storageData==null);
-        console.log(stds);
 
         // 세션스토리지에 저장되어있을 경우 -> 스토리지 우선
-        if(storageData!=null){
-            this.$set(this, 'teams', storageData.teams)
-            this.$set(this, 'students', storageData.students)
+        if(teams.length>0){
+            var stdsKeys = Object.keys(stds)
+            var teamsKeys = Object.keys(teams)
+
+            // 그룹내 수강생 푸시
+            for(var ii  in  stdsKeys){
+                for(var jj  in  teamsKeys){
+                    // 배열이 아닐경우 배열생성
+                    if( typeof(teams[jj].students) != 'object' ){
+                        teams[jj].students = []
+                    }
+                    if (stds[ii].group_idx === teams[jj].group_idx) {
+                            teams[jj].students.push(stds[ii])
+                    }
+                }// for
+            }// for
+            console.log(teams);
+            this.$set(this, 'teams', teams)
+            this.$set(this, 'students', stds)
             this.$set(this, 'students_temp', stds)
             return
 
-        }else if( stds!=null ){
+        }
+        else if( stds!=null && stds.length>0){
             this.$set(this, 'students', stds)
             console.log('!!!!!!!!!!');
             return
@@ -419,24 +436,28 @@ export default {
         // === 팀생성 === //
         addTeam() {
             // ID 자동생성
-            var newId = !this.teams.length ? 1 : this.teams[this.teams.length - 1].id + 1;
+            var newId = !this.teams.length ? 1 : this.teams[this.teams.length - 1].group_idx + 1;
 
-            if (this.teamInfo.name == ''  ||  this.teamInfo.name == undefined) {
+            if (this.teamInfo.group_name == ''  ||  this.teamInfo.group_name == undefined) {
                 if ( !confirm('팀명을 자동으로 생성하시겠습니까?') ) {
                     return
                 }
-                this.teamInfo.name = 'A'+newId+'팀'
+                this.teamInfo.group_name = 'A'+newId+'팀'
             } // if
 
 
-            this.teamInfo.id = newId
-            this.teamInfo.students = new Array()
+            this.teamInfo.group_idx = newId
+            this.teamInfo.students = []
 
             // 데이터 삽입
             this.teams.push(this.teamInfo)
 
             // 임시모델 초기화
-            this.teamInfo = { id:'', name: '', description: '' }
+            this.teamInfo = {
+                group_idx: '',
+                group_name: '',
+                group_text: ''
+            }
             this.modal.createTeam = false
         }, // addTeam
 
@@ -452,7 +473,7 @@ export default {
 
             // 삭제할 아이디가 유효한지 검사
             did = this.teams.findIndex(function (team) {
-                return team.id === id
+                return team.group_idx === id
             })
 
 
@@ -481,7 +502,7 @@ export default {
         editTeam(id){
             // 아이디가 유효한지 검사
             var eid = this.teams.findIndex(function (team) {
-                return team.id === id
+                return team.group_idx === id
             })
 
             // this.$set(this, 'tempTeam', this.teams[eid])
@@ -511,7 +532,7 @@ export default {
 
             // 팀아이디가 유효한지 검사
             var rid = this.teams.findIndex(function (team) {
-                return team.id === idx
+                return team.group_idx === idx
             })
 
             // 체크된 수강생
@@ -530,7 +551,7 @@ export default {
             // 체크모델 초기화 & 수강생 목록에서 제외 => 수강생 전체 입력가능한 모델하나 더만들어야함
             this.checkedStudents.forEach((cstd,i)=>{
                 this.students.forEach((std, j)=>{
-                    if (cstd.com_code==std.com_code && cstd.id==std.id) {
+                    if (cstd.com_code==std.com_code && cstd.stu_idx==std.stu_idx) {
                         this.students.splice(j,1)
                     }
                     if (this.checkedStudents.length-1 == i && this.students.length-1==j) {
@@ -557,7 +578,7 @@ export default {
         removeStudent(id) {
             var selectTeam = this.selectTeam
             var rid = this.teams[selectTeam].students.findIndex(std=>{
-                return std.id == id
+                return std.stu_idx == id
             })
             this.students.push(this.teams[selectTeam].students[rid])
             this.teams[selectTeam].students.splice(rid, 1)
@@ -596,7 +617,7 @@ export default {
                 var rid = resp.data.insertIdx
                 if(rid != undefined){
                     for(var ii  in  this.teams){
-                        this.teams.idx = rid
+                        this.teams.group_idx = rid
                         rid++
                     }// for
                 }

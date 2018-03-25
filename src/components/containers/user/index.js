@@ -1,5 +1,6 @@
-// import LectureContainer from './LectureContainer'
+import Profile from './Profile'
 
 
 export {
+    Profile
 }

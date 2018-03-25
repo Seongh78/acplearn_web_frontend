@@ -14,6 +14,7 @@ import CardTitle from './CardTitle'
 import Timepicker from './Timepicker'
 import Timeline from './Timeline'
 import TestFeed from './TestContent/Feed'
+import Feed from './Feed'
 import NoContents from './NoContents'
 import Rating from './Rating'
 import Pagination from './Pagination'
@@ -36,6 +37,7 @@ export {
     Timepicker,
     Timeline,
     TestFeed,
+    Feed,
     NoContents,
     Rating,
     Pagination

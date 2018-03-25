@@ -320,6 +320,9 @@ export default {
             .then(resp=>{
                 var tempLec = resp.data.lecture
                 var tempKpi = resp.data.kpi
+                var tempCompanies = resp.data.companies
+                var tempStudents = resp.data.students
+                var tempGroups = resp.data.groups
                 var da = [ new Date(tempLec.lec_startDate) , new Date(tempLec.lec_endDate) ]
 
                 // 시작일자 만들기
@@ -361,7 +364,16 @@ export default {
                 if(tempKpi){
                     sessionStorage.setItem('lecture-kpi', JSON.stringify(tempKpi))
                 }
-
+                // 참여기업
+                if(tempCompanies){
+                    sessionStorage.setItem('lecture-companies', JSON.stringify(tempCompanies))
+                }
+                // 수강생
+                if(tempStudents){
+                    sessionStorage.setItem('lecture-students', JSON.stringify(tempStudents))
+                }
+                // 그룹
+                sessionStorage.setItem('lecture-teamBuilding', JSON.stringify({teams : tempGroups, students : tempStudents}))
             })
             .catch(err=>{
                 console.log(err);
