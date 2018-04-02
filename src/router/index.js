@@ -28,6 +28,7 @@ import * as Recruitment from '@/components/containers/recruitment'
 import * as User from '@/components/containers/user'
 
 // 테스트 컴포넌트
+import * as NewTest from '@/components/containers/testComponents' // 강의개설 테스트
 import Lab from '@/components/containers/labs/Lab'
 import NotFoundPage from '@/components/containers/NotFoundPage'
 import NoContentPage from '@/components/containers/NoContentPage'
@@ -181,20 +182,31 @@ const router = new VueRouter({
                 //         aplAuth: true
                 //     },
                 // },
-                {// 상세보기2
-                    path : ':ca/:id',
-                    component:Lecture.LectureDetail,
+
+                // {// 상세보기2
+                //     path : ':ca/:id',
+                //     component:Lecture.LectureDetail,
+                //     meta: {
+                //         requiresAuth: true,
+                //         redirectUrl:'/login',
+                //         aplAuth: true
+                //     },
+                // },
+
+                {// 진행중 강의 ttttt
+                    path: 'processes',
+                    name:'lectures_processes',
+                    component : Lecture.LectureProcess,
                     meta: {
                         requiresAuth: true,
                         redirectUrl:'/login',
                         aplAuth: true
                     },
                 },
-
                 {// 진행중 강의 ttttt
-                    path: 'processes',
-                    name:'lectures_processes',
-                    component : Lecture.LectureProcess,
+                    path: 'complete',
+                    name:'lectures_complete',
+                    component : Lecture.LectureComplete,
                     meta: {
                         requiresAuth: true,
                         redirectUrl:'/login',
@@ -266,7 +278,18 @@ const router = new VueRouter({
                         redirectUrl:'/login',
                         aplAuth: true
                     },
-                }
+                },
+
+
+                {// 상세보기2
+                    path : ':ca/:id',
+                    component:Lecture.LectureDetail,
+                    meta: {
+                        requiresAuth: true,
+                        redirectUrl:'/login',
+                        aplAuth: true
+                    },
+                },
 
             ]
         },
@@ -274,8 +297,12 @@ const router = new VueRouter({
 
 
 
-        // ==========   템플릿관리   ========== //
 
+
+
+
+
+        // ==========   템플릿관리   ========== //
 
         { // 강의템플릿관리
             path: '/templates',
@@ -298,7 +325,6 @@ const router = new VueRouter({
             ]// children
         },
 
-
         // ==========   템플릿관리   ========== //
 
 
@@ -308,6 +334,8 @@ const router = new VueRouter({
 
 
 
+
+        // ==========   기업관리   ========== //
         { // 기업관리
             path: '/companies',
             component: SideBarContainer,
@@ -332,6 +360,50 @@ const router = new VueRouter({
 
             ]//children
         },
+        // ==========   기업관리   ========== //
+
+
+
+
+
+
+
+
+
+
+        // ==========   테스트   ========== //
+        {
+            path: '/test/new',
+            component: LectureCreateContainer,
+            children: [
+                {// 강의개요
+                    path: 'timetable',
+                    component: NewTest.Timetable
+                },
+            ]
+        },
+        {
+            path: '/test/lectures/processes',
+            component: SideBarContainer,
+            children: [
+                {// 상세보기2
+                    path : ':id',
+                    component:NewTest.LectureDetail,
+                    // meta: {
+                    //     requiresAuth: true,
+                    //     redirectUrl:'/login',
+                    //     aplAuth: true
+                    // },
+                },
+            ]
+        },
+        // ==========   테스트   ========== //
+
+
+
+
+
+
 
 
 
@@ -446,7 +518,7 @@ router.beforeEach((to, from, next)=>{
 
     if (to.meta.requiresAuth) {
         if (to.meta.aplAuth) {
-            console.log('o?');
+
         }
         axios.get('/api/users/session')
             .then(resp=>{

@@ -129,8 +129,8 @@ export default {
     name: page,
 
     created() {
-        var ss = window.sessionStorage;
-        sessionStorage.clear();
+        // var ss = window.sessionStorage;
+        // sessionStorage.clear();
 
         this.getLectures()
     },
@@ -144,6 +144,7 @@ export default {
 
     methods: {
         getLectures() {
+            console.log(12123123);
             this.$http.get('/api/lectures?lecType=승인대기')
             .then(resp=>{
                 // console.log(resp.data.data);

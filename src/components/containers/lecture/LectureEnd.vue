@@ -77,7 +77,7 @@
                         <h5 class="ui center aligned header" v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'black' : (lec.lec_flag==='종료')? 'grey':'red' )">{{ lec.lec_flag }}</h5>
                     </td>
                     <td class="single line">
-                        <router-link tag="a" :to="{path:'/lectures/cwait/'+lec.lec_idx}">{{ lec.lec_title }}</router-link>
+                        <router-link tag="a" :to="{path:'/lectures/end/'+lec.lec_idx}">{{ lec.lec_title }}</router-link>
                     </td>
                     <td class="center aligned">{{ lec.lec_startDate }} ~ {{ lec.lec_endDate }}</td>
                     <td class="center aligned">{{ lec.lec_sessionCount }}회</td>

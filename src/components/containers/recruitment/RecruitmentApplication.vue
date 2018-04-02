@@ -410,7 +410,9 @@ export default {
                 rec_idx : this.rec_idx // 강의아이디
             })
             .then(resp=>{
-                console.log(resp.data);
+                // console.log(resp.data);
+                alert('수강신청이 완료되었습니다.')
+                this.$router.replace('/apl/record/'+resp.data.insertId)
             })
             .catch(err=>{
                 console.log(err);

@@ -18,6 +18,8 @@ import Feed from './Feed'
 import NoContents from './NoContents'
 import Rating from './Rating'
 import Pagination from './Pagination'
+import Comment from './Comment'
+import Loading from './Loading'
 
 
 export {
@@ -40,5 +42,7 @@ export {
     Feed,
     NoContents,
     Rating,
-    Pagination
+    Pagination,
+    Comment,
+    Loading
 }

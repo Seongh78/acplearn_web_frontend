@@ -1,4 +1,5 @@
 import LectureContainer from './LectureContainer'
+import LectureComplete from './LectureComplete'
 import LectureList from './LectureList'
 import LectureDetail from './LectureDetail'
 import LectureEdit from './LectureEdit'
@@ -10,6 +11,7 @@ import LectureEnd from './LectureEnd'
 
 export {
     LectureContainer,
+    LectureComplete,
     LectureList,
     LectureDetail,
     LectureEdit,

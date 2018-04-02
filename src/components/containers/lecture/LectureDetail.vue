@@ -211,48 +211,48 @@
                                 <th>강의내용</th>
                             </tr>
                         </thead>
+
                         <!-- 상세시간표가 있을 경우 -->
                         <tbody v-if="sess.timetables.length > 0">
                             <tr v-for="(timetable, tid)  in  sess.timetables">
-                                <td>{{ timetable.lt_startTime ? timetable.lt_startTime : '00:00' }} ~ {{ timetable.lt_endTime ? timetable.lt_endTime : '00:00' }}</td>
-                                <td>{{ timetable.lt_title }}</td>
-                                <!-- 모듈수만큼 rowspan -->
                                 <td>
+                                    {{ timetable.lt_startTime ? timetable.lt_startTime : '00:00' }} ~ {{ timetable.lt_endTime ? timetable.lt_endTime : '00:00' }}
+                                </td>
+                                <td>{{ timetable.lt_title }}</td>
+
+                                <td style="padding:0;">
 
 
-                                    <!-- 모듈 -->
-                                    <div class="ui relaxed divided list">
-                                        <div class="item" v-for="(md, mid)  in  timetable.modules">
-                                        <!-- <i class="large github middle aligned icon"></i> -->
-                                            <div class="ui label small middle aligned horizontal" style="float:left; margin-top:5px; padding:5px 8px;" v-bind:class="[ md.lm_type=='강의' ? 'blue' :  md.lm_type=='미션' ? 'green' : 'orange' ]">
-                                                {{ md.lm_type }}
-                                            </div>
-                                            <div class="content horizontal" style="float:left; margin-left:7px;">
-                                                <span class="header">
-                                                    <small>{{ md.lm_startTime }} ~ {{ md.lm_endTime }}</small> <br>
-                                                     {{md.lm_title}}
-                                                </span>
-                                                <div class="description">{{ md.lm_text }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- <div class="ui middle aligned divided list" >
-                                        <div class="item ui grid" v-for="(md, mid)  in  timetable.modules">
-                                            <div class="content  wide column moduleLabel" >
-                                                <div class="ui right pointing basic label medium" v-bind:class="[md.lm_type=='강의'?'blue': md.lm_type=='미션'?'green':'orange']">{{ md.lm_type }} </div>
-                                            </div>
-                                            <div class="content  wide column moduleContent">
-                                                <div class="header">{{md.lm_title}}</div>
-                                                {{ md.lm_text }}
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- 모듈 -->
+                                    <table class="ui table selectable single line" style="border:none;" v-if="timetable.modules.length>0">
+                                        <colgroup>
+                                            <col width="15%">
+                                            <col width="20%">
+                                            <col >
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th class="center aligned singleLineTd">유형</th>
+                                                <th class="center aligned singleLineTd">시간</th>
+                                                <th class="singleLineTd">주제</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(md, mid)  in  timetable.modules">
+                                                <td class="center aligned singleLineTd">
+                                                    <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ md.lm_type=='강의' ? 'blue' :  md.lm_type=='미션' ? 'green' : 'orange' ]">
+                                                        {{ md.lm_type }}
+                                                    </div>
+                                                </td>
+                                                <td class="center aligned singleLineTd">09:00 ~ 10:00</td>
+                                                <td class="singleLineTd">대인관계능력 실습</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
                                 </td>
                             </tr>
                         </tbody>
+
                         <!-- 상세시간표가 없을 경우 -->
                         <tbody v-else>
                             <tr>
@@ -462,57 +462,96 @@
                     </h3>
 
                     <!-- 세션내용(상세시간표) -->
-                    <table class="ui table celled structured" v-if="sess.timetables.length > 0" v-for="(timetable, tid)  in  sess.timetables" style="margin-bottom:55px;">
+                    <table class="ui table celled structured cardbox" v-if="sess.timetables.length > 0" v-for="(timetable, tid)  in  sess.timetables" style="margin-bottom:55px;">
                         <colgroup>
-                            <col width="14%">
+                            <col width="8.5%">
                             <col >
                         </colgroup>
                         <tbody>
                             <tr>
-                                <th class="borderTop">주제</th>
+                                <th class="borderTop center aligned">주제</th>
                                 <td>{{ timetable.lt_title }}</td>
                             </tr>
                             <tr>
-                                <th class="borderTop">시간</th>
+                                <th class="borderTop center aligned">시간</th>
                                 <td>{{ timetable.start ? timetable.start : '00:00' }} ~ {{ timetable.end ? timetable.end : '00:00' }}</td>
                             </tr>
+
                             <tr>
-                                <th class="borderTop">내용</th>
-                                <!-- 모듈수만큼 rowspan -->
-                                <td>
+                                <th class="borderTop center aligned">내용</th>
+
+                                <td style="padding:0;">
                                     <!-- 모듈 -->
-                                    <div class="ui relaxed divided list" v-if="timetable.modules.length>0">
-                                        <div class="item" v-for="(md, mid)  in  timetable.modules">
-                                        <!-- <i class="large github middle aligned icon"></i> -->
-                                            <div class="ui label small middle aligned horizontal" style="float:left; margin-top:5px; padding:5px 8px;" v-bind:class="[ md.lm_type=='강의' ? 'blue' :  md.lm_type=='미션' ? 'green' : 'orange' ]">
-                                                {{ md.lm_type }}
-                                            </div>
-                                            <div class="content horizontal" style="float:left; margin-left:7px;">
-                                                <span class="header">
-                                                    <small>{{ md.lm_startTime }} ~ {{ md.lm_endTime }}</small> <br>
-                                                     {{md.lm_title}}
-                                                </span>
-                                                <div class="description">{{ md.lm_text }}</div>
-                                            </div>
+                                    <div class="ui grid" style="padding:0; margin:0; ">
+
+                                        <div class="sixteen wide column" style="padding:0; ">
+                                            <table class="ui table selectable single line" style="border:none;">
+                                                <colgroup>
+                                                    <col width="10%">
+                                                    <col width="13.5%">
+                                                    <col >
+                                                    <col width="8%">
+                                                    <col width="8%">
+                                                    <col width="9.5%">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="center aligned singleLineTd">유형</th>
+                                                        <th class="center aligned singleLineTd">시간</th>
+                                                        <th class="singleLineTd">주제</th>
+                                                        <th class="center aligned singleLineTd">피드</th>
+                                                        <th class="center aligned singleLineTd">이미지</th>
+                                                        <!-- <th class="center aligned singleLineTd">동영상</th> -->
+                                                        <th class="center aligned singleLineTd"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class=" " v-for="(module, mid)  in  timetable.modules">
+                                                    <!-- 모듈 목록 -->
+                                                    <tr class="cursorPointer" @click="accordionOpen(module.lm_idx)">
+
+                                                        <td class="center aligned singleLineTd borderTop">
+                                                            <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ module.lm_type=='강의' ? 'blue' :  module.lm_type=='미션' ? 'green' : 'orange' ]">
+                                                                {{ module.lm_type }}
+                                                            </div>
+                                                        </td>
+                                                        <td class="center aligned singleLineTd borderTop">{{ module.lm_startTime }} ~ {{ module.lm_endTime }}</td>
+                                                        <td class="singleLineTd borderTop">{{ module.lm_title }}</td>
+                                                        <td class="center aligned singleLineTd borderTop">12건</td>
+                                                        <td class="center aligned singleLineTd borderTop">12건</td>
+                                                        <td class="center aligned singleLineTd borderTop">
+                                                            <a v-if="module.lm_idx!=accordion">열기 <i class="icon angle down"></i></a>
+                                                            <a v-else>닫기 <i class="icon angle up"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- 해당 모듈에 대한 피드들  -->
+                                                    <tr v-bind:style="{'display':(module.lm_idx==accordion?'':'none')}">
+                                                        <td colspan="6" style="padding:20px 27px; border-top:none;">
+                                                            <loading v-if="comments.length<1" />
+                                                            <comment class="viewLoadAnimationTop" v-else v-bind:contents="comments"  />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
+
+
+
                                     </div>
 
-                                    <div class="center aligned" v-else>
+                                    <!-- <div class="center aligned" v-else>
                                         <no-contents header-text="강의모듈이 없는 강의입니다" icon="calendar minus outline" size="size1" />
-                                    </div>
+                                    </div> -->
                                 </td>
                             </tr>
-                            <tr>
-                                <th class="borderTop">활동내용</th>
-                                <td class="borderBottom">
-                                    <!--  -->
-                                    <feed table="feedback" v-bind:idx="lec_idx" />
-                                    <br>
-                                    <button class="fluid ui button small">피드 더 보기</button>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
+
+                    <div class="ui grid">
+                        <div class="">
+
+                        </div>
+                    </div>
 
                     <div class="center aligned container" style="text-align:center;" v-if="sess.timetables.length < 1">
                         <br>
@@ -996,6 +1035,44 @@
     </div>
 </modal>
 
+
+
+
+
+
+<!-- 강의 활동내역 모달 -->
+<modal v-if="modal.lectureComments" @close="modal.lectureComments = false" w="w-40" h="">
+    <h3 slot="header">활동내역</h3>
+    <div slot="body" class="ui form">
+
+        <div class="ui comments">
+            <div class="comment">
+                <a class="avatar">
+                  <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                </a>
+                <div class="content">
+                  <a class="author">Matt</a>
+                  <div class="metadata">
+                    <span class="date">Today at 5:42PM</span>
+                  </div>
+                  <div class="text">
+                    How artistic!
+                  </div>
+                  <div class="actions">
+                    <a class="reply">Reply</a>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.lectureComments=false">확인</div>
+        </div>
+    </div>
+</modal>
+
 <!-- ======================== Modal ============================ -->
 
 
@@ -1014,8 +1091,12 @@ import {
     Timeline ,
     Feed ,
     NoContents,
-    Rating
+    Rating,
+    Comment,
+    Loading
 } from '../../components'
+
+import LectureModule from './LectureModule'
 
 export default {
     name: 'LectureDetail',
@@ -1026,7 +1107,10 @@ export default {
         'timeline'          : Timeline,
         'feed'                : Feed,
         'no-contents'    : NoContents,
-        'rating'              : Rating
+        'rating'              : Rating,
+        'comment'        : Comment,
+        'lecture-module': LectureModule,
+        'loading' : Loading
     },
 
     data () {
@@ -1035,6 +1119,7 @@ export default {
                 aadd:false, // 테스트모달
                 actionPlan : false, //액션플랜 상세보기
                 addActionPlan : false, //액션플랜 추가 상세보기
+                lectureComments : false, //강의활동내역 상세보기
             },
           msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
           lec_idx:null,
@@ -1049,13 +1134,14 @@ export default {
           groupTab:'' , // 선택한 그룹아이디
           chooseTeam:{}, // 선택한 그룹 정보
           companyTab:0,
-          tab:5, // 현재 활성화 탭
+          tab:3, // 현재 활성화 탭
           attendanceCount : 0, // 출석 카운트
           avgAttendancePercent : 0, // 평균출석률
 
 
           // === 교육진행 === //
-
+          accordion : -1 , // 펼쳐보기 탭
+          comments: [], // 선택된 모듈의 내용들
           // === 교육진행 === //
 
 
@@ -1087,9 +1173,11 @@ export default {
 
     created(){
         var id = this.$ro.history.current.params.id
-        this.$set(this, 'lec_idx', id)
+        // this.$set(this, 'lec_idx', id)
+        this.$set(this, 'lec_idx', 5)  //  테스트 컨텐츠
 
-        this.getLecture(id)
+        this.getLecture(id) // 강의정보
+        this.getComments('feedback', id) // 활동내역
 
         // $On
         this.$EventBus.$on('addTeam', this.addTeam)
@@ -1261,8 +1349,46 @@ export default {
 
 
 
+        // ========== 교육진행 / 코멘트 / 활동내용 ========== //
 
-        // ===== 액션플랜 ===== //
+
+        // === 활동내용 리스트 === //
+        getComments( table , lec_idx ){
+            /*
+            table       : 찾을 테이블 [ 'feedback' , 'action_check' ]
+            lec_idx    : 강의 아이디
+            */
+            var url = '/api/comments/'+table+'/'+lec_idx
+            this.$http.get(url)
+            .then (resp =>{
+                console.log(resp.data.comments);
+                this.$set(this, 'comments', resp.data.comments)
+            })
+            .catch (err => {
+
+            })
+        },
+
+
+        // === 아코디언 탭 === //
+        accordionOpen(lm_idx){
+            this.$set(this, 'comments', [])
+            var val = lm_idx==this.accordion?-1:lm_idx
+            this.$set(this, 'accordion', val) // 모듈 아이디
+            this.getComments('modules', lm_idx)
+        }, // accordionOpen()
+
+
+
+        // ========== 교육진행 / 코멘트 / 활동내용 ========== //
+
+
+
+
+
+
+
+        // ========== 액션플랜 ========== //
 
         // 점수추가
         plusScore(table, id, score){
@@ -1306,15 +1432,7 @@ export default {
             })
         },// 점수추가
 
-        // ===== 액션플랜 ===== //
 
-
-
-
-
-
-
-        // ===== 액션플랜 ===== //
 
         // 액션플랜 목록 조회
         getActionPlan( stu_idx ){
@@ -1344,7 +1462,7 @@ export default {
         },// 액션플랜 상세
 
 
-        // ===== 액션플랜 ===== //
+        // ========== 액션플랜 ========== //
 
 
 
@@ -1355,117 +1473,112 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
+
+
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
-.segment{
-    padding:20px;
-}
-
-
-.lectureInfo a:hover{color:#c1c1c1;}
-.lectureInfo a{color:#333; text-decoration: underline; cursor: pointer;}
-
-
-
-
-th{
-    background: #F9FAFB;
-    padding:0.92857143em 0.78571429em;
-}
-.borderBottom{
-    border-bottom: 1px solid rgba(34, 36, 38, 0.1);
-}
-.borderTop{
-    border-top: 1px solid rgba(34, 36, 38, 0.1);
-}
-
-
-.tempRow{ cursor: pointer; }
-.tempRow:hover{ background: #f9f9f9 !important; }
-
-
-
-
-    .lectureMenu .active{
-        color: #fff !important;
-        background: #3b485f !important;
-        border-radius: 0 !important;
+    h1, h2 {
+      font-weight: normal;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      display: inline-block;
+      margin: 0 10px;
+    }
+    a {
+      color: #42b983;
     }
 
-    .tab.segment{
-        padding:30px 25px !important;
+    .segment{
+        padding:20px;
     }
 
 
+    .lectureInfo a:hover{color:#c1c1c1;}
+    .lectureInfo a{color:#333; text-decoration: underline; cursor: pointer;}
 
 
-    .list > .item {
-        margin:3px;
-        padding-top: 10px;
-        padding-bottom: 5px;
+    th{
+        background: #F9FAFB;
+        padding:0.92857143em 0.78571429em;
+    }
+    /*.borderBottom{
+        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+    }
+    .borderTop{
+        border-top: 1px solid rgba(34, 36, 38, 0.1);
+    }*/
+
+
+    .singleLineTd{
+        border-right:none !important;
+        border-left:none !important;
     }
 
 
-
-    h3 .icon {
-        color:rgba(0, 0, 0, 0.45) !important;
-        font-size: 0.95em !important;
-    }
+    .tempRow{ cursor: pointer; }
+    .tempRow:hover{ background: #f9f9f9 !important; }
 
 
 
-    .moduleLabel{
-        padding:0 !important;
-        width:57px !important;
-    }
-    .moduleContent{
-        padding:0 !important;
-        width:calc(90% - 60px) !important;
-    }
+        .lectureMenu .active{
+            color: #fff !important;
+            background: #3b485f !important;
+            border-radius: 0 !important;
+        }
 
-
-    .fixButton{
-        position: absolute;
-        top: 0;
-        right:0;
-        z-index: 99;
-    }
+        .tab.segment{
+            padding:30px 25px !important;
+        }
 
 
 
-
-    .actionPlan td{
-        padding:20px 18px;
-        cursor: pointer;
-    }
-
-
+        .list > .item {
+            margin:3px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
 
 
 
-    .actionPlanUserList .item{
-        cursor: pointer;
-    }
-    .actionPlanUserList .item:hover{
-        background: #f1f1f1;
-    }
+        h3 .icon {
+            color:rgba(0, 0, 0, 0.45) !important;
+            font-size: 0.95em !important;
+        }
 
 
 
+        .moduleLabel{
+            padding:0 !important;
+            width:57px !important;
+        }
+        .moduleContent{
+            padding:0 !important;
+            width:calc(90% - 60px) !important;
+        }
 
+
+        .fixButton{
+            position: absolute;
+            top: 0;
+            right:0;
+            z-index: 99;
+        }
+
+
+        .actionPlan td{
+            padding:20px 18px;
+            cursor: pointer;
+        }
+
+
+        .actionPlanUserList .item{
+            cursor: pointer;
+        }
+        .actionPlanUserList .item:hover{
+            background: #f1f1f1;
+        }
 </style>

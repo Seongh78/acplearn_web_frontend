@@ -1,13 +1,11 @@
 <template>
-    <!-- 진행강의 목록 -->
     <div class="">
 
-
-        <h1 class="ui header">강의현황</h1>
+        <h1 class="ui header">승인대기 강의</h1>
         <hr style="opacity:0.3;">
         <div class="ui secondary  menu" style="padding:0;">
-            <a href="#" class="item active">진행강의</a>
-            <router-link class="item" tag="a" :to="{ name: 'lectures_wait'}">승인대기강의</router-link>
+            <a class="item active">진행강의</a>
+            <router-link href="#" class="item" tag="a" :to="{ name: 'lectures_wait'}">승인대기강의</router-link>
             <router-link class="item" tag="a" :to="{ name: 'lectures_cwait'}">개설대기강의</router-link>
             <router-link class="item" tag="a" :to="{ name: 'lectures_end'}">종료강의</router-link>
 
@@ -42,6 +40,10 @@
         </div>
 
 
+
+
+
+
         <table class="ui celled padded table ">
             <colgroup>
                 <col width="7.5%">
@@ -65,14 +67,18 @@
             <tbody v-if="lectures.length<1">
                 <tr>
                     <td class="center aligned" colspan="6">
-                        <h4>진행중인 강의가 없습니다.</h4>
+                        <h4>승인대기 중인 강의가 없습니다.</h4>
                     </td>
                 </tr>
             </tbody>
             <tbody v-else>
                 <tr v-for="lec in lectures">
                     <td>
-                        <h5 class="ui center aligned header" v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'grey' : (lec.lec_flag==='종료')? 'grey':'red' )">{{ lec.lec_flag }}</h5>
+                        <h5
+                        class="ui center aligned header"
+                        v-bind:class="(lec.lec_flag==='진행중'?'green': (lec.lec_flag=='승인대기')? 'black' : (lec.lec_flag==='종료')? 'grey':'red' )">
+                            {{ lec.lec_flag }}
+                        </h5>
                     </td>
                     <td class="single line">
                         <router-link tag="a" :to="{path:'/lectures/processes/'+lec.lec_idx}">{{ lec.lec_title }}</router-link>
@@ -110,21 +116,25 @@
         </div>
 
 
+
+
+
     </div>
 </template>
 
 
 
+
 <!-- Script -->
 <script>
-const page = 'LectureProcesses';
+const page = 'LectureWait';
 
 export default {
     name: page,
 
     created() {
-        var ss = window.sessionStorage;
-        sessionStorage.clear();
+        // var ss = window.sessionStorage;
+        // sessionStorage.clear();
 
         this.getLectures()
     },
@@ -132,19 +142,13 @@ export default {
     data () {
         return {
             msg: page,
-            lectures: [],
-            ca:''
+            lectures: []
         }
     }, // data
 
-
-    created(){
-        this.$set(this, 'ca', this.$ro.history.current.params.ca)
-    },
-
-
     methods: {
         getLectures() {
+            console.log(12123123);
             this.$http.get('/api/lectures?lecType=진행중')
             .then(resp=>{
                 // console.log(resp.data.data);

@@ -2,19 +2,19 @@
     <div class="ui feed">
 
 
-        <div class="event" v-for="(feed, fid)  in  feeds">
+        <!-- <div class="event" >
             <div class="label">
                 <img src="../../assets/user_sample1.png" class="profileImg">
             </div>
             <div class="content">
                 <div class="summary">
-                    <a>{{ feed.stu_name }}</a>
-                    <div class="date">{{ feed.lc_date }}</div><br>
-                    {{ feed.lc_text }}
+                    <a>David - 강사</a>
+                    <div class="date">0000-00-00</div><br>
+                    교육생들이 너무 열정적으로 참여하고 있습니다. ^^
                 </div>
                 <div class="extra images">
-                    <!-- <a><img src="../../assets/user_sample1.png"></a>
-                    <a><img src="../../assets/user_sample1.png"></a> -->
+                    <a><img src="../../assets/lecture_comments/cm01.jpg"></a>
+                    <a><img src="../../assets/lecture_comments/cm2.jpg"></a>
                 </div>
                 <div class="meta">
                     <a class="like">
@@ -22,7 +22,7 @@
                 </a>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
     </div>
@@ -55,8 +55,8 @@ export default {
 
 
     created(){
-        this.getFeeds(this.table, this.idx)
-        console.log('feed : ', this.idx)
+        // this.getFeeds(this.table, this.idx)
+        // console.log('feed : ', this.idx)
     }, // created()
 
 

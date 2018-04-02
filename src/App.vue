@@ -100,10 +100,10 @@
         padding:0.92857143em 0.78571429em;
     }
     .borderBottom{
-        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+        border-bottom: 1px solid rgba(34, 36, 38, 0.1) !important;
     }
     .borderTop{
-        border-top: 1px solid rgba(34, 36, 38, 0.1);
+        border-top: 1px solid rgba(34, 36, 38, 0.1) !important;
     }
 
 
@@ -121,6 +121,24 @@
                 opacity:1
             }
     }
+
+
+
+    .cursorPointer {
+        cursor: pointer !important;
+    }
+
+
+    .opacity2{ opacity: .2; }
+    .opacity3{ opacity: .3; }
+    .opacity4{ opacity: .4; }
+    .opacity5{ opacity: .5; }
+    .opacity6{ opacity: .6; }
+    .opacity7{ opacity: .7; }
+    .opacity8{ opacity: .8; }
+
+
+
 
     .viewLoadAnimationTop { animation:fade-in-top .3s cubic-bezier(.39,.575,.565,1.000) both }
     @keyframes fade-in-top{0%{transform:translateY(-30px);opacity:0}100%{transform:translateY(0);opacity:1}}
