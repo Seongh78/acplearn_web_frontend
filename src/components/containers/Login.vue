@@ -9,14 +9,14 @@
 
         <form class="ui form">
           <div class="field">
-            <input v-model="usr.id" type="text" name="first-name" placeholder="아이디를 입력해 주세요">
+            <input v-model="usr.id" type="text" v-on:keyup="saveIdFunc" placeholder="아이디를 입력해 주세요">
           </div>
           <div class="field">
             <input v-model="usr.pw" type="password" name="last-name" placeholder="패스워드를 입력해 주세요">
           </div>
           <div class="field">
-            <div class="ui checkbox">
-              <input type="checkbox" tabindex="0" class="hidden">
+            <div class="ui checkbox" @click.prevent="check=!check">
+              <input type="checkbox" tabindex="0" class="hidden" v-model="check">
               <label>아이디 기억하기</label>
             </div>
           </div>
@@ -56,12 +56,25 @@ export default {
 
     data(){
         return{
-            usr:{ id:'', pw:'' }
+            usr:{ id:'', pw:'' }, // 유저정보
+            check: false, // 아이디 저장여부
         }
     },//data
 
 
+
+
+
+
+
     created(){
+
+        var chk = localStorage.getItem('usr_id')
+        if(chk !== null && chk !== undefined){
+            this.$set(this.usr, 'id', chk, String(chk))
+            this.$set(this, 'check', true)
+        } // if
+
     },
 
 
@@ -87,12 +100,16 @@ export default {
             })
         },
 
+
+
         usrCheck(){
             this.$http.get('/api/users/session').then(resp=>{
                 // console.log(resp)
                 console.log(document.cookie)
             })
         },
+
+
 
         api_session(){
             // this.$http.get('http://localhost:3000/api/users/session').then(resp=>{
@@ -101,12 +118,24 @@ export default {
                 console.log(resp.data)
             })
         },
+
+
+
         api_gg(){
             this.$http.get('/api/users/gg').then(resp=>{
                 // console.log(resp)
                 console.log(resp.data)
             })
-        }
+        },
+
+
+
+        // 아이디 저장
+        saveIdFunc(){
+            if (this.check) {
+                localStorage.setItem('usr_id', this.usr.id)
+            }
+        } // saveIdFunc
 
     }//methods
 

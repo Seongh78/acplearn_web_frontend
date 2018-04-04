@@ -90,8 +90,8 @@ export default {
             selector: 'summary',
             steps : [
                 { title: '강의개요', sub: 'summary' },
-                { title: 'APL기간', sub: 'aplterm' },
-                { title: '시간표', sub: 'timetable' },
+                // { title: 'APL기간', sub: 'aplterm' },
+                { title: '일정/시간표', sub: 'timetable' },
                 { title: 'KPI설정', sub: 'kpi' },
                 { title: '수강생', sub: 'students' },
                 { title: '팀빌딩', sub: 'team' },

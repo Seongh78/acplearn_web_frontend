@@ -1,6 +1,8 @@
 <template lang="html">
 <div class="ui comments">
-    <div class="comment" v-for="(content, cid)  in  contents">
+    <!-- <div class="comment" v-for="(content, cid)  in  contents" v-if="sorting==content.group_idx || sorting==-1"> -->
+    <div class="comment">
+
         <a class="avatar">
           <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
         </a>
@@ -39,11 +41,12 @@ export default {
         table => 찾을 테이블
     }
     */
-    props: ['contents'],
+    props: ['contents', 'groupFilter'],
 
     data(){
         return {
-            feeds:[]
+            feeds:[],
+            sorting:'', // 분류 기준
         }
     }, // data()
 
@@ -53,8 +56,15 @@ export default {
 
     created(){
         // this.getFeeds(this.table, this.idx)
-        // console.log('feed : ', this.idx)
+        // console.log('feed : ', this.groupFilter)
+        // this.$set(this, 'sorting', this.groupFilter)
     }, // created()
+
+
+    updated(){
+        console.log('feed : ', this.groupFilter)
+        this.$set(this, 'sorting', this.groupFilter)
+    }, // updated
 
 
 

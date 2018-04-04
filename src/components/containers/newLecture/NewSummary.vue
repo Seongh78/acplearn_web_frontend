@@ -254,7 +254,7 @@ export default {
             this.$set(this, 'lec_idx', id ? id : -1)
 
             // 임시저장 중인 강의가 있을 시 목록 선택화면 출력
-            let lec = sessionStorage.getItem('lecture-summary');
+            var lec = sessionStorage.getItem('lecture-summary');
             if(lec){
                 this.summary = JSON.parse(lec);
             }
@@ -351,9 +351,13 @@ export default {
                 sessionStorage.setItem('lecture-idx', id)
 
                 // 불러온 데이터 푸시
+                // #강의 개요
+                sessionStorage.setItem('lecture-summary', JSON.stringify(this.summary))
+
                 // #강의 차시
                 if(tempLec.sessions.length>0){
                     sessionStorage.setItem('lecture-term', JSON.stringify({ sessionDetail:tempLec.sessions }))
+                    sessionStorage.setItem('lecture-sessions', JSON.stringify(tempLec.sessions))
                     sessionStorage.setItem('lecture-sessionCount', tempLec.sessions.length)
                 }
                 // 상세시간표

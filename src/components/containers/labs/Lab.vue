@@ -12,6 +12,18 @@
 
 
 
+        <h4>Timepicker</h4>
+        <date-picker v-model="date" format="yyyy-MM-dd" minimumView="day" maximumView="day"></date-picker>
+        {{date}}
+        <hr>
+
+
+
+        <br>
+        <br>
+        <br>
+
+
         <h4>페이징 테스트</h4>
         <paging />
         <hr>
@@ -37,12 +49,12 @@
         <br>
         <br>
 
-        <react />
+        <!-- <react /> -->
 
 
         <h4>Timepicker TEST</h4>
         <!-- <time-picker flag="dateTest" defaultTime="Mon Mar 05 2018 10:00:13 GMT+0900 (KST)" /> -->
-        <time-picker flag="dateTest" v-bind:defaultTime="tdtd" />
+        <!-- <time-picker flag="dateTest" v-bind:defaultTime="tdtd" /> -->
 
 
 
@@ -71,9 +83,22 @@ import {
     Pagination
 } from '@/components/components'
 
+
+
 import Eventbus from './Eventbus'
 import Reactivity from './Reactivity'
 import Timepicker from './Timepicker'
+
+import Datepicker from 'vuejs-datepicker'
+/*
+타임피커 형식 format
+"d MMM yyyy"           d MMM yyyy           - e.g       12 Feb 2016
+"d MMMM yyyy"       d MMMM yyyy        - e.g       12 February 2016
+"yyyy-MM-dd"           yyyy-MM-dd            - e.g        2016-02-12
+"dsu MMM yyyy"      dsu MMM yyyy        - e.g       12th Feb 2016
+"D dsu MMM yyyy"  D dsu MMM yyyy     - e.g       Sat 12th Feb 2016
+*/
+
 
 export default {
     name: 'Lab',
@@ -88,7 +113,8 @@ export default {
         'react' : Reactivity,
         'time-picker' : Timepicker,
         'rating': Rating,
-        'paging' : Pagination
+        'paging' : Pagination,
+        'date-picker' : Datepicker,
     },
 
     data () {
@@ -96,7 +122,8 @@ export default {
             items:0,
             ddd:0,
             // tdtd : '2018-02-26 10:00:00'
-            tdtd : '10:00:00'
+            tdtd : '10:00:00',
+            date: ''
         }
     }, //data
 

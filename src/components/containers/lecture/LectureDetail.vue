@@ -525,9 +525,28 @@
                                                     </tr>
                                                     <!-- 해당 모듈에 대한 피드들  -->
                                                     <tr v-bind:style="{'display':(module.lm_idx==accordion?'':'none')}">
-                                                        <td colspan="6" style="padding:20px 27px; border-top:none;">
+                                                        <td colspan="6" style="padding:0 27px 20px 27px; border-top:none;">
+                                                            <div class="ui divider" style="margin-top:0;"></div>
+
+                                                            <!-- 로딩이미지 -->
                                                             <loading v-if="comments.length<1" />
-                                                            <comment class="viewLoadAnimationTop" v-else v-bind:contents="comments"  />
+                                                            <!-- 강의모듈이 토론/미션일경우 그룹별 정보조회 가능 -->
+                                                            <div class="" v-if="comments.length>0 && module.lm_type !== '강의'">
+                                                                <!-- <h4>
+                                                                    <i class="icon filter"></i>
+                                                                    분류
+                                                                </h4> -->
+                                                                <div id="context2">
+                                                                    <div class="ui secondary menu">
+                                                                        <a class="item" v-bind:class="[groupCommentTab==-1?'active':'']" @click.prevent="groupCommentTab = -1">전체</a>
+                                                                        <a class="item" v-for="(group, gid)  in  groups" v-bind:class="[group.group_idx==groupCommentTab?'active':'']" @click.prevent="groupCommentTab = group.group_idx">
+                                                                            {{ group.group_name }}
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            ::: {{groupCommentTab}}
+                                                            <!-- <comment class="viewLoadAnimationTop" v-bind:contents="comments" v-bind:group-filter="groupCommentTab"  /> -->
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -1142,6 +1161,7 @@ export default {
           // === 교육진행 === //
           accordion : -1 , // 펼쳐보기 탭
           comments: [], // 선택된 모듈의 내용들
+          groupCommentTab : -1,
           // === 교육진행 === //
 
 
@@ -1215,9 +1235,11 @@ export default {
         },
 
         getLecture(id){
-            this.$http.get('/api/lectures/dt/'+id)
+            // alert(typeof id)
+            // return
+            this.$http.get('/api/lectures/dt/'+Number(id))
             .then(resp=>{
-                // console.log(resp.data);
+                console.log(resp.data.students);
                 this.$set(this, 'lecture', resp.data.lecture)
                 this.$set(this, 'companies', resp.data.companies)
                 this.$set(this, 'groups', resp.data.groups)

@@ -1,1000 +1,802 @@
-<template>
-    <div class="">
+<template lang="html">
+<div class="">
 
-        <!-- ======================== 페이지 타이릍 ============================ -->
-        <div class="cardbox" style="margin:10px 0; padding:25px; ">
-            <h2>
-                상세시간표
-                <button class="ui icon button tiny " style="margin: 4px 0 0 5px; padding:7px; font-size:.5em; position:absolute;">
-                    <i class="help circle icon"></i> 가이드
-                </button>
-            </h2>
+
+
+    <!-- ======================== 페이지 타이릍 ============================ -->
+    <div class="cardbox" style="margin:10px 0; padding:25px; ">
+        <h2>
+            일정/시간표
+            <button class="ui icon button tiny " style="margin: 4px 0 0 5px; padding:7px; font-size:.5em; position:absolute;">
+                <i class="help circle icon"></i> 가이드
+            </button>
+        </h2>
+    </div>
+    <!-- ======================== 페이지 타이릍 ============================ -->
+
+
+
+
+
+
+
+    <!-- ======================== 회차정보 ============================ -->
+    <div class="cardbox " style="margin:0; padding:0; ">
+
+        <div class="ui top attached menu big lectureMenu" >
+            <a class=" item" v-bind:class="[thisTab==-1?'active':'']" v-on:click.prevent="thisTab=-1">
+               전체일정
+            </a>
+            <a
+                class=" item"
+                v-for="(sess, sid) in sessions"
+                :key="sid"
+                v-bind:class="[thisTab==sid?'active':'']"
+                v-on:click.prevent="thisTab=(sid)">
+                 {{ sid+1 }}회차
+            </a>
+            <a class=" item" @click.prevent="removeSessionFunc(sessions.length-1)" v-if="sessions.length>0">
+                <i class="icon minus circle red" ></i>회차삭제
+            </a>
+            <div class=" menu" @click.prevent="modal.addSession=true">
+                <a class="item "  style="color:green;">
+                    <i class="add icon"></i> 회차등록
+                </a>
+            </div>
         </div>
-        <!-- ======================== 페이지 타이릍 ============================ -->
+
+    </div>
 
 
 
 
-<br>
 
 
-
-        <!-- ======================== 회차정보 ============================ -->
-        <div class="cardbox" style="margin:0; padding:0; ">
-            <div class="ui top attached menu big lectureMenu" >
-                  <a class=" item"
-                          v-for="(sc, i) in timetables"
-                          :key="i"
-                          v-bind:class="[thisTab==i?'active':'']"
-                          v-on:click.prevent="selectTab(i)">
-                     {{ i+1 }}회차
-                  </a>
-                  <!-- <div class=" menu">
-                        <a class="item "  style="color:green;">
-                          <i class="add icon"></i> 차시등록
-                        </a>
-                  </div> -->
-                </div>
+    <!-- ========= 전체회차 ========= -->
+    <div class="ui bottom attached tab segment cardbox viewLoadAnimation" v-bind:class="[thisTab<0?'active viewAnimate':'']" style="border-top:none; padding:25px;">
+        <div class="container" style="text-align:center;" v-if="sessions.length<1">
+            <no-contents header-text="등록된 회차정보가 없습니다." icon="edit" />
         </div>
 
+        <div v-else>
+            <!--
+            전체현황에 대한 정보 표시와 수정가능한 디자인 제작해야함
+            -->
+            <h3>전체 학습기간</h3>
+            <hr class="opacity3">
+            <table class="ui table celled form centerLayout">
+                <colgroup>
+                    <col width="27%">
+                    <col width="27%">
+                    <col width="23%">
+                    <col width="23%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="center aligned">시작일</th>
+                        <th class="center aligned">종료일</th>
+                        <th class="center aligned">시간</th>
+                        <th class="center aligned">회차</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="center aligned">
+                        <datepicker format="yyyy-MM-dd" v-model="lecture.lec_startDate" />
+                    </td>
+                    <td class="center aligned">
+                        <datepicker format="yyyy-MM-dd" v-model="lecture.lec_endDate" />
+                    </td>
+                    <td class="center aligned">13시간</td>
+                    <td class="center aligned">
+                        총 {{ sessions.length }}회
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
 
-        <div class="cardbox" style="margin:0; padding:25px; ">
+            <br>
+            <br>
 
-                <div
-                    class="ui bottom tab"
-                    v-for="(sc, i) in timetables"
-                    :key="i"
-                    v-bind:class="[thisTab==i?'active viewAnimate':'']" >
-                    <table class="ui celled table form timetable" >
-                        <colgroup>
-                            <col width="60%">
-                            <col width="20%">
-                            <col width="20%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th><b>{{ thisTab+1 }}</b>회차 강의주제</th>
-                                <th>시작시간</th>
-                                <th>종료시간</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <!-- <input type="text" placeholder="해당 회차의 제목을 입력해 주세요" v-model="timetables[thisTab].timetableTitle"> -->
-                                    <input type="text" placeholder="해당 회차의 제목을 입력해 주세요" v-model="timetables[thisTab].ls_title">
-                                </td>
-                                <td>
-                                    <time-picker flag="sessionCountStart" v-bind:defaultTime="sc.ls_startTime" />
-                                    <!-- {{sc.ls_startTime}} -->
-                                </td>
-                                <td>
-                                    <time-picker flag="sessionCountEnd" v-bind:defaultTime="sc.ls_endTime" />
-                                    <!-- {{sc.ls_endTime}} -->
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+
+            <!-- 회차목록 -->
+            <h3>회차별 학습시간</h3>
+            <hr class="opacity3">
+            <table class="ui table celled form centerLayout">
+                <colgroup>
+                    <col width="15%">
+                    <col width="15%">
+                    <col >
+                    <col width="31.5%">
+                    <col width="8.5%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>시작일</th>
+                        <th>종료일</th>
+                        <th>주제</th>
+                        <th>장소</th>
+                        <th class="center aligned">-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(session, sid) in  sessions">
+                        <td><datepicker format="yyyy-MM-dd" v-model="session.ls_startDate" /></td>
+                        <td><datepicker format="yyyy-MM-dd" v-model="session.ls_endDate" /></td>
+                        <td><input placeholder="회차 제목을 입력해 주세요" type="text" v-model="session.ls_title"></td>
+                        <td><input placeholder="강의장소를 입력해 주세요" type="text" v-model="session.ls_location"></td>
+                        <td class="center aligned"><button type="button" class="ui button red mini">삭제</button></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" style="padding:0;">
+                            <button type="button" class="ui button fluid basic green mini" @click.prevent="modal.addSession=true">회차등록</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
-        <!-- ======================== 회차정보 ============================ -->
+    </div>
+    <!-- ========= 전체회차 ========= -->
 
 
 
 
+
+
+    <!-- ========= 회차상세정보 ========= -->
+    <div
+        class="ui bottom attached tab segment form segment cardbox viewLoadAnimation"
+        v-bind:class="[thisTab==sid?'active viewAnimate':'']"
+        style="border-top:none; padding:25px;"
+        v-for="(session , sid)  in  sessions">
+
+        <h3>{{sid+1}}회차 정보</h3>
+        <hr class="opacity3">
+
+        <div class="ui grid" style="margin-top:12px; padding-botton:0;">
+            <div class="sixteen wide column field">
+                <label class="opacity5">회차제목</label>
+                <input placeholder="" type="text" v-model="session.ls_title">
+            </div>
+        </div>
+
+        <div class="ui grid" style="margin-top:0;">
+            <div class="ten wide column" >
+                <label class="opacity5">강의장소</label>
+                <input placeholder="" type="text" v-model="session.ls_location">
+            </div>
+            <div class="three wide column field">
+                <label class="opacity5">시작일</label>
+                <!-- <input placeholder="First Name" type="date" v-model="session.ls_startDate"> -->
+                <datepicker format="yyyy-MM-dd" v-model="session.ls_startDate" />
+            </div>
+            <div class="three wide column field">
+                <label class="opacity5">종료일</label>
+                <!-- <input placeholder="First Name" type="date" v-model="session.ls_endDate"> -->
+                <datepicker format="yyyy-MM-dd" v-model="session.ls_endDate" />
+            </div>
+        </div>
+
+        <div
+            class="ui top right attached label red basic cursorPointer"
+            @click.prevent="removeSessionFunc(sessions.length-1)"
+            v-if="thisTab == sessions.length-1">
+            회차정보 삭제
+        </div>
+
+        <br>
+        <br>
         <br>
 
 
-
-
-
-        <!-- ======================== 시간표 활성화 플래그 ============================ -->
-
-        <!-- <div class="">
-            <div class="ui ">
-                <div class="field" style="">
-                  <div class="ui toggle checkbox " v-bind:class="[ timetableFlag ? 'checked' : '' ]" @click="timetableFlag = !timetableFlag">
+        <!-- ========= 시간표 활성화 플래그 ========= -->
+        <div class="ui grid">
+            <div class=" two wide column" style="">
+                <h3>상세시간표</h3>
+            </div>
+            <div class="field fourteen wide column right aligned" style="">
+                <div class="ui toggle checkbox checked" v-bind:class="[ timetableFlag ? 'checked' : '' ]" @click="timetableFlag = !timetableFlag">
+                    <label>시간표 사용</label>
                     <input type="checkbox" name="gift" tabindex="0" class="hidden" v-model="timetableFlag" style="background:red;">
-                    <label>상세시간표 사용하기</label>
-                  </div>
                 </div>
-              </div>
-        </div> -->
-        <!-- ======================== 시간표 플래그 ============================ -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- ======================== 상세시간표 ============================ -->
-        <div class="cardbox viewAnimate" style="margin:10px 0; padding:25px; ">
-
-            <!-- ==== 시간표 활성화 플래그 ==== -->
-            <div class="">
-                <div class="ui ">
-                    <div class="field" style="">
-                      <div class="ui toggle checkbox " v-bind:class="[ timetableFlag ? 'checked' : '' ]" @click="timetableFlag = !timetableFlag">
-                        <input type="checkbox" name="gift" tabindex="0" class="hidden" v-model="timetableFlag" style="background:red;">
-                        <label>상세시간표 사용하기</label>
-                      </div>
-                    </div>
-                  </div>
             </div>
-            <hr style="opacity:.4; margin-top:10px; margin-bottom:20px;">
-            <!-- ==== 시간표 활성화 플래그 ==== -->
+        </div>
+        <!-- ========= 시간표 활성화 플래그 ========= -->
+        <hr class="opacity3">
+
+
+
+        <!-- ========= 시간표가 없는 경우 ========= -->
+        <div class="container " style="text-align:center;" v-if="session.timetables.length<1">
+            <br>
+            <no-contents header-text="시간표를 등록해 주세요" sub-text=" " icon="edit" />
+        </div>
+        <!-- ========= 시간표가 없는 경우 ========= -->
 
 
 
 
-            <div  v-if="!timetableFlag">
-                <h3  style="opacity:0.55;">상세시간표를 비활성화 했습니다.</h3>
-            </div>
+
+        <!-- ========= 시간표가 있는 경우 ========= -->
+        <div class="container " v-else>
+
+            <br>
+            <timeline class="container33 " v-for="(timetable, tid)  in  session.timetables"  :key="tid" >
+                <!-- 세션헤더 -->
+                <h4>&nbsp;09:00 ~ 12:30</h4>
+                <table class="ui table cardbox" style="padding:0;">
+                    <colgroup>
+                        <col width="9%">
+                        <col >
+                        <col width="9%">
+                        <col width="9%" v-if="session.timetables.length-1 == tid">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <td class="center aligned borderBottom" style="border-right:1px solid #e1e1e1; background:#37474F; ">
+                                <h3 class="ui header" style="color:#fff">
+                                    03
+                                    <div class="sub header" style="color:#fff">시간</div>
+                                </h3>
+                            </td>
+                            <td class="borderBottom">
+                                <h4 class="ui header">
+                                    {{ timetable.lt_title }}
+                                </h4>
+                            </td>
+                            <td class="center aligned borderBottom addModule" style="border-left: 1px solid #e1e1e1; color:#b1b1b1;" @click.prevent="modal.addModule = true , thisTimetable = tid">
+                                <i class="plus icon"></i><br>시간표 수정
+                            </td>
+                            <td class="center aligned borderBottom removeModule" style="border-left: 1px solid #e1e1e1; color:#b1b1b1;" @click.prevent="removeTimetable(tid)" v-if="session.timetables.length-1 == tid">
+                                <i class="minus circle icon"></i><br>시간표 삭제
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="borderTop" colspan="4">
+
+
+
+                                <!--  -->
+                                <div class="" v-if="timetable.modules.length==0">
+                                    <h5 class="ui header sixteen wide column center aligned opacity4">등록된 모듈이 없습니다.</h5>
+                                    <br>
+                                    <!-- 모듈추가 버튼 -->
+                                    <div class="ui grid" style="margin-left:-12px; margin-bottom:-11px;">
+                                        <button type="button" class="ui button fluid  mini" @click.prevent="modal.addModule = true , thisTimetable = tid">모듈추가</button>
+                                    </div>
+                                </div>
+
+                                <div class="" v-else>
+                                    <!-- 모듈헤더 -->
+                                    <div class="ui grid" style="">
+                                        <div class="two wide column center aligned">
+                                            <label>유형</label>
+                                        </div>
+                                        <div class="two wide column center aligned">
+                                            <label>시작시간</label>
+                                        </div>
+                                        <div class="two wide column center aligned">
+                                            <label>종료시간</label>
+                                        </div>
+                                        <div class="seven wide column">
+                                            <label>주제</label>
+                                        </div>
+                                        <div class="three wide column center aligned">
+                                            <label>-</label>
+                                        </div>
+                                    </div>
 
 
 
 
-            <!-- timeflag -->
-            <div v-if="timetableFlag">
-            <h3>상세시간표</h3>
-                <div v-if="viewFlag"><!-- viewFlag -->
+                                    <!-- 모듈리스트 -->
+                                    <div
+                                        class="ui grid viewLoadAnimation "
+                                        style=" border-top:1px solid #f1f1f1;"
 
-                    <div v-if=" timetables[thisTab].timetables=='' ">
-                        <div class="ui warning message"><div class="header">아직 등록된 시간표가 없습니다.</div></div>
-                        <br>
-                    </div>
-
-                    <!-- 시간표 템플릿 -->
-                    <timeline
-                        class="session viewAnimate"
-                        v-for="(timetable, timetableIndex) in timetables[thisTab].timetables"
-                        :key="timetableIndex" >
-
-                        <table class="ui celled table form timetable ">
-                            <colgroup>
-                                <col width="40%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="10%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th style="border-left:1px solid #f2f2f2;">주제</th>
-                                    <th>시작시간</th>
-                                    <th>종료시간</th>
-                                    <th>시간</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr>
-                                    <td style="border-left:1px solid #f2f2f2;">
-                                        <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="timetable.lt_title">
-                                    </td>
-                                    <td>{{ timetable.lt_startTime }}</td>
-                                    <td>{{ timetable.lt_endTime }}</td>
-                                    <!-- <td>{{ timeCount(timetable.start ,  timetable.end) }}</td> -->
-                                    <td>{{ timeCount(timetable.lt_startTime ,  timetable.lt_endTime) }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" style="border-left:1px solid #f2f2f2;">
-                                        <h4>강의모듈</h4>
-                                        <!-- 모듈없을때 -->
-                                        <p v-if="timetable.modules==undefined">생성된 강의모듈이 없습니다.</p>
-
-                                        <!-- 모듈리스트 -->
-                                        <div
-                                            v-else
-                                            class="ui icon small message"
-                                            v-for="(module, moduleIndex) in timetable.modules">
-
-                                            <!-- 플래그 -->
-                                            <div
-                                                class="ui right pointing basic label large"
-                                                style="margin-right:20px;"
-                                                v-bind:class="[(module.lm_type=='lecture' ? 'blue' :  (module.lm_type=='mission'?'green':'orange')) ]">
-
-                                                {{ (module.lm_type=='lecture' ? '강의' : (module.lm_type=='mission' ? '미션' : '토론')) }}
-                                            </div><!-- 플래그 -->
-
-                                            <div class="content">
-                                                <div class="header">
-                                                    {{ module.lm_title }}  &nbsp;&nbsp;&nbsp;
-                                                    <a v-on:click.prevent="modal.editModule=true, tempModule = timetables[thisTab].timetables[timetableIndex].modules[moduleIndex]">[수정]</a>&nbsp;
-                                                    <a v-on:click.prevent="removeModule(timetableIndex,moduleIndex)"> [삭제] </a>
-                                                </div>
-                                                <p v-if="module.lm_text">
-                                                    {{module.lm_text}} <br>
-                                                    {{ module.lm_startTime }} ~ {{ module.lm_endTime }}
-                                                </p>
+                                    v-for="(module, mid)  in  timetable.modules">
+                                        <div class="two wide column center aligned">
+                                            {{ module.lm_type }}
+                                        </div>
+                                        <div class="two wide column center aligned">
+                                            {{ module.lm_startTime }}
+                                        </div>
+                                        <div class="two wide column center aligned">
+                                            {{ module.lm_endTime }}
+                                        </div>
+                                        <div class="seven wide column">
+                                            {{ module.lm_title }}
+                                        </div>
+                                        <div class="three wide column center aligned" style="padding:6.5px;">
+                                            <div class="ui buttons mini basic">
+                                              <button class="ui button">수정</button>
+                                              <button class="ui button" @click.prevent="removeModuleFunc(tid , mid)">삭제</button>
                                             </div>
-                                        </div> <!-- 모듈리스트 -->
-
-                                        <button type="button" class="ui primary button addModule" @click.prevent="modal.addModule=true, thisSession=timetableIndex">모듈추가</button>
-                                        <button type="button" class="ui red button addModule right floated column" v-on:click.prevent="removeSession(timetableIndex)" v-if="timetableIndex==timetables[thisTab].timetables.length-1">세션삭제</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    <br>
-                    <br>
-                    </timeline>
-
-
-
-                    <!-- 시간표 템플릿 입력 폼 -->
-                        <div>
-                            <table class="ui celled table form timetable" style="border:1px solid #3781bf">
-                                <colgroup>
-                                    <col width="50%">
-                                    <col width="16%">
-                                    <col width="16%">
-                                </colgroup>
-                                <thead>
-                                    <tr>
-                                        <th style="border-left:1px solid #f2f2f2;"><label for="">주제</label></th>
-                                        <th><label for="">시작시간</label></th>
-                                        <th><label for="">종료시간</label></th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr>
-                                        <td style="border-left:1px solid #f2f2f2;">
-                                            <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="tempTable.lt_title">
-                                        </td>
-                                        <td>
-                                            <time-picker
-                                                flag="tempStart"
-                                                v-bind:defaultTime="tempTable.lt_startTime" />
-                                        </td>
-                                        <td>
-                                            <time-picker
-                                                flag="tempEnd"
-                                                v-bind:defaultTime="tempTable.lt_endTime" />
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td colspan="4" style="border:none; padding:0;">
-                                            <button type="button" class="ui primary medium button" style="width:100%;  border-radius:0 0 1px 1px;" @click.prevent="addSession">세션등록</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- 시간표 템플릿 입력 폼 -->
-
-
-                </div>
-            <!-- viewFlag -->
-
-            <!-- 차시가 없을때 -->
-                <div v-else>
-                    <hr>
-                    <h4>회차정보 없음</h4>
-                </div>
-
-
-            </div><!-- timeflag -->
-        </div>
-        <!-- ======================== 상세시간표 ============================ -->
+                                        </div>
+                                    </div>
+                                    <!-- 모듈추가 버튼 -->
+                                    <div class="ui grid" style="margin-left:-12px; margin-bottom:-11px;">
+                                        <button type="button" class="ui button fluid  mini" @click.prevent="modal.addModule = true , thisTimetable = tid">모듈추가</button>
+                                    </div>
+                                </div>
 
 
 
 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
 
 
-
-        <!-- ======================== 하단 ============================ -->
-        <div class="cardbox" style="margin:10px 0; padding:25px; text-align:center;">
-            <button class="ui button" @click.prevent="save">저장</button>
-            <button class="ui primary button" @click="goTo">다음페이지</button>
-        </div>
-        <!-- ======================== 하단 ============================ -->
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- ======================== 모달영역 ============================ -->
-
-
-        <modal v-if="modal.addModule" @close="modal.addModule = false" w="w-50">
-            <h3 slot="header">신규 모듈등록</h3>
-            <div slot="body" class="content">
-
-                <div class="ui form">
-                    <div class="inline fields">
-                        <label>강의유형</label>
-
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input id="rr1" type="radio" v-model="tempModule.lm_type" value="debate" checked="checked">
-                                <label for="rr1">토론</label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input id="rr2" type="radio" v-model="tempModule.lm_type" value="mission">
-                                <label for="rr2">미션</label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input id="rr3" type="radio" v-model="tempModule.lm_type" value="lecture">
-                                <label for="rr3">강의</label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <br>
-
-                <div class="ui form">
-
-                    <div class="fields" >
-                        <div class="eight wide field" >
-                            <label for="" style="font-weight:500;">시작시간</label>
-                            <!--
-                            timetables[thisTab].timetables[thisSession].start : 해당 시간표의 시작시간
-                            timetables[thisTab].timetables[thisSession].end : 해당 시간표의 종료시간
-                            -->
-                            <time-picker
-                            flag="moduleStart"
-                            v-bind:defaultTime="tempModule.lm_startTime"
-                            v-bind:starth="timetables[thisTab].timetables[thisSession].lt_startTime"
-                            v-bind:endh="timetables[thisTab].timetables[thisSession].lt_endTime" />
-                        </div>
-                        <div class="eight wide field" >
-                            <label for="" style="font-weight:500;">종료시간 </label>
-                            <time-picker
-                            flag="moduleEnd"
-                            v-bind:defaultTime="tempModule.lm_endTime"
-                            v-bind:starth="timetables[thisTab].timetables[thisSession].lt_startTime"
-                            v-bind:endh="timetables[thisTab].timetables[thisSession].lt_endTime" />
-                        </div>
-                    </div>
-
-                    <label for="">제목</label>
-                    <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="tempModule.lm_title">
-                    <br>
-                    <br>
-                    <label for="">내용</label>
-                    <textarea  rows="6" placeholder="내용을 입력해 주세요" v-model="tempModule.lm_text"></textarea>
-                </div>
-            </div>
-
-            <div slot="footer" class="ui two bottom attached buttons">
-                <div class="ui button" @click="modal.addModule=false">닫기</div>
-                <div class="ui button blue" @click="addModule">등록</div>
-            </div>
-        </modal>
-        <!-- 모듈추가 모달 -->
-
-
-
-
-
-        <!-- 모듈수정 모달 -->
-        <modal v-if="modal.editModule" @close="modal.editModule = false" w="w-50">
-            <h3 slot="header">모듈 수정</h3>
-            <div slot="body" class="content">
-
-                <div class="ui form">
-                    <div class="inline fields">
-                        <label>강의유형</label>
-
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input id="rr1" type="radio" v-model="tempModule.type" value="debate" checked="checked">
-                                <label for="rr1">토론</label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                          <div class="ui radio checkbox">
-                            <input id="rr2" type="radio" v-model="tempModule.type" value="mission">
-                            <label for="rr2">미션</label>
-                          </div>
-                        </div>
-
-                        <div class="field">
-                          <div class="ui radio checkbox">
-                            <input id="rr3" type="radio" v-model="tempModule.type" value="lecture">
-                            <label for="rr3">강의</label>
-                          </div>
-                        </div>
-
-                    </div>
-                </div>
                 <br>
+            </timeline>
+        </div>
+        <!-- ========= 시간표가 있는 경우 ========= -->
 
-                <div class="ui form">
+        <br>
+        <button type="button" class="ui button basic green fluid" @click.prevent="modal.addTimetable=true">시간표 추가</button>
 
-
-                    <label for="">제목</label>
-                    <input type="text" placeholder="제목을 입력해 주세요" style="width:100%;" v-model="tempModule.title">
-
-                    <br>
-                    <br>
-
-                    <label for="">내용</label>
-                    <textarea  rows="6" placeholder="내용을 입력해 주세요" v-model="tempModule.content"></textarea>
-                </div>
-            </div>
-
-            <div slot="footer" class="ui two bottom attached buttons">
-                <div class="ui button blue" @click="modal.editModule=false">확인</div>
-            </div>
-        </modal>
-        <!-- 모듈수정 모달 -->
-
-        <!-- ======================== 모달영역 ============================ -->
 
     </div>
+    <!-- ========= 회차상세정보 ========= -->
+
+
+    <!-- ======================== 회차정보 ============================ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ======================== 모달영역 ============================ -->
+
+    <!-- 세션추가 -->
+    <modal v-if="modal.addSession" @close="modal.addSession = false" w="w-50">
+        <h3 slot="header">
+            <i class="calendar alternate outline icon"></i> 차시 등록
+        </h3>
+        <div slot="body" class="content">
+
+
+            <div class="ui form">
+                <div class="three fields">
+                    <div class="field">
+                        <label>시작일</label>
+                        <!-- <input placeholder="First Name" type="date" v-model="temp.session.ls_startDate"> -->
+                        <datepicker v-model="temp.session.ls_startDate" format="yyyy-MM-dd" />
+                    </div>
+                    <div class="field">
+                        <label>종료일</label>
+                        <!-- <input placeholder="Last Name" type="date" v-model="temp.session.ls_endDate"> -->
+                        <datepicker v-model="temp.session.ls_endDate" format="yyyy-MM-dd" />
+                    </div>
+                </div>
+
+
+                <div class="field">
+                    <label>회차제목</label>
+                    <input placeholder="" type="text" v-model="temp.session.ls_title">
+                </div>
+
+                <div class="field">
+                    <label>강의장소</label>
+                    <input placeholder="" type="text" v-model="temp.session.ls_location">
+                </div>
+
+                <!-- <div class="field">
+                    <label>설명</label>
+                    <textarea  rows="3" placeholder="내용을 입력해 주세요" v-model="temp.session.ls_text"></textarea>
+                </div> -->
+            </div>
+
+
+        </div>
+
+        <div slot="footer" class="ui two bottom attached buttons">
+            <div class="ui button" @click="modal.addSession=false">닫기</div>
+            <div class="ui button blue" @click="addSessionFunc">등록</div>
+        </div>
+    </modal>
+    <!-- 세션추가 -->
+
+
+
+
+    <!-- 시간표추가 -->
+    <modal v-if="modal.addTimetable" @close="modal.addTimetable = false" w="w-50">
+        <h3 slot="header">
+            <i class="columns icon"></i> 시간표 등록
+        </h3>
+        <div slot="body" class="content">
+
+
+            <div class="ui form">
+                <div class="field">
+                    <label>강의주제</label>
+                    <input placeholder="" type="text" v-model="temp.timetable.lt_title='대인관계능력 실습'">
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>시작시간</label>
+                        <!-- <input placeholder="First Name" type="date" v-model="temp.timetable.lt_startTime='2018-01-23'"> -->
+                        <datepicker v-model="temp.timetable.lt_startTime" format="yyyy-MM-dd" />
+                    </div>
+                    <div class="field">
+                        <label>종료시간</label>
+                        <!-- <input placeholder="Last Name" type="date" v-model="temp.timetable.lt_endTime='2018-02-28'"> -->
+                        <datepicker v-model="temp.timetable.lt_endTime" format="yyyy-MM-dd" />
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div slot="footer" class="ui two bottom attached buttons">
+            <div class="ui button" @click="modal.addTimetable=false">닫기</div>
+            <div class="ui button blue" @click="addTimetableFunc">등록</div>
+        </div>
+    </modal>
+    <!-- 시간표추가 -->
+
+
+
+
+
+    <!-- 모듈추가 -->
+    <modal v-if="modal.addModule" @close="modal.addModule = false" w="w-50">
+        <h3 slot="header">
+            <i class="columns icon"></i> 강의모듈 등록
+        </h3>
+        <div slot="body" class="content">
+
+            <div class="ui form">
+                <label>강의유형</label>
+                <div class="inline fields">
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input id="rr1" type="radio" v-model="temp.module.lm_type" value="토론" checked="checked">
+                            <label for="rr1">토론</label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input id="rr2" type="radio" v-model="temp.module.lm_type" value="미션">
+                            <label for="rr2">미션</label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input id="rr3" type="radio" v-model="temp.module.lm_type" value="강의">
+                            <label for="rr3">강의</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="field">
+                    <label>주제</label>
+                    <input placeholder="" type="text" v-model="temp.module.lm_title='대인관계능력 실습'">
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>시작시간</label>
+                        <!-- <input placeholder="First Name" type="date" v-model="temp.module.lm_startTime='2018-01-23'"> -->
+                        <timepicker />
+                    </div>
+                    <div class="field">
+                        <label>종료시간</label>
+                        <input placeholder="Last Name" type="date" v-model="temp.module.lm_endTime='2018-02-28'">
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div slot="footer" class="ui two bottom attached buttons">
+            <div class="ui button" @click="modal.addModule=false">닫기</div>
+            <div class="ui button blue" @click="addModuleFunc">등록</div>
+        </div>
+    </modal>
+    <!-- 모듈추가 -->
+
+
+    <!-- ======================== 모달영역 ============================ -->
+
+
+
+</div>
 </template>
 
 
 
 
-
-
-
-
-
-
-
-<!-- Script -->
 <script>
-import { Modal, Timepicker, Timeline } from '../../components'
-const page = 'NewTimetable';
+// ========== Imports ========== //
+import {
+    Modal,
+    Timepicker,
+    Timeline ,
+    Feed ,
+    NoContents,
+} from '../../components'
+
+
+// 타임픽커
+import Datepicker from 'vuejs-datepicker'
+
+
+
 
 export default {
-    name: page,
+
+    name: "NewTimetable",
+
+
+    // ========== Components ========== //
     components : {
-        'modal' : Modal,
-        'time-picker' : Timepicker,
-        'timeline' : Timeline
+        'modal'             : Modal,
+        'time-picker'     : Timepicker,
+        'timeline'          : Timeline,
+        'feed'                : Feed,
+        'no-contents'   : NoContents,
+        'datepicker'    : Datepicker,
     },
 
 
 
-    // ============ data ============ //
-    data () {
-        return {
-            lec_idx:0,                           // 강의아이디
-            showModal: false,            // 모달테스트
+
+    // ========== Data ========== //
+    data(){
+        return{
             modal: {                             // 모달객체
+                addSession : false,
+                addTimetable : false,
                 addModule:false,
                 editModule:false
             },
+
+            thisTab : -1, // 현재 선택된 세션의 아이디
+            thisTimetable: -1, //선택된 타임테이블
             timetableFlag: true,           // 시간표 활성화 플래그
-            thisTab:0,                           // 현재 배열 번지
-            thisSession:0,                     // 현재 배열 번지
-            viewFlag:false,                   // 초기 뷰설정 플래그
-            sessionCount:0,
-            selector: 0,
-            sessionDetail: [],                // APL기간 저장
-            timetables:[],                     // 메인 모델
-            tempTable:{                       // 추가 세션
-                lt_startTime : '00:00:00',
-                lt_endTime  : '00:00:00',
-                modules : []
-            },
-            tempModule:{                   // 추가 모듈
-                lm_type : 'lecture',
-                lm_title : '',
-                lm_text : '',
-                lm_startTime : '00:00:00',
-                lm_endTime : '00:00:00'
-            },
-            timepicker:{                     // 타임픽커
-                hh : [],
-                mm : []
-            },
-            sessionCountStart:'',       // 강의시작시간
-            sessionCountEnd:''         // 강의종료시간
 
-        }//return
-    },  // ============ data ============ //
+            lecture : {},
+            sessions : [],
+            timetables : [],
 
-
-
-
-
-
-
-
-    // ============ created ============ //
-    created() {
-
-        // 강의아이디
-        const id = sessionStorage.getItem('lecture-idx')
-        this.$set(this, 'lec_idx', id ? id : -1)
-
-        // 세션스토리지의  APL Term 데이터 파싱
-        var term = JSON.parse(sessionStorage.getItem('lecture-term'));
-        var timetable = JSON.parse(sessionStorage.getItem('lecture-timetables'));
-
-        console.log("term ㄱ");
-        console.log(term==null);
-
-        // APL Term 존재 여부 확인
-        if(term==null){
-            console.log(this.$router);
-            alert('APL기간 설정이 완료되지 않았습니다. ')
-            this.$router.push({ path: '/new/aplterm' })
-            return
-            // if ( !confirm('APL기간 설정없이 진행하시겠습니까?') ) {
-            //     this.$ro.push({path : '/lectures/new/aplterm'})
-            //     return
-            // }
-        }else {
-            this.$set(this, 'sessionDetail', term)
-            this.$set(this, 'timetables', term.sessionDetail)
-            console.log(this.timetables);
-            if (timetable){
-                this.timetables = timetable;
+            tempModule : {},
+            temp : { // 인풋 모델
+                session : {
+                    ls_title : '대인관계능력 실습',
+                    ls_location : '서울특별시 강남구 테헤란로4길 27 (역삼동) 금성빌딩 5층',
+                    ls_startDate : '2018-01-23',
+                    ls_endDate : '2018-02-23',
+                    timetables: []
+                },
+                timetable : {
+                    lt_title : '',
+                    lt_startTime : '',
+                    lt_endTime : '',
+                    modules: []
+                },
+                module : {
+                    lm_type:'강의',
+                    lm_title: '',
+                    lm_text: '',
+                    lm_startTime: '',
+                    lm_endTime: ''
+                }
             }
-        }// if
-
-
-
-
-        // 시간선택시 시작시간/종료시간 구분 후 입력 - 배열로 변환해서 저장
-        this.$EventBus.$on('tempStart', (v)=>{
-            this.$set(this.tempTable, 'lt_startTime', v)
-        })
-        // 회차 시작시간
-        this.$EventBus.$on('tempEnd', (v)=>{
-            this.$set(this.tempTable, 'lt_endTime', v)
-        })
-
-
-
-        // 회차 시작시간
-        this.$EventBus.$on('sessionCountStart', (v)=>{
-            // console.log("vv: ", v);
-            var c = this.timeRangeCheck(v,  this.sessionCountEnd,  'start')
-            this.$set(this, 'sessionCountStart', v)
-            this.$set(this.timetables[this.thisTab], 'ls_startTime', v)
-        })
-
-        // 회차 종료시간
-        this.$EventBus.$on('sessionCountEnd', (v)=>{
-            var c = this.timeRangeCheck(v,  this.sessionCountStart,  'end')
-            this.$set(this, 'sessionCountEnd', v)
-            this.$set(this.timetables[this.thisTab], 'ls_endTime', v)
-        })
-
-
-        // 모듈 타임픽커
-        this.$EventBus.$on('moduleStart', (v)=>{
-            console.log('moduleStart::',v);
-            this.$set(this.tempModule, 'lm_startTime', v)
-        })
-        this.$EventBus.$on('moduleEnd', (v)=>{
-            this.$set(this.tempModule, 'lm_endTime', v)
-        })
-
-
-
-    },  // ============ created ============ //
+        }
+    }, //data
 
 
 
 
 
+    // ========== Created ========== //
+    created(){
+        var storageLecture = JSON.parse(sessionStorage.getItem('lecture-summary'))
+        var storageSessions  =  JSON.parse(sessionStorage.getItem('lecture-sessions'))
 
-    // ============ mounted ============ //
-    mounted(){
-        // 시간표 플래그 ON
-        this.viewFlag=true;
+        this.$set(this, 'lecture' , storageLecture)
+        this.$set(this, 'sessions' , storageSessions)
     },
 
 
 
 
 
+    // ========== Methods ========== //
+    methods : {
 
 
-
-    // ============ 메소드 ============ //
-    methods: {
-
-        // === 입력시간 확인 === //
-        timeRangeCheck(compare , target , direction){
-            /*
-            compare     : 입력값
-            target         : 비교대상
-            direction    : up/down여부
-            ( start: 입력값이 비교대상보다 높을경우 false / end: 입력값이 비교대상보다 낮을경우 false )
-            */
-
-            if (target=='' || target==undefined || target==null)
-                return 2
-
-            compare = compare.split(':')
-            target = target.split(':')
-
-            if (direction=='start') {
-                if (compare[0] > target[0]) {
-                    return 0
-                }
-            }else if(direction == 'end'){
-                if (compare[0] < target[0]) {
-                    return 0
-                }
-            }// elseif
-
-            return 1
-
-        }, // timeRangeCheck
-
-
-
-
-        // == 시간비교 함수 == //
-        timeCheck( nullValue, targetValue , compareValue , compareStandard ) {
-            /*
-            nullValue : 삽입변수 값 - 빈값확인
-            targetValue : 비교할 값
-            compareValue : 타임픽커 값
-            compareStandard : 비교기준
-            */
-
-            //빈값여부 체크 => 빈값이 아닐경우만 비교
-            if (nullValue != undefined) {
-                if (compareStandard == 'end') { // 종료시간 체크
-                    // 시간비교
-                    if (compareValue < targetValue) {
-                        alert('시작시간보다 낮게 설정할 수 없습니다')
-                        return false
-                    }
-                    return true
-                }else if(compareStandard == 'start'){ // 시작시간 체크
-                    // 시간비교
-                    if (compareValue > targetValue) {
-                        // alert('종료시간보다 높게 설정할 수 없습니다')
-                        return false
-                    }
-                    return true
-                }// elseif
-                return false
-
-            }// if
-        }, // timeCheck
-
-
-
-
-
-
-
-
-
-        // == 합계시간 계산함수 == //
-        timeCount(s, e){
-            /*
-            인자값
-            */
-            var sh = s.split(':')
-            var eh = e.split(':')
-            var start = (Number(sh[0])*60)+Number(sh[1])
-            var end  = (Number(eh[0])*60)+Number(eh[1])
-            var rs  = end - start
-            var rsTime  = parseInt(rs/60);
-            var rsMn  = (rs) - (rsTime*60)
-
-            return  rsTime+"시간"+(rsMn>0 ? rsMn+"분" : '')
+        // ===== 회차정보 추가 ===== //
+        addSessionFunc(){
+            this.sessions.push(this.temp.session) // 모델로 푸시
+            this.$set(this.modal , 'addSession', false) // 모달 OFF
+            // this.$set(this , 'thisTab', -1)
+            this.$set(this , 'thisTab', this.sessions.length-1)
+            // 초기화
+            this.$set(this.temp, 'session' , {
+                ls_title : '대인관계능력 실습',
+                ls_location : '서울특별시 강남구 테헤란로4길 27 (역삼동) 금성빌딩 5층',
+                ls_startDate : '2018-01-23',
+                ls_endDate : '2018-02-23',
+                timetables: []
+            })
         },
 
 
 
-        // == 탭메뉴선택 == //
-        selectTab(s) {
-            this.thisTab=s;
-        },
 
 
-
-        // == 세션등록 - (시간표) == //
-        addSession(){
-
-            // console.log("this.timetables[this.thisTab].timetables.length : ");
-            // console.log(this.timetables[this.thisTab].timetables == undefined);
-
-            // 선택된 차시의 시간
-            var start =
-            typeof(this.timetables[this.thisTab].ls_startTime) == 'string' ?
-            this.timetables[this.thisTab].ls_startTime.split(':') :
-            this.timetables[this.thisTab].ls_startTime // 비교데이터 - 시작시간
-
-            var end =
-            typeof(this.timetables[this.thisTab].ls_endTime) == 'string' ?
-            this.timetables[this.thisTab].ls_endTime.split(':') :
-            this.timetables[this.thisTab].ls_endTime // 비교데이터 - 종료시간
-
-            var temp = this.tempTable // 입력데이터
-            var prevTimetable = this.timetables[this.thisTab].timetables; // 해당차시의 시간표 목록
-            var ptLength =(this.timetables[this.thisTab].timetables == undefined || this.timetables[this.thisTab].timetables =='') ? 0 : this.timetables[this.thisTab].timetables.length ; // 해당 차시의 시간표 개수
-
-            // console.log("!!!!!!!! : ", typeof(temp.lt_startTime));
-            // console.log("!!!!!!!! : ", temp.lt_startTime);
-
-            // 비교하기 위해서 배열로 변환
-            var tStart = typeof(temp.lt_startTime) == 'string' ? temp.lt_startTime.split(':') : temp.lt_startTime
-            var tEnd = typeof(temp.lt_endTime) == 'string' ? temp.lt_endTime.split(':') : temp.lt_endTime
-
-
-            // console.log("start : ", tStart[0]);
-            // console.log("end : ", end);
-            // console.log("temp.start : ", temp.lt_startTime);
-            // console.log("temp.end : ", temp.lt_endTime);
-
-
-            if ( temp.lt_title=='' || temp.lt_title==undefined ) { // 제목 입력확인
-                alert('제목를 입력해 주세요')
-                return
-            } // if
-
-
-
-            if ( Number(tStart[0])=='' || Number(tEnd[0])=='' ) { // 시간 입력확인
-                alert('시간을 입력해 주세요')
-                return
-            } // if
-
-            // 차시시간 > 입력시간 비교
-            if ( Number(tStart[0]) < Number(start[0])  ||  Number(tStart[0])  > Number(end[0]) ||
-                 Number(tEnd[0])  < Number(start[0])  ||  Number(tEnd[0])   > Number(end[0]) ) {
-                alert('해당 차시의 시간범위를 초과할 수 없습니다')
-                // console.log(temp);
-                return
-
-            }// if
-
-            // 직전 시간표와 겹치는지 확인
-            if ( ptLength > 0 ) {
-                var ptEnd = prevTimetable[ptLength-1].lt_endTime.split(":") // 직전 세션의 시간
-                if ( Number(tStart[0]) < Number(ptEnd[0]) ) {
-                    alert('직전 시간표와 시간이 겹치네요. 다시 한번 확인해 주세요')
-                    return
-                }
-            }// if
-
-
-
-
-            // 시작시간 < 종료시간 비교
-            if (Number(tStart[0]) > Number(tEnd[0])) {
-                alert('종료시간은 시작시간보다 낮게 설정할 수 없습니다')
-                return
-            }else if( ( Number(tStart[0]) == Number(tEnd[0]) ) && ( Number(tStart[1]) > Number(tEnd[1]) ) ){
-                alert('종료시간은 시작시간보다 낮게 설정할 수 없습니다')
-                return
-            }
-
-            if(this.timetables[this.thisTab].timetables==undefined){
-                this.timetables[this.thisTab].timetables = new Array()
-            }
-            this.timetables[this.thisTab].timetables.push(temp);
-
-            // 시간초기화
-            this.$set(this, 'tempTable', {
-                // lt_startTime : '00:00:00',
-                // lt_endTime : '00:00:00',
+        // ===== 상세시간표 추가 ===== //
+        addTimetableFunc(){
+            // 현재 세션의 상세시간표 모델로 푸시
+            this.sessions[this.thisTab].timetables.push(this.temp.timetable)
+            // 모달 OFF
+            this.$set(this.modal, 'addTimetable', false)
+            // 초기화
+            this.$set(this.temp, 'timetable', {
+                lt_title : '',
                 lt_startTime : '',
                 lt_endTime : '',
-                modules : []
+                modules: []
             })
-            console.log(this.tempTable);
-            // console.log("this.tempTable.start  :  ", this.tempTable);
-
-        }, // addSession
+        },
 
 
 
 
 
-
-        // == 모듈추가 == //
-        addModule(){
-            // 유효성
-            if (this.tempModule.lm_title =='' || this.tempModule.lm_title==undefined) {
-                alert('모듈제목을 입력해 주세요');
-                return
-            }
-
-            // 배열이 없을경우 초기화
-            if(this.timetables[this.thisTab].timetables[this.thisSession].modules===undefined){
-                this.timetables[this.thisTab].timetables[this.thisSession].modules=new Array();
-            }
-
-            // 데이터 삽입
-            this.timetables[this.thisTab].timetables[this.thisSession].modules.push(this.tempModule)
-
+        // ===== 모듈추가 ===== //
+        addModuleFunc(){
+            // 현재 시간표의 모듈 모델로 푸시
+            this.sessions[this.thisTab].timetables[this.thisTimetable].modules.push(this.temp.module)
+            // console.log(this.temp.module)
+            // 모달 OFF
+            this.$set(this.modal, 'addModule', false)
             // 초기화
-            this.tempModule={
-                lm_type : 'lecture',
-                lm_title : '',
-                lm_text : '',
-                lm_startTime : '',
-                lm_endTime : ''
-            }
-
-            // 모달OFF
-            this.modal.addModule = false
-
-        }, // addModule()
-
-
-
-
-
-
-
-        // == 모듈삭제 == //
-        removeModule(timetableIndex, moduleIndex) {
-
-            var leng = this.timetables[this.thisTab].timetables[timetableIndex].modules.length // 배열길이
-            if ( confirm('해당 모듈을 삭제하시겠습니까?') ){
-                if (leng<=1) {
-                    this.timetables[this.thisTab].timetables[timetableIndex].modules.pop()
-                    return
-                }
-                this.timetables[this.thisTab].timetables[timetableIndex].modules.splice(moduleIndex,1)
-            }// if
-
-        }, // removeModule
-
-
-
-
-        // == 세션삭제 == //
-        removeSession(timetableIndex){
-            if ( confirm('삭제한 세션은 다시 복구할 수 없습니다. 삭제하시겠습니까?') ){
-                this.timetables[this.thisTab].timetables.splice(timetableIndex,1)
-            }
-        }, // removeSession
-
-
-
-
-        // == 저장 == //
-        save(){
-            // console.log(this.timetables);
-            // return
-
-            if(this.timetableFlag){
-                for(var ii  in  this.timetables){
-                    if( this.timetables[ii].timetables== undefined || this.timetables[ii].timetables.length==0  ){
-                        alert("상세시간표를 입력해 주세요")
-                        return
-                    }// if
-                }// for
-            }// if
-
-            // 서버로
-            this.$http.post('/api/lectures/create/timetable' , {
-                // sessionDetail : this.timetables,
-                sessionDetail : this.timetables,
-                lec_idx : this.lec_idx,
-                timetableFlag : this.timetableFlag
-            }).then(resp=>{
-                // console.log(resp);
-            }).catch(err=>{
-                console.log(err);
-                alert('Error - ')
+            this.$set(this, 'thisTimetable', -1)
+            this.$set(this.temp, 'module', {
+                lt_title : '',
+                lt_startTime : '',
+                lt_endTime : '',
+                lm_type:'강의'
             })
-
-
-            sessionStorage.setItem('lecture-timetables', JSON.stringify(this.timetables));
-            sessionStorage.setItem('lecture-term', JSON.stringify(this.sessionDetail));
-            alert('저장되었습니다.')
-
-        }, // save
+        },
 
 
 
-        goTo(){
-            this.$ro.push({ path: '/new/kpi' })
-        }
+
+
+        // ===== 세션 삭제 ===== //
+        removeSessionFunc(sid){
+            if( !confirm('삭제한 차시는 복구가 불가능합니다. 삭제하시겠습니까?') )
+                return
+
+            this.$set(this, 'thisTab', this.thisTab-1)
+
+            // this.sessions.splice(sid, 1)
+            this.sessions.pop()
+        },
 
 
 
-    }// method()
+
+
+        // ===== 시간표 삭제 ===== //
+        removeTimetable(tid){
+            if( !confirm('삭제한 시간표는 복구가 불가능합니다. 삭제하시겠습니까?') )
+                return
+
+            this.sessions[this.thisTab].timetables.splice(tid, 1)
+        },
+
+
+
+
+
+        // ===== 모듈 삭제 ===== //
+        removeModuleFunc(tid, mid){
+            if( !confirm('삭제한 모듈은 복구가 불가능합니다. 삭제하시겠습니까?') )
+                return
+
+            this.sessions[this.thisTab].timetables[tid].modules.splice(mid, 1)
+        },
+
+
+
+    }, // ========== Methods ========== //
+
 }
 </script>
 
 
 
-<!-- Style -->
-<style scoped>
-    a {
-        color: #42b983;
-        cursor: pointer;
-    }
-    a:hover{
-        text-decoration: underline;
-    }
 
+<style lang="css">
 
-    label{
-        cursor: pointer!important;
-    }
-
-
-    .timetable-lectureModules{
-        padding:0;
-    }
-    .timetable-lectureModules li{
-        list-style: none;
-        margin:7px 0;
-        background:#f4f4f4;
-        padding:8.5px;
-    }
-
-    .session{
-        margin-bottom: 15px;
+    .sessionInfo h4{
+        margin-top: 10px;
     }
 
 
 
     .lectureMenu {
-        border-left:none !important;
-        border-right:none !important;
-        border-top:none !important;
+
         border-radius: 0 !important;
     }
     .lectureMenu .active{
+        border-left:none !important;
+        border-right:none !important;
+        border-top:none !important;
         color: #fff !important;
         background: #3b485f !important;
         border-radius: 0 !important;
     }
 
 
-    /*타임피커*/
-    .timepicker{
-        /*width: 40% !important;*/
+
+    .addModule , .removeModule{
+        font-size: 0.9em;
     }
 
 
-    .checkbox label::before,
-    .checkbox label::after{
-        border: 1px solid #c8c8c8 !important;
+    .addModule{
+        cursor: pointer;
+        color:#9FC93C !important;
     }
-
-
-
-    /*.session,*/
-    .timetable-lectureModules li,
-    .viewAnimate {
-          animation:fade-in-fwd .6s cubic-bezier(.39,.575,.565,1.000) both
-      }
-      @keyframes fade-in-fwd{0%{transform:translateZ(-80px);opacity:0}100%{transform:translateZ(0);opacity:1}}
-
-
-
+    .addModule:hover{
+        background :#9FC93C !important;
+        color :#fff !important;
+    }
+    .removeModule{
+        cursor: pointer;
+        color:#F15F5F !important;
+    }
+    .removeModule:hover{
+        background :#F15F5F !important;
+        color :#fff !important;
+    }
 
 </style>
