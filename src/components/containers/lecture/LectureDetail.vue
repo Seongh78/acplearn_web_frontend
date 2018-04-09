@@ -12,9 +12,12 @@
         <div class="eleven wide column">
             <!-- 타이틀 -->
             <h2 class="ui header" @click.prevent="modal.aadd=true">
-                <div class="ui right pointing  basic label" style="margin-left:0;"
-                v-bind:class="(lecture.lec_flag==='진행중'?'green': (lecture.lec_flag=='승인대기')? 'grey' : 'red' )">
-                {{ lecture.lec_flag }}</div>
+                <div
+                    class="ui right pointing  basic label"
+                    style="margin-left:0;"
+                    v-bind:class="(lecture.lec_flag==='진행중'?'green': (lecture.lec_flag=='승인대기')? 'grey' : 'red' )">
+                    {{ lecture.lec_flag }}
+                </div>
                 {{ lecture.lec_title }}
             </h2>
         </div>
@@ -175,108 +178,127 @@
             <i class="align left icon"></i> 상세일정
         </h3>
 
-        <!-- 탭메뉴 -->
+        <!-- 회차 탭메뉴 -->
         <div class="ui top secondary pointing menu">
             <a class="item" v-bind:class="[sessionTab < 0?'active':'']" @click.prevent="sessionTabChange(-1)">전체</a>
             <a class="item" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" @click.prevent="sessionTabChange(jj)">{{ jj+1 }}회</a>
         </div>
-        <br>
 
 
-        <!-- 상세시간표 -->
-        <div class="ui bottom tab active">
+        <!-- 탭 -->
+        <div class="ui bottom   tab segment viewLoadAnimation" v-bind:class="[sessionTab < 0?'active':'']">
+            <h1>asd</h1>
+        </div>
+        <div class="ui bottom attached  tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" style="padding:13px 8px !important; border:none;">
 
-            <!-- 타임라인 컨포넌트 -->
-            <timeline class="container33" v-for="(sess, ii)  in  lecture.sessions"  :key="sess.ls_idx" v-if="sessionTab < 0 || sessionTab==ii">
+            <!-- 세션헤더 -->
+            <h3 class="ui header block">
+                {{ jj+1 }}회차 - {{ sess.ls_title }}
+                <div class="sub header" style="margin-top:8px;">
+                    <i class="icon calendar outline"></i>
+                    <b>강의일정 :</b> {{ sess.ls_startDate }}
+                    &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                    <i class="icon clock outline"></i>
+                    <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)</div>
+            </h3>
 
-                    <!-- 세션헤더 -->
-                    <h3 class="ui header">
-                        {{ ii+1 }}회차 - {{ sess.ls_title }}
-                        <div class="sub header">
-                            <b>강의일정 :</b> {{ sess.ls_startDate }}
-                            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
-                            <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)</div>
-                    </h3>
+            <!-- 집합교육 탭메뉴 -->
+            <div class="ui grid verticalTab" style="padding:10px 0;">
 
-                    <!-- 세션내용(상세시간표) -->
-                    <table class="ui table celled structured">
-                        <colgroup>
-                            <col width="12%">
-                            <col width="27%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th>시간</th>
-                                <th>주제</th>
-                                <th>강의내용</th>
-                            </tr>
-                        </thead>
+                <div class="three wide column">
+                    <div class="ui vertical fluid attached menu listTab pointing">
+                        <!-- 강의회차 탭-->
+                        <a class="item" v-for="(sClass, scid) in sess.sessionClass" v-bind:class="[sessionTab==jj?'active':'']">
+                            <b>{{scid+1}}차</b> 교육 - {{ sClass.lsc_date }}
+                        </a>
+                        <!-- 강의회차 탭-->
+                    </div>
+                </div>
 
-                        <!-- 상세시간표가 있을 경우 -->
-                        <tbody v-if="sess.timetables.length > 0">
-                            <tr v-for="(timetable, tid)  in  sess.timetables">
-                                <td>
-                                    {{ timetable.lt_startTime ? timetable.lt_startTime : '00:00' }} ~ {{ timetable.lt_endTime ? timetable.lt_endTime : '00:00' }}
-                                </td>
-                                <td>{{ timetable.lt_title }}</td>
+                <div class="thirteen wide stretched column ">
+                    <div class="ui segment attached contentTab" v-for="(sClass, kk) in sess.sessionClass" style="padding:0 !important; border:none; ">
+                        <!-- 강의내용 -->
+                        <timeline class="container33" v-for="(timetable, tid)  in  sClass.timetables" :key="timetable.lt_idx">
+                            <table class="ui table celled structured">
+                                <!-- 상세시간표가 있을 경우 -->
+                                <colgroup>
+                                    <col width="8.5%">
+                                    <col >
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th class="borderTop center aligned">주제</th>
+                                        <td>{{ timetable.lt_title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="borderTop center aligned">시간</th>
+                                        <td>{{ timetable.start ? timetable.start : '00:00' }} ~ {{ timetable.end ? timetable.end : '00:00' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="borderTop center aligned">내용</th>
+                                        <td style="padding:0;">
+                                            <table class="ui line table " style="border:none; margin-bottom:0;">
+                                                <colgroup>
+                                                    <col width="10%">
+                                                    <col width="16%">
+                                                    <col>
+                                                    <col width="15%">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="center aligned "  style="border-right:none; border-left:none;">유형</th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">시간</th>
+                                                        <th style="border-right:none; border-left:none;">주제</th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">강사</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(module, mid)  in  timetable.modules" class="">
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">
+                                                            &nbsp;
+                                                            <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ module.lm_type=='강의' ? 'blue' :  module.lm_type=='미션' ? 'green' : 'orange' ]">
+                                                                {{ module.lm_type }}
+                                                            </div>
+                                                        </td>
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">{{ module.lm_startTime }} ~ {{ module.lm_endTime }}</td>
+                                                        <td class="" style="border-right:none; border-left:none;">{{ module.lm_title }}</td>
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">{{ module.lm_teacher }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
 
-                                <td style="padding:0;">
-
-
-                                    <table class="ui table selectable single line" style="border:none;" v-if="timetable.modules.length>0">
-                                        <colgroup>
-                                            <col width="15%">
-                                            <col width="20%">
-                                            <col >
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th class="center aligned singleLineTd">유형</th>
-                                                <th class="center aligned singleLineTd">시간</th>
-                                                <th class="singleLineTd">주제</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(md, mid)  in  timetable.modules">
-                                                <td class="center aligned singleLineTd">
-                                                    <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ md.lm_type=='강의' ? 'blue' :  md.lm_type=='미션' ? 'green' : 'orange' ]">
-                                                        {{ md.lm_type }}
-                                                    </div>
-                                                </td>
-                                                <td class="center aligned singleLineTd">09:00 ~ 10:00</td>
-                                                <td class="singleLineTd">대인관계능력 실습</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </td>
-                            </tr>
-                        </tbody>
-
-                        <!-- 상세시간표가 없을 경우 -->
-                        <tbody v-else>
-                            <tr>
-                                <td class="center aligned" colspan="3">
-                                    <no-contents />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br>
-                    <br>
-
-            </timeline>
-
-
-
-
-
-            <div class="" v-else>
+                                <!-- 상세시간표가 없을 경우 -->
+                                <!-- <tbody v-else>
+                                    <tr>
+                                        <td class="center aligned" colspan="3">
+                                            <no-contents />
+                                        </td>
+                                    </tr>
+                                </tbody> -->
+                            </table>
+                            <br>
+                            <br>
+                        </timeline>
+                        <!-- 강의내용 -->
+                    </div>
+                </div>
 
             </div>
+            <!-- 집합교육 탭메뉴 -->
+
+
 
 
         </div>
+
+
+
+
+
+
 
 
     </div>
@@ -446,79 +468,99 @@
         <br>
 
 
+
         <!-- 상세시간표 -->
-        <div class="ui bottom tab active">
+        <div class="ui bottom attached  tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab2==jj?'active':'']" style="padding:13px 8px !important; border:none;">
 
-            <!-- 타임라인 컨포넌트 -->
-            <timeline class="container33" v-for="(sess, ii)  in  lecture.sessions"  :key="sess.ls_idx" v-if="sessionTab2 < 0 || sessionTab2==ii">
+            <!-- 세션헤더 -->
+            <h3 class="ui header block">
+                {{ jj+1 }}회차 - {{ sess.ls_title }}
+                <div class="sub header" style="margin-top:8px;">
+                    <i class="icon calendar outline"></i>
+                    <b>강의일정 :</b> {{ sess.ls_startDate }}
+                    &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                    <i class="icon clock outline"></i>
+                    <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)</div>
+            </h3>
 
-                    <!-- 세션헤더 -->
-                    <h3 class="ui header">
-                        {{ ii+1 }}회차 - {{ sess.ls_title }}
-                        <div class="sub header">
-                            <b>강의일정 :</b> {{ sess.ls_startDate }}
-                            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
-                            <b>시간 :</b> {{ sess.ls_startTime }} ~ {{ sess.ls_endTime }} (00시간)</div>
-                    </h3>
+            <!-- 집합교육 탭메뉴 -->
+            <div class="ui grid verticalTab" style="padding:10px 0;">
 
-                    <!-- 세션내용(상세시간표) -->
-                    <table class="ui table celled structured cardbox" v-if="sess.timetables.length > 0" v-for="(timetable, tid)  in  sess.timetables" style="margin-bottom:55px;">
-                        <colgroup>
-                            <col width="8.5%">
-                            <col >
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <th class="borderTop center aligned">주제</th>
-                                <td>{{ timetable.lt_title }}</td>
-                            </tr>
-                            <tr>
-                                <th class="borderTop center aligned">시간</th>
-                                <td>{{ timetable.start ? timetable.start : '00:00' }} ~ {{ timetable.end ? timetable.end : '00:00' }}</td>
-                            </tr>
+                <div class="three wide column">
+                    <div class="ui vertical fluid attached menu listTab pointing">
+                        <!-- 강의회차 탭-->
+                        <a class="item" v-for="(sClass, scid) in sess.sessionClass" v-bind:class="[sessionTab2==jj?'active':'']">
+                            <b>{{scid+1}}차</b> 교육 - {{ sClass.lsc_date }}
+                        </a>
+                        <!-- 강의회차 탭-->
+                    </div>
+                </div>
 
-                            <tr>
-                                <th class="borderTop center aligned">내용</th>
-
-                                <td style="padding:0;">
-                                    <!-- 모듈 -->
-                                    <div class="ui grid" style="padding:0; margin:0; ">
-
-                                        <div class="sixteen wide column" style="padding:0; ">
-                                            <table class="ui table selectable single line" style="border:none;">
+                <div class="thirteen wide stretched column ">
+                    <div class="ui segment attached contentTab" v-for="(sClass, kk) in sess.sessionClass" style="padding:0 !important; border:none; ">
+                        <!-- 강의내용 -->
+                        <timeline class="container33" v-for="(timetable, tid)  in  sClass.timetables" :key="timetable.lt_idx">
+                            <table class="ui table celled structured">
+                                <!-- 상세시간표가 있을 경우 -->
+                                <colgroup>
+                                    <col width="8.5%">
+                                    <col >
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th class="borderTop center aligned">주제</th>
+                                        <td>{{ timetable.lt_title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="borderTop center aligned">시간</th>
+                                        <td>{{ timetable.start ? timetable.start : '00:00' }} ~ {{ timetable.end ? timetable.end : '00:00' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="borderTop center aligned">내용</th>
+                                        <td style="padding:0;">
+                                            <table class="ui selectable single line table " style="border:none; margin-bottom:0;">
                                                 <colgroup>
                                                     <col width="10%">
-                                                    <col width="13.5%">
-                                                    <col >
-                                                    <col width="8%">
-                                                    <col width="8%">
-                                                    <col width="9.5%">
+                                                    <col width="15%">
+                                                    <col>
+                                                    <col width="9%">
+                                                    <col width="9%">
+                                                    <col width="7.5%">
                                                 </colgroup>
                                                 <thead>
                                                     <tr>
-                                                        <th class="center aligned singleLineTd">유형</th>
-                                                        <th class="center aligned singleLineTd">시간</th>
-                                                        <th class="singleLineTd">주제</th>
-                                                        <th class="center aligned singleLineTd">피드</th>
-                                                        <th class="center aligned singleLineTd">이미지</th>
-                                                        <!-- <th class="center aligned singleLineTd">동영상</th> -->
-                                                        <th class="center aligned singleLineTd"></th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">유형</th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">시간</th>
+                                                        <th style="border-right:none; border-left:none;">주제</th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">피드</th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">이미지</th>
+                                                        <th class="center aligned" style="border-right:none; border-left:none;">-</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class=" " v-for="(module, mid)  in  timetable.modules">
-                                                    <!-- 모듈 목록 -->
-                                                    <tr class="cursorPointer" @click="accordionOpen(module.lm_idx)">
+                                                <tbody v-for="(module, mid)  in  timetable.modules">
+                                                    <tr
+                                                        class=""
+                                                        @click="accordionOpen(module.lm_idx)">
 
-                                                        <td class="center aligned singleLineTd borderTop">
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">
+                                                            &nbsp;
                                                             <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ module.lm_type=='강의' ? 'blue' :  module.lm_type=='미션' ? 'green' : 'orange' ]">
                                                                 {{ module.lm_type }}
                                                             </div>
                                                         </td>
-                                                        <td class="center aligned singleLineTd borderTop">{{ module.lm_startTime }} ~ {{ module.lm_endTime }}</td>
-                                                        <td class="singleLineTd borderTop">{{ module.lm_title }}</td>
-                                                        <td class="center aligned singleLineTd borderTop">12건</td>
-                                                        <td class="center aligned singleLineTd borderTop">12건</td>
-                                                        <td class="center aligned singleLineTd borderTop">
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">
+                                                            {{ module.lm_startTime }} ~ {{ module.lm_endTime }}
+                                                        </td>
+                                                        <td class="" style="border-right:none; border-left:none;">
+                                                            {{ module.lm_title }}
+                                                        </td>
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">
+                                                            12건
+                                                        </td>
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">
+                                                            12건
+                                                        </td>
+                                                        <td class="center aligned " style="border-right:none; border-left:none;">
                                                             <a v-if="module.lm_idx!=accordion">열기 <i class="icon angle down"></i></a>
                                                             <a v-else>닫기 <i class="icon angle up"></i></a>
                                                         </td>
@@ -532,10 +574,6 @@
                                                             <loading v-if="comments.length<1" />
                                                             <!-- 강의모듈이 토론/미션일경우 그룹별 정보조회 가능 -->
                                                             <div class="" v-if="comments.length>0 && module.lm_type !== '강의'">
-                                                                <!-- <h4>
-                                                                    <i class="icon filter"></i>
-                                                                    분류
-                                                                </h4> -->
                                                                 <div id="context2">
                                                                     <div class="ui secondary menu">
                                                                         <a class="item" v-bind:class="[groupCommentTab==-1?'active':'']" @click.prevent="groupCommentTab = -1">전체</a>
@@ -545,50 +583,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            ::: {{groupCommentTab}}
                                                             <!-- <comment class="viewLoadAnimationTop" v-bind:contents="comments" v-bind:group-filter="groupCommentTab"  /> -->
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
 
-
-
-                                    </div>
-
-                                    <!-- <div class="center aligned" v-else>
-                                        <no-contents header-text="강의모듈이 없는 강의입니다" icon="calendar minus outline" size="size1" />
-                                    </div> -->
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-                    <div class="ui grid">
-                        <div class="">
-
-                        </div>
+                                <!-- 상세시간표가 없을 경우 -->
+                                <!-- <tbody v-else>
+                                    <tr>
+                                        <td class="center aligned" colspan="3">
+                                            <no-contents />
+                                        </td>
+                                    </tr>
+                                </tbody> -->
+                            </table>
+                            <br>
+                            <br>
+                        </timeline>
+                        <!-- 강의내용 -->
                     </div>
+                </div>
 
-                    <div class="center aligned container" style="text-align:center;" v-if="sess.timetables.length < 1">
-                        <br>
-                        <no-contents header-text="시간표가 없는 차시입니다" icon="calendar minus outline" size="size2" />
-                    </div>
-                    <br>
-                    <br>
-
-
-
-
-            </timeline>
-
+            </div>
+            <!-- 집합교육 탭메뉴 -->
 
 
 
 
         </div>
+
+
+
     </div>
     <!-- ======================== 교육진행 ============================ -->
 
@@ -1094,6 +1123,9 @@
 
 <!-- ======================== Modal ============================ -->
 
+<button data-content="보고서로 출력(종료 시 생김)" class="circular ui icon orange button tooltip" style="position: fixed; bottom: 15px; right: 95px; font-size: 1em; box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px 1px; z-index: 11; width: 75.0312px; height: 35px;"><i class="icon image"></i> 사진
+    </button>
+
 
   </div>
 </template>
@@ -1153,7 +1185,7 @@ export default {
           groupTab:'' , // 선택한 그룹아이디
           chooseTeam:{}, // 선택한 그룹 정보
           companyTab:0,
-          tab:3, // 현재 활성화 탭
+          tab:1, // 현재 활성화 탭
           attendanceCount : 0, // 출석 카운트
           avgAttendancePercent : 0, // 평균출석률
 
@@ -1239,7 +1271,7 @@ export default {
             // return
             this.$http.get('/api/lectures/dt/'+Number(id))
             .then(resp=>{
-                console.log(resp.data.students);
+                // console.log(resp.data.students);
                 this.$set(this, 'lecture', resp.data.lecture)
                 this.$set(this, 'companies', resp.data.companies)
                 this.$set(this, 'groups', resp.data.groups)
@@ -1383,7 +1415,7 @@ export default {
             var url = '/api/comments/'+table+'/'+lec_idx
             this.$http.get(url)
             .then (resp =>{
-                console.log(resp.data.comments);
+                // console.log(resp.data.comments);
                 this.$set(this, 'comments', resp.data.comments)
             })
             .catch (err => {

@@ -1,14 +1,16 @@
 <template lang="html">
-<div class="ui form" style="padding-left:7.5px; padding-right:7.5px;">
+<div class="ui form" style="border-radius: 0 !important;">
 
     <div class="fields">
         <!-- 시간 -->
-        <select class="eight wide field hour ui dropdown"  @input="updateTime()" ref="hourPicker" style="border-radius:0;">
-            <option v-for="(h) in  timeLimit.hour" :value="h">{{h<10?'0':''}}{{ h }}시</option>
+        <select class="eight wide field hour ui dropdown"  @input="updateTime()" ref="hourPicker">
+            <option value="0">시간</option>
+            <option v-for="(h) in  timeLimit.hour" :value="h">{{h<10?'0':''}}{{ h }}</option>
         </select>
         <!-- 분 -->
         <select class="eight wide field minute ui dropdown"  @input="updateTime()" ref="minutePicker">
-            <option v-for="(m) in  timeLimit.minute" :value="m">{{m<10?'0':''}}{{ m }}분</option>
+            <option value="0">분</option>
+            <option v-for="(m) in  timeLimit.minute" :value="m">{{m<10?'0':''}}{{ m }}</option>
         </select>
     </div>
 
@@ -73,22 +75,14 @@ export default {
     },
 
 
-    // ===== mounted ===== //
-    mounted(){
-        this.updateTime()
-    },
-
-
     // ===== Methods ===== //
     methods: {
 
         updateTime() {
             // TIME형태로 변환 후 리턴
-            var result  =''
-            result += (this.$refs.hourPicker.value<10?'0':'')+this.$refs.hourPicker.value
-            result += ":"
-            result += (this.$refs.minutePicker.value<10?'0':'')+this.$refs.minutePicker.value
-
+            var result   = (this.$refs.hourPicker.value<10?'0':'')+this.$refs.hourPicker.value
+                  result += ":"
+                  result += (this.$refs.minutePicker.value<10?'0':'')+this.$refs.minutePicker.value
             // this.$emit('input', {
             //     hour : +this.$refs.hourPicker.value,
             //     minute : +this.$refs.minutePicker.value

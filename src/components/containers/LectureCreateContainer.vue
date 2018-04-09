@@ -96,7 +96,7 @@ export default {
                 { title: '수강생', sub: 'students' },
                 { title: '팀빌딩', sub: 'team' },
                 // { title: '설문', sub: 'survey' },
-                { title: '완료', sub: 'complete' }
+                { title: '검토/완료', sub: 'complete' }
             ]
         }
     }, // data()

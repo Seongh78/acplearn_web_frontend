@@ -69,14 +69,6 @@
                         <button type="button" for="file" class="ui basic button" style="width:10%; height:42.5px;">추가</button>
                     </td>
                 </tr>
-                <tr>
-                    <th class="borderTop">강의기간</th>
-                    <td>
-                        <input type="date" placeholder="제목을 입력해 주세요" style="width:27%;" v-model="summary.lec_startDate">
-                        &nbsp;&nbsp;&nbsp;
-                        <input type="date" placeholder="제목을 입력해 주세요" style="width:27%;" v-model="summary.lec_endDate">
-                    </td>
-                </tr>
             </table>
 
         </div>
@@ -197,13 +189,18 @@
 <script>
 import { Modal } from '../../components'
 
+// 데이트픽커
+import DatePicker from 'vuejs-datepicker'
+
+
 export default {
     name: 'NewSummary',
 
 
     // ====== 컴포넌트 ====== //
     components : {
-        'modal' : Modal
+        'modal' : Modal,
+        DatePicker
     },
 
 
@@ -221,12 +218,12 @@ export default {
             closeMsg:'적용',
             summary: {
                 lec_title: '산업안전을 위한 우리조직 안전리더십 개발 - 테스트',
-                lec_content : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                lec_goal : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                lec_effect : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                lec_target: '건설현장 현장직 근무자 대상',
-                lec_startDate : '2018-02-16',
-                lec_endDate : '2018-03-22'
+                lec_content : '',
+                lec_goal : '',
+                lec_effect : '',
+                lec_target: '',
+                lec_startDate : '',
+                lec_endDate : ''
             }, // 강의개요
             tempSummary:{}, // 개요 임시저장
             tempLectures:[], // 임시저장 강의 목록
@@ -482,7 +479,7 @@ export default {
                 alert('저장 후 이동 가능합니다.')
                 return
             }
-            this.$ro.push({ path: '/new/aplterm' })
+            this.$ro.push({ path: '/new/timetable' })
         }// goTo
 
     } // methods

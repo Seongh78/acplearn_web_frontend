@@ -153,8 +153,8 @@
                         <th class="center aligned">직급</th>
                         <th class="center aligned">이름</th>
                         <th class="center aligned">연락처</th>
-                        <th class="center aligned">생년월일</th>
-                        <th class="center aligned">성별</th>
+                        <th class="center aligned">입사날짜</th>
+                        <!-- <th class="center aligned">성별</th> -->
                     </tr>
                 </thead>
                 <!-- 전체 수강생 목록 -->
@@ -164,9 +164,9 @@
                         <td>{{ std.stu_department }}</td>
                         <td class="center aligned">{{ std.stu_position }}</td>
                         <td class="center aligned">{{ std.stu_name }}</td>
-                        <td class="center aligned">-</td>
-                        <td class="center aligned">-</td>
-                        <td class="center aligned">{{ std.stu_gender }}</td>
+                        <td class="center aligned">{{ std.stu_phone }}</td>
+                        <td class="center aligned">{{ std.stu_joinYear }}</td>
+                        <!-- <td class="center aligned">{{ std.stu_gender }}</td> -->
                     </tr>
                 </tbody>
                 <!-- 선택된 기업 수강생 목록 -->
@@ -176,9 +176,9 @@
                         <td>{{ std.stu_department }}</td>
                         <td class="center aligned">{{ std.stu_position }}</td>
                         <td class="center aligned">{{ std.stu_name }}</td>
-                        <td class="center aligned">-</td>
-                        <td class="center aligned">-</td>
-                        <td class="center aligned">{{ std.stu_gender }}</td>
+                        <td class="center aligned">{{ std.stu_phone }}</td>
+                        <td class="center aligned">{{ std.stu_joinYear }}</td>
+                        <!-- <td class="center aligned">{{ std.stu_gender }}</td> -->
                     </tr>
                 </tbody>
             </table>
@@ -352,82 +352,62 @@
             <form class="ui form">
                 <div class="field">
                     <label>소속</label>
-                    <input type="text" name="first-name" placeholder="First Name" value="(주)아카스타 - 자동기입" disabled>
+                    <!-- <input type="text" name="first-name" placeholder="First Name" value="(주)아카스타 - 자동기입" disabled> -->
+                    <input type="text" name="first-name" placeholder="First Name" v-bind:value="getDefaultCompany(thisTab)" disabled>
                 </div>
 
                 <div class="field">
                     <label>부서/직급</label>
                     <div class="two fields">
                         <div class="field">
-                            <input type="text" name="shipping[first-name]" placeholder="부서">
+                            <input type="text" name="shipping[first-name]" v-model="tempStudent.stu_department" placeholder="부서">
                         </div>
                         <div class="field">
-                            <input type="text" name="shipping[last-name]" placeholder="직급">
+                            <input type="text" name="shipping[last-name]" v-model="tempStudent.stu_position" placeholder="직급">
                         </div>
                     </div>
                 </div>
 
                 <div class="field">
                     <label>이름</label>
-                    <input type="text" name="last-name" placeholder="이름을 입력해 주세요">
+                    <input type="text" name="last-name" v-model="tempStudent.stu_name" placeholder="이름을 입력해 주세요">
                 </div>
 
                 <div class="field">
                     <label>연락처</label>
-                    <input type="text" name="last-name" placeholder=" '-'(하이픈) 없이 입력해 주세요 ">
+                    <input type="text" name="last-name" v-model="tempStudent.stu_phone" placeholder=" '-'(하이픈) 없이 입력해 주세요 ">
                 </div>
 
 
 
                 <div class="field">
-                    <label>생년월일</label>
-                    <div class="four fields">
+                    <label>입사일</label>
+                    <div class="two fields">
                         <div class="field">
-                            <select class="ui fluid dropdown">
-                                <option value="">연도</option>
-                                <option value="">2018년</option>
-                                <option value="">2017년</option>
-                                <option value="">2016년</option>
-                            </select>
+                            <date-picker v-model="tempStudent.stu_joinYear" format="yyyy-MM-dd" />
                         </div>
-                       <div class="field">
-                            <select class="ui fluid dropdown">
-                               <option value="">월</option>
-                               <option value="">01월</option>
-                               <option value="">02월</option>
-                               <option value="">03월</option>
-                            </select>
-                       </div>
-                       <div class="field">
-                           <select class="ui fluid dropdown">
-                               <option value="">일</option>
-                               <option value="">01일</option>
-                               <option value="">02일</option>
-                               <option value="">03일</option>
-                            </select>
-                       </div>
                     </div>
                 </div>
 
 
 
-                <div class="field">
+                <!-- <div class="field">
                     <label>성별</label>
                     <div class="inline fields">
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" checked="" tabindex="0" class="hidden">
+                                <input type="radio" name="fruit" checked="" tabindex="0" class="hidden" v-model="tempStudent.stu_gender" value="M">
                                 <label>남자</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="fruit" tabindex="0" class="hidden">
+                                <input type="radio" name="fruit" tabindex="0" class="hidden" v-model="tempStudent.stu_gender" value="F">
                                 <label>여자</label>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
 
 
@@ -441,7 +421,7 @@
         <div slot="footer">
             <div class="ui two bottom attached buttons">
                 <div class="ui button" @click="modal.newStudent=false">닫기</div>
-                <div class="ui button blue" @click="insertCompany">등록</div>
+                <div class="ui button blue" @click="addStudent">등록</div>
             </div>
         </div>
     </modal>
@@ -513,6 +493,7 @@
 <!-- Script -->
 <script>
 import { Modal, SearchForm, CardTitle } from '../../components'
+import DatePicker from 'vuejs-datepicker'
 
 const page = 'NewStudent';
 
@@ -523,7 +504,8 @@ export default {
     components: {
         'modal' : Modal,
         'search-form' : SearchForm,
-        'card-title' : CardTitle
+        'card-title' : CardTitle,
+        DatePicker
     },
 
     // ============ 데이터모델 ============ //
@@ -540,8 +522,17 @@ export default {
             thisTab2:'t01', //탭
             attachment:{name:null, file:null}, //업로드 엑셀파일
             selectSheet:0, // 업로드시트 선택
-            students:[], // 수강생목록
 
+
+            students:[], // 수강생목록
+            tempStudent:{
+                stu_department : '',
+                stu_position : '',
+                stu_name : '',
+                stu_phone : '',
+                stu_joinYear : '',
+                stu_gender : ''
+            },
             tempStudents:[], //  수강생목록  -  TEST model
 
             companies:[], // 업체목록
@@ -588,10 +579,18 @@ export default {
     },// created()
 
 
+
+
+
+
+
     // ============ Updated ============ //
     updated(){
         // this.companiesLoad()
     },
+
+
+
 
 
 
@@ -608,6 +607,17 @@ export default {
         // === 탭메뉴 선택 === //
         selectTab2(s) {
             this.thisTab2=s;
+        },
+
+
+
+        // === 선택된 기업명 === //
+        getDefaultCompany(tab){
+            var id = this.companies.findIndex((com)=>{
+                return com.com_code === tab
+            })
+            // console.log(":::: ", companies[id]);
+            return this.companies[id].com_name
         },
 
 
@@ -951,6 +961,31 @@ export default {
         },  // xlsParser()
 
 
+
+
+
+
+
+        // === 단일 수강생 추가 === //
+        addStudent(){
+            var std = this.tempStudent // 입력데이터
+            if ( // 예외처리
+                std.stu_department === '' ||
+                std.stu_position === '' ||
+                std.stu_phone === '' ||
+                std.stu_joinYear === ''){
+                alert('모든 항목을 채워주세요')
+                return
+            }
+            // 기업아이디 찾기
+            var id = this.companies.findIndex((com)=>{
+                return com.com_code === this.thisTab
+            })
+            // 기업정보 추가
+            std.com_code = this.companies[id].com_code
+            std.com_name = this.companies[id].com_name
+            this.tempStudents.push(std) // 모델로 푸시
+        },
 
 
 

@@ -11,9 +11,31 @@
     <page-layout>
 
 
+        <h4>Vertical Tab2</h4>
+        <time-picker-test v-model="time" />
+        <!-- <time-picker-test  min-hour="3" /> -->
+        {{time}}
+        <hr>
+        <date-picker-test v-model="date"></date-picker-test>
+        <p>
+          Month: {{date.month}}
+          Year: {{date.year}}
+        </p>
+        <br>
+        <br>
+        <br>
 
-        <h4>Timepicker</h4>
-        <date-picker v-model="date" format="yyyy-MM-dd" minimumView="day" maximumView="day"></date-picker>
+        <h4>Vertical Tab</h4>
+        <div class="">
+
+            <vertical-tab />
+
+        </div>
+
+
+
+        <!-- <h4>Timepicker</h4>
+        <date-picker v-model="date" format="yyyy-MM-dd" minimumView="day" maximumView="day" language="ko"></date-picker>
         {{date}}
         <hr>
 
@@ -53,14 +75,11 @@
 
 
         <h4>Timepicker TEST</h4>
-        <!-- <time-picker flag="dateTest" defaultTime="Mon Mar 05 2018 10:00:13 GMT+0900 (KST)" /> -->
-        <!-- <time-picker flag="dateTest" v-bind:defaultTime="tdtd" /> -->
-
 
 
         <hr>
         <h4>Rating TEST</h4>
-        <rating />
+        <rating /> -->
 
 
     </page-layout>
@@ -88,6 +107,10 @@ import {
 import Eventbus from './Eventbus'
 import Reactivity from './Reactivity'
 import Timepicker from './Timepicker'
+import TimePickerTest from './TimePickerTest'
+import VerticalTab from './VerticalTab'
+
+import DatePickerTest from './DatePickerTest.vue';
 
 import Datepicker from 'vuejs-datepicker'
 /*
@@ -98,6 +121,10 @@ import Datepicker from 'vuejs-datepicker'
 "dsu MMM yyyy"      dsu MMM yyyy        - e.g       12th Feb 2016
 "D dsu MMM yyyy"  D dsu MMM yyyy     - e.g       Sat 12th Feb 2016
 */
+
+
+
+
 
 
 export default {
@@ -115,6 +142,9 @@ export default {
         'rating': Rating,
         'paging' : Pagination,
         'date-picker' : Datepicker,
+        DatePickerTest,
+        TimePickerTest,
+        'vertical-tab' : VerticalTab,
     },
 
     data () {
@@ -123,7 +153,11 @@ export default {
             ddd:0,
             // tdtd : '2018-02-26 10:00:00'
             tdtd : '10:00:00',
-            date: ''
+            date: {
+                month: 1,
+                year: 2017
+            },
+            time:''
         }
     }, //data
 
