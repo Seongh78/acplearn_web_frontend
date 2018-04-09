@@ -112,7 +112,7 @@ import VerticalTab from './VerticalTab'
 
 import DatePickerTest from './DatePickerTest.vue';
 
-import Datepicker from 'vuejs-datepicker'
+import DatePicker from 'vuejs-datepicker'
 /*
 타임피커 형식 format
 "d MMM yyyy"           d MMM yyyy           - e.g       12 Feb 2016
