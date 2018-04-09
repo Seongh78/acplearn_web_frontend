@@ -78,7 +78,7 @@
                     <date-picker format="yyyy-MM-dd" v-model="lecture.lec_startDate" />
                 </td>
                 <td class="center aligned">
-                    <date-picker format="yyyy-MM-dd" v-model="lecture.lec_endDate" />
+                    <date-picker format="yyyy-MM-dd" v-model="lecture.lec_endDate"  />
                 </td>
                 <td class="center aligned">0시간</td>
                 <td class="center aligned">
@@ -126,8 +126,18 @@
                 </thead>
                 <tbody>
                     <tr v-for="(session, sid) in  sessions">
-                        <td><date-picker format="yyyy-MM-dd" v-model="session.ls_startDate" /></td>
-                        <td><date-picker format="yyyy-MM-dd" v-model="session.ls_endDate" /></td>
+                        <td>
+                            <date-picker
+                                format="yyyy-MM-dd"
+                                v-model="session.ls_startDate"
+                                @selected="changeDateCheck('start', session.ls_startDate, sid)" />
+                        </td>
+                        <td>
+                            <date-picker
+                                format="yyyy-MM-dd"
+                                v-model="session.ls_endDate"
+                                @selected="changeDateCheck('end', session.ls_endDate, sid)" />
+                        </td>
                         <td><input placeholder="회차 제목을 입력해 주세요" type="text" v-model="session.ls_title"></td>
                         <td><input placeholder="강의장소를 입력해 주세요" type="text" v-model="session.ls_location"></td>
                         <td class="center aligned"><button type="button" class="ui button red mini">삭제</button></td>
@@ -773,6 +783,28 @@ export default {
 
 
 
+
+
+
+    // ========== Created ========== //
+    watch:{
+        // 회차 시작일 설정
+        'lecture.lec_startDate'(val){
+            this.compareSessionDate('start', val, this.lecture.lec_endDate)
+        },
+        // 회차 종료일 설정
+        'lecture.lec_endDate'(val){
+            this.compareSessionDate('end', this.lecture.lec_startDate, val)
+        }
+    },
+
+
+
+
+
+
+
+
     // ========== Created ========== //
     created(){
         var id = sessionStorage.getItem('lecture-idx') // 강의아이디
@@ -794,6 +826,82 @@ export default {
 
     // ========== Methods ========== //
     methods : {
+
+        // ===== 회차날짜 비교 ===== //
+        compareSessionDate(thisVal, startVal, endVal){
+            var start = new Date(startVal)
+            var end = new Date(endVal)
+            var sessionLength = this.sessions.length
+
+            if ( start < end ) {
+                if (sessionLength>0) {
+                    this.sessions[0].ls_startDate = start // 시작일 설정
+                    this.sessions[sessionLength-1].ls_endDate = end // 종료일 설정
+                }
+            }//
+
+        },
+
+
+        // ===== 변경되는 날짜 비교 ===== //
+        changeDateCheck(flag, val, id){
+            /*
+            flag : 시작/종료 여부
+            val : 비교될 값
+            id : 값의 해당 번지수
+            */
+            var thisValue   = new Date(val)
+            var start           = new Date(this.lecture.lec_startDate)
+            var end            = new Date(this.lecture.lec_endDate)
+            var ls_start       = new Date(this.sessions[id].ls_startDate)
+            var ls_end        = new Date(this.sessions[id].ls_endDate)
+            // 이전 다음
+            var prev_end =null,
+                  next_start = null;
+
+            // 차시가 두개일경우
+            if (id===1) {
+                prev_end  = new Date(this.sessions[id-1].ls_endDate)
+            }
+            // 차시가 두개 이상일 경우
+            else if(id>1){
+                prev_end  = new Date(this.sessions[id-1].ls_endDate)
+                next_start = new Date(this.sessions[id+1].ls_startDate)
+            }
+
+
+            if (thisValue > start  &&  thisValue < end) {
+                if(flag==='start'){
+                    if (thisValue < ls_end) {
+                        if(prev_end !== null){
+                            if (thisValue > prev_end) {
+                                return
+                            }
+                        }else{
+                            return
+                        }
+                    }
+                    this.sessions[id].ls_startDate = ''
+                }
+                else if(flag==='end'){
+                    if (thisValue > ls_start) {
+                        if(next_start !== null){
+                            if (thisValue < next_start) {
+                                return
+                            }
+                        }else{
+                            return
+                        }
+                    }
+                    this.sessions[id].ls_endDate = ''
+                }
+
+                alert('전체 강의기간을 초과할 수 없습니다.')
+            }
+
+
+        },
+
 
 
         // ===== 회차정보 추가 ===== //

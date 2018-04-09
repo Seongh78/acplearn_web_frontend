@@ -1123,8 +1123,7 @@
 
 <!-- ======================== Modal ============================ -->
 
-<button data-content="보고서로 출력(종료 시 생김)" class="circular ui icon orange button tooltip" style="position: fixed; bottom: 15px; right: 95px; font-size: 1em; box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px 1px; z-index: 11; width: 75.0312px; height: 35px;"><i class="icon image"></i> 사진
-    </button>
+
 
 
   </div>

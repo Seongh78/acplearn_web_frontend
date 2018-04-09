@@ -315,6 +315,7 @@ export default {
             // 불러오기
             this.$http.get('/api/lectures/dt/'+id)
             .then(resp=>{
+                console.log(resp.data.lecture);
                 var tempLec = resp.data.lecture
                 var tempKpi = resp.data.kpi
                 var tempCompanies = resp.data.companies
@@ -340,6 +341,7 @@ export default {
                     lec_goal              : tempLec.lec_goal,
                     lec_content        : tempLec.lec_content,
                     lec_effect           : tempLec.lec_effect,
+                    lec_target           : tempLec.lec_target,
                     lec_startDate     : tempLec.lec_startDate,
                     lec_endDate      : tempLec.lec_endDate
                 })
