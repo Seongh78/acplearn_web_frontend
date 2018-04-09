@@ -11,10 +11,9 @@
     <page-layout>
 
 
-        <h4>Vertical Tab2</h4>
+        <!-- <h4>Vertical Tab2</h4>
         <time-picker-test v-model="time" />
-        <!-- <time-picker-test  min-hour="3" /> -->
-        {{time}}
+        <time-picker-test  min-hour="3" />
         <hr>
         <date-picker-test v-model="date"></date-picker-test>
         <p>
@@ -23,7 +22,7 @@
         </p>
         <br>
         <br>
-        <br>
+        <br> -->
 
         <h4>Vertical Tab</h4>
         <div class="">
@@ -110,7 +109,7 @@ import Timepicker from './Timepicker'
 import TimePickerTest from './TimePickerTest'
 import VerticalTab from './VerticalTab'
 
-import DatePickerTest from './DatePickerTest.vue';
+// import DatePickerTest from './DatePickerTest.vue';
 
 import DatePicker from 'vuejs-datepicker'
 /*
@@ -141,8 +140,8 @@ export default {
         'time-picker' : Timepicker,
         'rating': Rating,
         'paging' : Pagination,
-        'date-picker' : Datepicker,
-        DatePickerTest,
+        'date-picker' : DatePicker,
+        // DatePickerTest,
         TimePickerTest,
         'vertical-tab' : VerticalTab,
     },
