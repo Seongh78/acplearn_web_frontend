@@ -10,6 +10,13 @@
 
     <page-layout>
 
+        <h4>Highcharts TEST</h4>
+        <div class="">
+            <vue-highcharts :options="chartData" ref="lineCharts" style="box-shadow:none;"></vue-highcharts>
+            <button @click="load">load</button>
+        </div>
+
+
 
         <!-- <h4>Vertical Tab2</h4>
         <time-picker-test v-model="time" />
@@ -121,6 +128,24 @@ import DatePicker from 'vuejs-datepicker'
 "D dsu MMM yyyy"  D dsu MMM yyyy     - e.g       Sat 12th Feb 2016
 */
 
+import VueHighcharts from 'vue2-highcharts'
+
+
+
+
+// 차트 데이터
+const asyncData = {
+    name: '자가평가',
+    marker: {
+        symbol: 'round'
+    },
+    data: [
+        { data: [3.5, 2.9, 1.5, 0.5, 4.2] },
+        { data: [3.5, 2.9, 1.5, 0.5, 4.2] }
+    ]
+}
+
+
 
 
 
@@ -144,6 +169,7 @@ export default {
         // DatePickerTest,
         TimePickerTest,
         'vertical-tab' : VerticalTab,
+        VueHighcharts
     },
 
     data () {
@@ -156,7 +182,79 @@ export default {
                 month: 1,
                 year: 2017
             },
-            time:''
+            time:'',
+
+
+            chartData: {}, // 차트데이터
+
+            // 하이차트 데이터 옵션
+            options: {
+                chart: {
+                    // type: 'spline'
+                },
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    // text: 'Source: WorldClimate.com'
+                },
+                xAxis: {
+
+                    categories: ['1일차', '2일차', '3일차', '4일차', '5일차']
+                },
+                yAxis: {
+                    max:5,
+                    title: {
+                        text: ''
+                    },
+                    labels: {
+                        formatter: function () {
+                            // return this.value + '°';
+                            return this.value + '점';
+                        }
+                    }
+                },
+                tooltip: {
+                    crosshairs: true,
+                    shared: true
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    spline: {
+                      marker: {
+                        radius: 5,
+                        lineColor: '#fff',
+                        symbolColor:'#FF5E00',
+                        lineWidth: 1
+                      }
+                    }
+                },
+
+                series:[]
+                // series: [
+                //     {
+                //         data: [2.5, 1.9, 1.5, 0.5, 4.2] ,
+                //         name: '자가평가',
+                //         color:'#7cb5ec',
+                //         type: 'column'
+                //     },
+                //     {
+                //         data: [3.5, 2.3, 1.5, 2.5, 5.2] ,
+                //         name: '팀원평가',
+                //         color:'#90ed7d',
+                //         type: 'column'
+                //     },
+                //     {
+                //         data: [2.5, 2.1, 1.5, 1.5, 4.7] ,
+                //         name: 'GAP',
+                //         color:'#FF8224',
+                //         // type: 'column'
+                //     },
+                // ] // series
+
+            }// option
         }
     }, //data
 
@@ -182,7 +280,52 @@ export default {
 
 
 
+
+
+
+
+
+
     methods: {
+
+
+
+        load(){
+            var series= [
+                {
+                    data: [2.5, 1.9, 1.5, 0.5, 4.2] ,
+                    name: '자가평가',
+                    color:'#7cb5ec',
+                    type: 'column'
+                },
+                {
+                    data: [3.5, 2.3, 1.5, 2.5, 4.9] ,
+                    name: '팀원평가',
+                    color:'#90ed7d',
+                    type: 'column'
+                },
+                {
+                    data: [2.5, 2.1, 1.5, 1.5, 4.7] ,
+                    name: 'GAP',
+                    color:'#FF8224'
+                },
+            ] // series
+              let lineCharts = this.$refs.lineCharts;
+              lineCharts.delegateMethod('showLoading', 'Loading...');
+              setTimeout(() => {
+                  for(var ii  in  series){
+                    lineCharts.addSeries(series[ii]);
+                  }
+
+                  // lineCharts.addSeries(asyncData);
+                  lineCharts.hideLoading();
+              }, 1000)
+          },
+
+
+
+
+
 
         dtdt(tt){
             this.$set(this, 'tdtd', tt)

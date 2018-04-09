@@ -943,71 +943,101 @@
 <!-- ======================== Modal ============================ -->
 
 <!-- 플랜상세 모달 -->
-<modal v-if="modal.actionPlan" @close="modal.actionPlan = false" w="w-40" h="">
+<modal v-if="modal.actionPlan" @close="modal.actionPlan = false" w="w-50" h="h-70">
     <h3 slot="header">플랜정보</h3>
     <div slot="body" class="ui form">
 
         <table class="ui table celled" style="padding:0;">
             <colgroup>
-                <col width="15%">
+                <col width="13%">
                 <col width="38%">
-                <col width="15%">
-                <col width="32%">
+                <col width="13%">
+                <col width="35%">
             </colgroup>
-            <tr>
-                <th class="borderTop">플랜명</th>
-                <td colspan="3">{{ plan.lap_text }}</td>
-            </tr>
-            <tr>
-                <th class="borderTop">KPI</th>
-                <td><div class="ui basic label">{{ plan.cc2_name }}</div></td>
-                <th class="borderTop">진행율</th>
-                <td>72%</td>
-            </tr>
-            <tr>
-                <th class="borderTop">평점</th>
-                <td>
-                    <rating v-bind:score="Number(plan.lap_othersAverage)" />
-                </td>
-                <th class="borderTop">평가진행</th>
-                <td>3명 / 5명</td>
-            </tr>
-            <tr>
-                <th class="center aligned borderTop" colspan="4">점수표</th>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0;">
-                    <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
-                        <colgroup><col width="15%"></colgroup>
-                        <tr>
-                            <th class="borderTop">자가평가</th>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                        </tr>
-                        <tr>
-                            <th class="borderTop">GAP</th>
-                            <td class="center aligned">-</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                        </tr>
-                        <tr>
-                            <th class="borderTop">팀원평가</th>
-                            <td class="center aligned">-</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                            <td class="center aligned">2</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+            <tbody>
+                <tr>
+                    <th class="borderTop">플랜명</th>
+                    <td colspan="3"><h4>{{ plan.lap_text }}</h4>  </td>
+                </tr>
+                <tr>
+                    <th class="borderTop">KPI</th>
+                    <td><div class="ui basic label">{{ plan.cc2_name }}</div></td>
+                    <th class="borderTop">진행율</th>
+                    <td>72%</td>
+                </tr>
+                <tr>
+                    <th class="borderTop">평점</th>
+                    <td>
+                        <rating v-bind:score="Number(plan.lap_othersAverage)" />
+                    </td>
+                    <th class="borderTop">평가진행</th>
+                    <td>3명 / 5명</td>
+                </tr>
             </tbody>
+        </table>
 
+        <table style="width:100%; margin:0; " class="structured ui table celled">
+            <colgroup><col width="15%"></colgroup>
+            <thead>
+                <tr>
+                    <th class="center aligned borderTop">점수표</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding:0;">
+                        <!-- <vue-highcharts :options="options" ref="lineCharts" style="box-shadow:none; margin:0; height:450px;"></vue-highcharts> -->
+                        <vue-highcharts :options="chartData" ref="lineCharts" style="box-shadow:none; border:none; height:330px; padding-bottom:5px; margin:0;"></vue-highcharts>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="center aligned" style="padding:0;">
+                        <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
+                            <colgroup>
+                                <col width="15%">
+                                <col width="3%">
+                                <col>
+                                <col>
+                                <col>
+                                <col>
+                                <col>
+                                <col width="3%">
+                            </colgroup>
+                            <tr>
+                                <th class="borderTop">자가평가</th>
+                                <td class="center aligned planScoreBtn" rowspan="3">
+                                    <i class="icon chevron left"></i>
+                                </td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned planScoreBtn" rowspan="3">
+                                    <i class="icon chevron right"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="borderTop">GAP</th>
+                                <td class="center aligned">-</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                            </tr>
+                            <tr>
+                                <th class="borderTop">팀원평가</th>
+                                <td class="center aligned">-</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                                <td class="center aligned">2</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
         </table>
         <br>
 
@@ -1049,6 +1079,13 @@
     </div>
 </modal>
 
+
+
+
+
+
+
+
 <!-- 플랜추가 모달 -->
 <modal v-if="modal.addActionPlan" @close="modal.addActionPlan = false" w="w-40" h="">
     <h3 slot="header">신규 플랜</h3>
@@ -1082,6 +1119,11 @@
         </div>
     </div>
 </modal>
+
+
+
+
+
 
 
 
@@ -1148,6 +1190,9 @@ import {
 
 import LectureModule from './LectureModule'
 
+// Highcharts - 그래프
+import VueHighcharts from 'vue2-highcharts'
+
 export default {
     name: 'LectureDetail',
 
@@ -1160,7 +1205,8 @@ export default {
         'rating'              : Rating,
         'comment'        : Comment,
         'lecture-module': LectureModule,
-        'loading' : Loading
+        'loading' : Loading,
+        VueHighcharts
     },
 
     data () {
@@ -1199,10 +1245,67 @@ export default {
 
 
           // === 액션플랜 === //
-          actionplanSessionTab : -1, // 세션탭
-          selectedStudent:-1, // 선택된 수강생
-          plans : [], // 선택된 수강생의 플랜들
-          plan : {}, // 선택된 수강생의 상세플랜
+            actionplanSessionTab : -1, // 세션탭
+            selectedStudent:-1, // 선택된 수강생
+            plans : [], // 선택된 수강생의 플랜들
+            plan : {}, // 선택된 수강생의 상세플랜
+
+
+            chartData: {}, // 차트데이터
+            options: {
+                chart: {},
+                title: { text: '' },
+                subtitle: { text: '' },
+                xAxis: {
+                    categories: ['1일차', '2일차', '3일차', '4일차', '5일차'],
+                    offset: 20,
+                },
+                yAxis: {
+                    title: { text: '' },
+                    max: 5, // 최대값
+                    tickAmount: 6, // 표시할 줄의 수
+                    labels: {
+                        formatter () { return this.value + '점'; }
+                    }
+                },
+                tooltip: {
+                    crosshairs: true,
+                    shared: true
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            radius: 5,
+                            lineColor: '#fff',
+                            symbolColor:'#FF5E00',
+                            lineWidth: 1
+                        }
+                    }
+                },
+
+                series : [
+                    {
+                        data: [2.5, 1.9, 1.5, 0.5, 4.2] ,
+                        name: '자가평가',
+                        color:'#7cb5ec',
+                        type: 'column'
+                    },
+                    {
+                        data: [3.5, 2.3, 1.5, 2.5, 5] ,
+                        name: '팀원평가',
+                        color:'#90ed7d',
+                        type: 'column'
+                    },
+                    {
+                        data: [2.5, 2.1, 1.5, 1.5, 4.7] ,
+                        name: 'GAP',
+                        color:'#FF8224'
+                    },
+                ] // series
+            }// option
           // === 액션플랜 === //
 
         }
@@ -1505,15 +1608,48 @@ export default {
         selectPlan( id ) {
             this.$http.get('/api/plans/detail/'+id)
             .then(resp=>{
-                console.log(resp.data);
+                // console.log(resp.data);
                 this.$set(this, 'plan', resp.data.plan)
                 this.$set(this.modal, 'actionPlan', true)
+                this.$set(this, 'chartData', this.options)
             })
             .catch(err=>{
+                console.log(err);
                 alert('Error - ')
             })
         },// 액션플랜 상세
 
+
+
+
+        chartLoad(){
+            var series= [
+                {
+                    data: [2.5, 1.9, 1.5, 0.5, 4.2] ,
+                    name: '자가평가',
+                    color:'#7cb5ec',
+                    type: 'column'
+                },
+                {
+                    data: [3.5, 2.3, 1.5, 2.5, 5.2] ,
+                    name: '팀원평가',
+                    color:'#90ed7d',
+                    type: 'column'
+                },
+                {
+                    data: [2.5, 2.1, 1.5, 1.5, 4.7] ,
+                    name: 'GAP',
+                    color:'#FF8224'
+                },
+            ] // series
+              let lineCharts = this.$refs.lineCharts;
+              for(var ii  in  series){
+                // lineCharts.addSeries(series[ii]);
+                this.options.series.push(series[ii])
+              }
+              // lineCharts.addSeries(asyncData);
+              // lineCharts.hideLoading();
+        },
 
         // ========== 액션플랜 ========== //
 
@@ -1634,4 +1770,19 @@ export default {
         .actionPlanUserList .item:hover{
             background: #f1f1f1;
         }
+
+
+        /* ======== 액션플랜 ======== */
+        .planScoreBtn{
+            cursor: pointer;
+            color:#333;
+        }
+        .planScoreBtn:hover{
+            background: #f1f1f1;
+        }
+        /* ======== 액션플랜 ======== */
+
+
+
+
 </style>
