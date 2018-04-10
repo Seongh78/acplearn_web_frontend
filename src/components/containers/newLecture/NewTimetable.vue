@@ -1047,11 +1047,24 @@ export default {
             })
             .then(resp=>{
                 var id = resp.data.lec_idx // 신규등록일 경우  -  리턴 아이디
+                var ls_idx = resp.data.ls_idx // 세션아이디
+
+                // 신규일경우 강의아이디 부여
                 if(this.lec_idx<0){
                     this.$set(this, 'lec_idx', id)
                     sessionStorage.setItem('lec_idx', id)
                 }// if
-                // alert('저장되었습니다.')
+
+                // 세션아이디 부여
+                if (ls_idx !== undefined && ls_idx !== null) {
+                    var keys = Object.keys(this.sessions)
+                    for(var ii  in  keys){
+                        this.sessions[ii].ls_idx = ls_idx
+                        ls_idx++
+                    }
+                }// if
+
+                sessionStorage.setItem('lecture-sessions', JSON.stringify(this.sessions))
                 this.$router.push('/new/'+url)
             })
             .catch(err=>{

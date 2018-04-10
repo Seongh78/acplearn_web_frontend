@@ -222,8 +222,6 @@ export default {
                 lec_goal : '',
                 lec_effect : '',
                 lec_target: '',
-                lec_startDate : '',
-                lec_endDate : ''
             }, // 강의개요
             tempSummary:{}, // 개요 임시저장
             tempLectures:[], // 임시저장 강의 목록
@@ -345,6 +343,7 @@ export default {
                     lec_startDate     : tempLec.lec_startDate,
                     lec_endDate      : tempLec.lec_endDate
                 })
+                console.log(tempLec.sessions);
 
                 this.$set(this, 'lec_idx', id)
                 sessionStorage.setItem('lecture-idx', id)

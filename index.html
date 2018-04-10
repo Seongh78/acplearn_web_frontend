@@ -19,13 +19,26 @@
             min-width: 1024px;
         }
 
-        
+
     </style>
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
 
+
+    <script type="text/javascript">
+        function diffDate(sd, ed) { // 날짜 차이 일수 구하기
+            /*
+            sd : 작은값
+            ed : 큰값
+            */
+            var sdt = new Date('Tue Jan 16 2018 09:00:00 GMT+0900 (KST)');
+            var edt = new Date('Wed Jan 17 2018 09:00:00 GMT+0900 (KST)');
+            var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+            return dateDiff; // 정수형 반환
+        }
+    </script>
 
   </body>
 </html>

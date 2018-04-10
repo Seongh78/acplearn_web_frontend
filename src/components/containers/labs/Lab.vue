@@ -268,10 +268,31 @@ export default {
         this.$EventBus.$on('add-item', this.addToCart)
         this.$EventBus.$on('save', this.save)
         this.$EventBus.$on('toto', this.toto)
-
-
         this.$EventBus.$on('dateTest', this.dtdt)
+
+
+        // 날짜 일수 차이구하기
+        var sdt = new Date('2018-09-10');
+        var edt = new Date('2018-09-15');
+        // console.log(sdt.getTime());
+        // console.log(edt.getTime());
+        var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+        // var d = diffDate('Tue Jan 16 2018 09:00:00 GMT+0900 (KST)', 'Wed Jan 17 2018 09:00:00 GMT+0900 (KST)')
+        console.log( "DATE : ", dateDiff );
+
+        var temDate = new Date();
+        for(var ii=0;  ii<=dateDiff;  ii++){
+            temDate.setDate(sdt.getDate()+ii)
+            console.log(temDate.getFullYear()+"-"+(temDate.getMonth()+1)+"-"+temDate.getDate());
+        }
       },
+
+
+
+
+
+
+
 
 
       updated(){

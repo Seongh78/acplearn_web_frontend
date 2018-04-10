@@ -1230,7 +1230,7 @@ export default {
           groupTab:'' , // 선택한 그룹아이디
           chooseTeam:{}, // 선택한 그룹 정보
           companyTab:0,
-          tab:1, // 현재 활성화 탭
+          tab:5, // 현재 활성화 탭
           attendanceCount : 0, // 출석 카운트
           avgAttendancePercent : 0, // 평균출석률
 
@@ -1328,7 +1328,7 @@ export default {
     created(){
         var id = this.$ro.history.current.params.id
         // this.$set(this, 'lec_idx', id)
-        this.$set(this, 'lec_idx', 5)  //  테스트 컨텐츠
+        this.$set(this, 'lec_idx', id)  //  테스트 컨텐츠
 
         this.getLecture(id) // 강의정보
         this.getComments('feedback', id) // 활동내역

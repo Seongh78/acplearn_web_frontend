@@ -322,7 +322,7 @@ export default {
 
         this.$http.get('/api/users/session')
         .then(resp=>{
-            console.log(resp);
+            // console.log(resp);
         })
     }, // created
 
@@ -346,8 +346,7 @@ export default {
             // 입력전 예외처리
             var lec=[
                 sessionStorage.getItem('lecture-summary'),
-                sessionStorage.getItem('lecture-term'),
-                sessionStorage.getItem('lecture-timetables'),
+                sessionStorage.getItem('lecture-sessions'),
                 sessionStorage.getItem('lecture-companies'),
                 sessionStorage.getItem('lecture-teamBuilding'),
                 sessionStorage.getItem('lecture-students'),
@@ -369,11 +368,19 @@ export default {
                     return
             }// if
 
+            var sessionCount = JSON.parse(lec[1])
+            var stdCount = JSON.parse(lec[4])
+            var sendData = {
+                lec_idx: this.lec_idx,
+                sessions : JSON.parse(lec[1]),
+                session_count : sessionCount.length,
+                student_count : stdCount.length
+            }
+
+            console.log(sendData);
 
 
-            this.$http.post('/api/lectures/complete', {
-                lec_idx: this.lec_idx
-            })
+            this.$http.post('/api/lectures/complete', sendData)
             .then(resp=>{
                 console.log(resp);
                 alert('강의가 등록되었습니다. 결제를 완료하면 정식 개설이 가능합니다.')
