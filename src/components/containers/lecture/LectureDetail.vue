@@ -192,7 +192,7 @@
         <div class="ui bottom tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']"  style="">
 
 
-
+ㅁㄴㅇ
 
 
             <!-- 집합교육 탭메뉴 -->
