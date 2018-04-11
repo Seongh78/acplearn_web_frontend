@@ -186,27 +186,35 @@
 
 
         <!-- 탭 -->
-        <div class="ui bottom   tab segment viewLoadAnimation" v-bind:class="[sessionTab < 0?'active':'']">
+        <div class="ui bottom tab segment viewLoadAnimation" v-bind:class="[sessionTab < 0?'active':'']">
             <h1>asd</h1>
         </div>
-        <div class="ui bottom attached  tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" style="padding:0 !important; border:none;">
+        <div class="ui bottom tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']"  style="">
 
-            <!-- 세션헤더 -->
-            <h3 class="ui header block">
-                {{ jj+1 }}회차 - {{ sess.ls_title }}
-                <div class="sub header" style="margin-top:8px;">
-                    <i class="icon calendar outline"></i>
-                    <b>강의일정 :</b> {{ sess.ls_startDate }}
-                    &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
-                    <i class="icon clock outline"></i>
-                    <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)</div>
-            </h3>
+
+
+
 
             <!-- 집합교육 탭메뉴 -->
-            <div class="ui grid verticalTab" style="padding:10px 5px;">
+            <div class="ui grid verticalTab">
+                <div class="sixteen wide column">
+                    <!-- 세션헤더 -->
+                    <!-- <h3 class="ui header block" > -->
+                    <h3 class="ui header" >
+                        {{ jj+1 }}회차 - {{ sess.ls_title }}
+                        <div class="sub header" >
+                            <i class="icon calendar outline"></i>
+                            <b>강의일정 :</b> {{ sess.ls_startDate }}
+                            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                            <i class="icon clock outline"></i>
+                            <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)</div>
+                    </h3>
+                    <hr class="opacity4">
+                </div>
 
-                <div class="three wide column">
-                    <div class="ui vertical fluid attached menu listTab pointing">
+
+                <div class="three wide column" >
+                    <div class="ui secondary vertical menu" style="width:100%;">
                         <!-- 강의회차 탭-->
                         <a class="item" v-for="(sClass, scid) in sess.sessionClass" v-bind:class="[sessionTab==jj?'active':'']">
                             <b>{{scid+1}}차</b> 교육 - {{ sClass.lsc_date }}
@@ -215,7 +223,7 @@
                     </div>
                 </div>
 
-                <div class="thirteen wide stretched column ">
+                <div class="thirteen wide  column ">
                     <div class="ui segment attached contentTab" v-for="(sClass, kk) in sess.sessionClass" style="padding:0 !important; border:none; ">
                         <!-- 강의내용 -->
                         <timeline class="container33" v-for="(timetable, tid)  in  sClass.timetables" :key="timetable.lt_idx">
