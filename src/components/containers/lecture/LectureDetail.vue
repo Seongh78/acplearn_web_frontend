@@ -1371,7 +1371,7 @@ export default {
         getLecture(id){
             // alert(typeof id)
             // return
-            this.$http.get('/api/lectures/dt/'+Number(id))
+            this.$http.get('/api/lectures/detail/'+Number(id))
             .then(resp=>{
                 // console.log(resp.data.students);
                 this.$set(this, 'lecture', resp.data.lecture)

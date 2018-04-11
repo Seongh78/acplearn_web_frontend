@@ -1038,6 +1038,7 @@ export default {
         // ===== 저장 ===== //
         save(url){
             // console.log("this.lec_idx : ", this.lecture);
+            console.log(this.sessions);
             // return
             this.$http.post('/api/lectures/create/sessions', {
                 sessions                : this.sessions,

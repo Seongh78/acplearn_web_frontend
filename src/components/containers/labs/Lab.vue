@@ -11,6 +11,16 @@
     <page-layout>
 
         <h4>Highcharts TEST</h4>
+        <!-- <date-picker v-model="ddd" placeholder="년-월-일" format="yyyy-MM-dd" type="date" /> -->
+        <date-picker v-model="ddd" placeholder="년-월-일"  type="date" :first-day-of-week="1" />
+        {{ddd}}
+        <br>
+        <br>
+        <br>
+
+
+
+        <h4>Highcharts TEST</h4>
         <div class="">
             <vue-highcharts :options="chartData" ref="lineCharts" style="box-shadow:none;"></vue-highcharts>
             <button @click="load">load</button>
@@ -29,14 +39,14 @@
         </p>
         <br>
         <br>
-        <br> -->
+        <br>
 
         <h4>Vertical Tab</h4>
         <div class="">
 
             <vertical-tab />
 
-        </div>
+        </div> -->
 
 
 
@@ -77,7 +87,7 @@
         <br>
         <br>
 
-        <!-- <react /> -->
+         <react /> -->
 
 
         <h4>Timepicker TEST</h4>
@@ -85,7 +95,7 @@
 
         <hr>
         <h4>Rating TEST</h4>
-        <rating /> -->
+        <rating />
 
 
     </page-layout>
