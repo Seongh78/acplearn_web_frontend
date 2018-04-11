@@ -189,7 +189,7 @@
         <div class="ui bottom   tab segment viewLoadAnimation" v-bind:class="[sessionTab < 0?'active':'']">
             <h1>asd</h1>
         </div>
-        <div class="ui bottom attached  tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" style="padding:13px 8px !important; border:none;">
+        <div class="ui bottom attached  tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" style="padding:0 !important; border:none;">
 
             <!-- 세션헤더 -->
             <h3 class="ui header block">
@@ -203,7 +203,7 @@
             </h3>
 
             <!-- 집합교육 탭메뉴 -->
-            <div class="ui grid verticalTab" style="padding:10px 0;">
+            <div class="ui grid verticalTab" style="padding:10px 5px;">
 
                 <div class="three wide column">
                     <div class="ui vertical fluid attached menu listTab pointing">
