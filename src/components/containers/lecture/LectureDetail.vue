@@ -192,9 +192,6 @@
         <div class="ui bottom tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']"  style="">
 
 
-ㅁㄴㅇ
-
-
             <!-- 집합교육 탭메뉴 -->
             <div class="ui grid verticalTab">
                 <div class="sixteen wide column">
@@ -214,6 +211,20 @@
 
 
                 <div class="three wide column" >
+                    <!-- 팀목록 -->
+                    <div class="three wide column">
+                        <h3><i class="align left icon"></i> 팀</h3>
+                        <div class="ui secondary vertical menu " style="width:100%;">
+                        <!-- <div class="ui vertical pointing menu " style="width:95%;"> -->
+                            <a class="item" v-bind:class="[groupTab==''?'active':'']" @click.prevent="chooseGroup('')">전체</a>
+                            <a class="item" v-for="(group, gid)  in  groups" v-bind:class="[group.group_idx==groupTab?'active':'']" @click.prevent="chooseGroup(group.group_idx)">
+                                {{ group.group_name }}
+                            </a>
+                            <a class="item" v-bind:class="[groupTab==null?'active':'']" @click.prevent="chooseGroup(null)">팀미지정</a>
+                            <a class="tiny button ui blue active" style="width:100%;" @click.prevent="$EventBus.$emit('onModal', 'addGroup', true)" >
+                                <i class="icon plus square"></i>팀생성</a>
+                        </div>
+                    </div>
                     <div class="ui secondary vertical menu" style="width:100%;">
                         <!-- 강의회차 탭-->
                         <a class="item" v-for="(sClass, scid) in sess.sessionClass" v-bind:class="[sessionTab==jj?'active':'']">
