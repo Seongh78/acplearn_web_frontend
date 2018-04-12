@@ -94,7 +94,7 @@
     <!-- <div class="ui eight item attached tabular menu"> -->
     <div class="ui eight item attached   menu lectureMenu" style=" top:0;">
         <a class="item" v-bind:class="[tab==0?'active':'']" v-on:click.prevent="selectTab(0)">강의개요</a>
-        <a class="item" v-bind:class="[tab==1?'active':'']" v-on:click.prevent="selectTab(1)">기간/일정</a>
+        <a class="item" v-bind:class="[tab==1?'active':'']" v-on:click.prevent="selectTab(1)">일정/시간표</a>
         <a class="item" v-bind:class="[tab==2?'active':'']" v-on:click.prevent="selectTab(2)">팀/수강생</a>
         <a class="item" v-bind:class="[tab==3?'active':'']" v-on:click.prevent="selectTab(3)">교육진행</a>
         <a class="item" v-bind:class="[tab==4?'active':'']" v-on:click.prevent="selectTab(4)">참여점수</a>
@@ -141,11 +141,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- ======================== 세션/시간표 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==1?'active viewAnimate':'']" >
-        <h3>
-            <i class="align left icon"></i> 강의정보
-        </h3>
+        <h3><i class="align left icon"></i> 강의정보</h3>
         <table class="ui table celled">
             <colgroup>
                 <col width="13%">
@@ -174,72 +188,95 @@
 
 
 
-        <h3>
-            <i class="align left icon"></i> 상세일정
-        </h3>
+        <h3><i class="align left icon"></i> 상세일정</h3>
 
-        <!-- 회차 탭메뉴 -->
+        <!-- ===== 회차 탭메뉴 ===== -->
         <div class="ui top secondary pointing menu">
             <a class="item" v-bind:class="[sessionTab < 0?'active':'']" @click.prevent="sessionTabChange(-1)">전체</a>
             <a class="item" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" @click.prevent="sessionTabChange(jj)">{{ jj+1 }}회</a>
         </div>
 
 
-        <!-- 탭 -->
+
+
+        <!-- ===== 탭 - 전체 ===== -->
         <div class="ui bottom tab segment viewLoadAnimation" v-bind:class="[sessionTab < 0?'active':'']">
-            <h1>asd</h1>
+            <h3 class="ui header">전체일정</h3>
+            <hr class="opacity3">
+            <!-- <table>
+
+            </table> -->
         </div>
-        <div class="ui bottom tab segment viewLoadAnimation" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']"  style="">
+        <!-- ===== 탭 - 전체 ===== -->
 
 
-            <!-- 집합교육 탭메뉴 -->
+
+
+
+        <!-- ===== 회차 탭 - 목록 ===== -->
+        <div
+            class="ui bottom tab segment viewLoadAnimation"
+            v-for="(sess, jj) in lecture.sessions"
+            v-bind:class="[sessionTab==jj?'active':'']"
+            style="">
+
+
+            <!-- === 집합교육 - 레이아웃 === -->
             <div class="ui grid verticalTab">
+
+                <!-- === 집합교육 - 타이틀 === -->
                 <div class="sixteen wide column">
-                    <!-- 세션헤더 -->
-                    <!-- <h3 class="ui header block" > -->
                     <h3 class="ui header" >
                         {{ jj+1 }}회차 - {{ sess.ls_title }}
-                        <div class="sub header" >
+                        <div class="sub header"  style="line-height:210%;">
                             <i class="icon calendar outline"></i>
                             <b>강의일정 :</b> {{ sess.ls_startDate }}
-                            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
                             <i class="icon clock outline"></i>
-                            <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)</div>
+                            <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)
+                        </div>
                     </h3>
                     <hr class="opacity4">
                 </div>
+                <!-- === 집합교육 - 타이틀 === -->
 
 
+                <!-- === 집합교육 - 목록 탭 === -->
                 <div class="three wide column" >
-                    <!-- 팀목록 -->
-                    <div class="three wide column">
-                        <h3><i class="align left icon"></i> 팀</h3>
-                        <div class="ui secondary vertical menu " style="width:100%;">
-                        <!-- <div class="ui vertical pointing menu " style="width:95%;"> -->
-                            <a class="item" v-bind:class="[groupTab==''?'active':'']" @click.prevent="chooseGroup('')">전체</a>
-                            <a class="item" v-for="(group, gid)  in  groups" v-bind:class="[group.group_idx==groupTab?'active':'']" @click.prevent="chooseGroup(group.group_idx)">
-                                {{ group.group_name }}
-                            </a>
-                            <a class="item" v-bind:class="[groupTab==null?'active':'']" @click.prevent="chooseGroup(null)">팀미지정</a>
-                            <a class="tiny button ui blue active" style="width:100%;" @click.prevent="$EventBus.$emit('onModal', 'addGroup', true)" >
-                                <i class="icon plus square"></i>팀생성</a>
-                        </div>
-                    </div>
+                    <h3><i class="align left icon"></i> 교육목록</h3>
                     <div class="ui secondary vertical menu" style="width:100%;">
                         <!-- 강의회차 탭-->
-                        <a class="item" v-for="(sClass, scid) in sess.sessionClass" v-bind:class="[sessionTab==jj?'active':'']">
-                            <b>{{scid+1}}차</b> 교육 - {{ sClass.lsc_date }}
+                        <a
+                            class="item"
+                            v-for="(sClass, scid) in sess.sessionClass"
+                            v-bind:class="[classTab==scid?'active':'']"
+                            @click.prevent="classTab=scid">
+                            {{scid+1}}차 교육 - {{ sClass.lsc_date }}
                         </a>
                         <!-- 강의회차 탭-->
                     </div>
                 </div>
+                <!-- === 집합교육 - 목록 탭 === -->
 
+
+
+                <!-- === 집합교육 - 상세보기 타임라인 === -->
                 <div class="thirteen wide  column ">
-                    <div class="ui segment attached contentTab" v-for="(sClass, kk) in sess.sessionClass" style="padding:0 !important; border:none; ">
-                        <!-- 강의내용 -->
-                        <timeline class="container33" v-for="(timetable, tid)  in  sClass.timetables" :key="timetable.lt_idx">
+                    <h3><i class="align left icon"></i> 시간표</h3>
+                    <div
+                        class="ui segment tab attached contentTab viewLoadAnimation"
+                        v-for="(sClass, scid) in sess.sessionClass"
+                        v-bind:class="[classTab==scid?'active':'']"
+                        style="padding:0 !important; border:none; ">
+
+                        <!-- 타임라인 -->
+                        <timeline
+                            class="container33"
+                            v-for="(timetable, tid)  in  sClass.timetables"
+                            v-if="timetable.lsc_idx === sClass.lsc_idx"
+                            :key="timetable.lt_idx">
+
                             <table class="ui table celled structured">
-                                <!-- 상세시간표가 있을 경우 -->
                                 <colgroup>
                                     <col width="8.5%">
                                     <col >
@@ -289,14 +326,6 @@
                                     </tr>
                                 </tbody>
 
-                                <!-- 상세시간표가 없을 경우 -->
-                                <!-- <tbody v-else>
-                                    <tr>
-                                        <td class="center aligned" colspan="3">
-                                            <no-contents />
-                                        </td>
-                                    </tr>
-                                </tbody> -->
                             </table>
                             <br>
                             <br>
@@ -304,24 +333,28 @@
                         <!-- 강의내용 -->
                     </div>
                 </div>
+                <!-- === 집합교육 - 상세보기 타임라인 === -->
 
             </div>
-            <!-- 집합교육 탭메뉴 -->
+            <!-- === 집합교육 레이아웃 === -->
 
 
 
 
         </div>
-
-
-
-
-
-
+        <!-- ===== 회차 탭 - 목록 ===== -->
 
 
     </div>
     <!-- ======================== 세션/시간표 ============================ -->
+
+
+
+
+
+
+
+
 
 
 
@@ -461,6 +494,16 @@
 
     </div>
     <!-- ======================== 팀/수강생 ============================ -->
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -648,6 +691,23 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- ======================== 참여점수 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==4?'active viewAnimate':'']" >
         <h3>참여점수</h3>
@@ -775,10 +835,18 @@
 
 
 
+
+
+
+
+
+
+
+
     <!-- ======================== 액션플랜 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
 
-        <!-- <div class="ui form">
+        <div class="ui form">
             <div class="inline fields" style="font-size:1.1em;">
                 <div class="field">
                     <div class="ui radio checkbox">
@@ -807,22 +875,23 @@
             </div>
 
         </div>
-        <hr style="opacity:.2;">
-
-        <br>
-        <br>-->
+        <hr class="opacity3">
+        <div class="ui secondary menu">
+            <a class="item active" data-tab="first">전체</a>
+            <a class="item" data-tab="second">A01팀</a>
+            <a class="item" data-tab="third">A02팀</a>
+          </div>
+        <hr class="opacity3">
 
         <div class="ui grid">
             <!-- Registration목록 -->
             <div class="three wide column">
-                <h3><i class="align left icon"></i> 수강생</h3>
-                <hr style="opacity:.2;">
                 <div class="ui list secondary vertical menu actionPlanUserList" style="width:100%;">
                     <div
-                    class="item"
-                    v-for="(std, sid)  in  students"
-                    v-bind:class="[std.stu_idx==selectedStudent?'active':'']"
-                    @click.prevent="getActionPlan(std.stu_idx)">
+                        class="item"
+                        v-for="(std, sid)  in  students"
+                        v-bind:class="[std.stu_idx==selectedStudent?'active':'']"
+                        @click.prevent="getActionPlan(std.stu_idx)">
                         <img class="ui avatar image" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_female2-64.png">
                         <div class="content">
                             <div class="header">{{ std.stu_name }}</div>
@@ -832,71 +901,84 @@
                 </div>
             </div>
 
+
+
             <!--PLAN목록 -->
             <div class="thirteen wide column">
-                <!-- <div class=""  v-if="groupTab==-1"> -->
                 <div class=""  >
                     <!-- 탭메뉴 -->
-                    <div class="ui top secondary pointing menu">
-                        <a class="item" v-bind:class="[actionplanSessionTab < 0?'active':'']" @click.prevent="actionplanSessionTab=(-1)">전체</a>
-                        <a class="item" v-for="(sess, jj) in lecture.sessions" v-bind:class="[actionplanSessionTab==jj+1?'active':'']" @click.prevent="actionplanSessionTab=(jj+1)">{{ jj+1 }}회</a>
+                    <div class="ui top secondary pointing menu ">
+                        <a
+                            class="item"
+                            v-bind:class="[actionplanSessionTab < 0?'active':'']"
+                            @click.prevent="actionplanSessionTab=(-1)">
+                            전체
+                        </a>
+                        <a
+                            class="item"
+                            v-for="(sess, jj) in lecture.sessions"
+                            v-bind:class="[actionplanSessionTab==jj+1?'active':'']"
+                            @click.prevent="actionplanSessionTab=(jj+1)">
+                            {{ jj+1 }}회
+                        </a>
+                    </div>
+
+                    <div class="ui bottom tab segment" v-bind:class="[actionplanSessionTab < 0?'active viewLoadAnimation':'']">
+                        <vue-highcharts :options="options" ref="lineCharts" style="box-shadow:none; border:none; margin:0; height:450px;"></vue-highcharts>
+                    </div>
+                    <div class="ui bottom tab segment" v-for="(sess, jj) in lecture.sessions"
+                    v-bind:class="[actionplanSessionTab==jj+1?'active viewLoadAnimation':'']">
+                        <vue-highcharts :options="options" ref="lineCharts" style="box-shadow:none; border:none; margin:0; height:450px;"></vue-highcharts>
+                        <!-- <h3>플랜리스트</h3> -->
+                        <table class="ui table actionPlan selectable single line " style="padding:0;">
+                            <colgroup>
+                                <col>
+                                <col width="17%">
+                                <col width="17%">
+                                <col width="15%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th >플랜명</th>
+                                    <th class="center aligned">KPI</th>
+                                    <th class="center aligned">평점</th>
+                                    <th class="center aligned">진행률</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="plans.length>0" >
+                                <tr class="viewLoadAnimation"
+                                v-for="(plan, pid)  in  plans"
+                                :key="pid"
+                                @click.prevent="selectPlan(plan.lap_idx)"
+                                v-if="actionplanSessionTab==plan.lec_seq || actionplanSessionTab<0">
+                                    <td><a>{{ plan.lap_text }}</a> </td>
+                                    <td class="center aligned"><div class="ui basic label">{{ plan.cc2_name }}</div></td>
+                                    <td class="center aligned">
+                                        <rating privat="true" v-bind:score="plan.lap_othersAverage" />
+                                    </td>
+                                    <td class="center aligned">72%</td>
+                                </tr>
+                                <tr class="viewLoadAnimation" v-else>
+                                    <td colspan="5"class="center aligned">
+                                        <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tbody class="viewLoadAnimation" v-else>
+                                <tr>
+                                    <td colspan="5"class="center aligned">
+                                        <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
 
 
 
-                    <!-- <h3>플랜리스트</h3> -->
-                    <table class="ui table actionPlan selectable single line cardbox" style="padding:0;">
-                        <colgroup>
-                            <col>
-                            <col width="17%">
-                            <col width="17%">
-                            <col width="15%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th >플랜명</th>
-                                <th class="center aligned">KPI</th>
-                                <th class="center aligned">평점</th>
-                                <th class="center aligned">진행률</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="plans.length>0" >
-                            <tr class="viewLoadAnimation"
-                            v-for="(plan, pid)  in  plans"
-                            :key="pid"
-                            @click.prevent="selectPlan(plan.lap_idx)"
-                            v-if="actionplanSessionTab==plan.lec_seq || actionplanSessionTab<0">
-                                <td><a>{{ plan.lap_text }}</a> </td>
-                                <td class="center aligned"><div class="ui basic label">{{ plan.cc2_name }}</div></td>
-                                <td class="center aligned">
-                                    <rating privat="true" v-bind:score="plan.lap_othersAverage" />
-                                </td>
-                                <td class="center aligned">72%</td>
-                            </tr>
-                            <tr class="viewLoadAnimation" v-else>
-                                <td colspan="5"class="center aligned">
-                                    <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
-                                </td>
-                            </tr>
-                        </tbody>
 
-                        <tbody class="viewLoadAnimation" v-else>
-                            <tr>
-                                <td colspan="5"class="center aligned">
-                                    <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
-                                </td>
-                            </tr>
-                        </tbody>
-
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" style="padding:0;">
-                                    <button type="button" class="ui button fluid blue" @click.prevent="modal.addActionPlan=true">플랜추가</button>
-                                </td>
-                            </tr>
-                        </tfoot>
-
-                    </table>
                 </div>
 
 
@@ -916,6 +998,14 @@
 
 
 
+
+
+
+
+
+
+
+    <!-- ======================== 리포트 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==6?'active viewAnimate':'']" >
         <br>
         <br>
@@ -925,6 +1015,7 @@
         <br>
         <br>
     </div>
+    <!-- ======================== 리포트 ============================ -->
 
 
 
@@ -935,6 +1026,15 @@
 
 
 
+
+
+
+
+
+
+
+
+    <!-- ======================== 설문조사 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==7?'active viewAnimate':'']" >
         <br>
         <br>
@@ -944,6 +1044,16 @@
         <br>
         <br>
     </div>
+    <!-- ======================== 설문조사 ============================ -->
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1236,34 +1346,43 @@ export default {
                 addActionPlan : false, //액션플랜 추가 상세보기
                 lectureComments : false, //강의활동내역 상세보기
             },
-          msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
-          lec_idx:null,
-          lecture:{},
-          companies: [],
-          groups:[],
-          students: [],
-          tempStudents:[] ,  // 렌더링 전용 학생목록
-          kpi:[],
-          sessionTab:-1,
-          sessionTab2:-1, // 교육진행 내 차시 탭
-          groupTab:'' , // 선택한 그룹아이디
-          chooseTeam:{}, // 선택한 그룹 정보
-          companyTab:0,
-          tab:5, // 현재 활성화 탭
-          attendanceCount : 0, // 출석 카운트
-          avgAttendancePercent : 0, // 평균출석률
-
-
-          // === 교육진행 === //
-          accordion : -1 , // 펼쳐보기 탭
-          comments: [], // 선택된 모듈의 내용들
-          groupCommentTab : -1,
-          // === 교육진행 === //
+            msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
+            lec_idx:null,
+            lecture:{},
+            companies: [],
+            groups:[],
+            students: [],
+            tempStudents:[] ,  // 렌더링 전용 학생목록
+            kpi:[],
+            sessionTab:-1,
+            sessionTab2:-1, // 교육진행 내 차시 탭
+            groupTab:'' , // 선택한 그룹아이디
+            chooseTeam:{}, // 선택한 그룹 정보
+            companyTab:0,
+            tab:5, // 현재 활성화 탭
+            attendanceCount : 0, // 출석 카운트
+            avgAttendancePercent : 0, // 평균출석률
 
 
 
+            // === 일정/시간표 === //
+            classTab:0, // 집합교육 탭
+            // === 일정/시간표 === //
 
-          // === 액션플랜 === //
+
+
+
+
+            // === 교육진행 === //
+            accordion : -1 , // 펼쳐보기 탭
+            comments: [], // 선택된 모듈의 내용들
+            groupCommentTab : -1,
+            // === 교육진행 === //
+
+
+
+
+            // === 액션플랜 === //
             actionplanSessionTab : -1, // 세션탭
             selectedStudent:-1, // 선택된 수강생
             plans : [], // 선택된 수강생의 플랜들
@@ -1381,6 +1500,7 @@ export default {
 
         sessionTabChange(jj){
             this.$set(this, 'sessionTab', jj)
+            this.$set(this, 'classTab', 0)
         },
 
         sessionTabChange2(jj){
@@ -1640,7 +1760,12 @@ export default {
 
 
 
+        // 개인별 차트
+        personalChartLoad(){
+            this.$set(this, 'chartData', this.options)
+        },
 
+        // 하이차트 테스트
         chartLoad(){
             var series= [
                 {

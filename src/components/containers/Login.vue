@@ -69,6 +69,8 @@ export default {
 
     created(){
 
+        console.log(this.$router);
+
         var chk = localStorage.getItem('usr_id')
         if(chk !== null && chk !== undefined){
             this.$set(this.usr, 'id', chk, String(chk))

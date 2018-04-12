@@ -311,7 +311,7 @@ export default {
             }
 
             // 불러오기
-            this.$http.get('/api/lectures/dt/'+id)
+            this.$http.get('/api/lectures/detail/'+id)
             .then(resp=>{
                 console.log(resp.data.lecture);
                 var tempLec = resp.data.lecture

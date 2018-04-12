@@ -53,7 +53,14 @@ const router = new VueRouter({
         {// 로그인
             path: '/login',
             name: 'login',
-            component: Login
+            component: Login,
+            beforeEnter:(to,from,next)=>{
+                // console.log(from);
+                // axios.get('/api/users/session').then(resp=>{
+                //     console.log(resp);
+                // })
+                next()
+            }
         },
 
         {// 가입
@@ -540,6 +547,7 @@ router.beforeEach((to, from, next)=>{
                     path: reUrl
                 })
             })
+        // axios
 
     }else{
         next()
