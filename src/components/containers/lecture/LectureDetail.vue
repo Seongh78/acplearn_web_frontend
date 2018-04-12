@@ -850,13 +850,13 @@
             <div class="inline fields" style="font-size:1.1em;">
                 <div class="field">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="fruit" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="fruit"  tabindex="0" class="hidden">
                         <label>전체</label>
                     </div>
                 </div>
                 <div class="field">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="fruit" tabindex="0" class="hidden">
+                        <input type="radio" name="fruit" tabindex="0" class="hidden" checked="">
                         <label>팀별</label>
                     </div>
                 </div>
