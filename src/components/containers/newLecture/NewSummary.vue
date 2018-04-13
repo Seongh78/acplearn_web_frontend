@@ -54,12 +54,12 @@
                         <textarea style="width:95%;" rows="6" placeholder="내용을 입력해 주세요" v-model="summary.lec_effect"></textarea>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th class="borderTop">강의대상</th>
                     <td>
                         <input type="text" placeholder="대상을 입력해 주세요" style="width:95%;" v-model="summary.lec_target">
                     </td>
-                </tr>
+                </tr> -->
 
                 <tr>
                     <th class="borderTop">계획서/자료</th>

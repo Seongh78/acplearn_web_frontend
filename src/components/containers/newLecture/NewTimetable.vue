@@ -7,8 +7,11 @@
     <div class="cardbox" style="margin:10px 0; padding:25px; ">
         <h2>
             일정/시간표
-            <button class="ui icon button tiny " style="margin: 4px 0 0 5px; padding:7px; font-size:.5em; position:absolute;">
+            <button class="ui icon button small " style="margin: 4px 0 0 5px; padding:7px; font-size:.5em; position:absolute;">
                 <i class="help circle icon"></i> 가이드
+            </button>
+            <button class="ui icon button small " style="margin: 4px 0 0 70px; padding:7px; font-size:.5em; position:absolute;">
+                <i class="copy outline icon"></i> 템플릿
             </button>
         </h2>
 
@@ -267,11 +270,11 @@
             <!-- 교육 헤더 -->
             <div class="ui message" style="padding:3px 20px;">
                 <div class="ui grid" style="margin-top:0; ">
-                    <div class="ten wide column field" >
+                    <div class="eleven wide column field" >
                         <label class="opacity5">교육주제</label>
                         <input placeholder="주제를 입력해 주세요" type="text" v-model="sClass.lsc_title">
                     </div>
-                    <div class="four wide column field">
+                    <div class="three wide column field">
                         <label class="opacity5">교육날짜</label>
                         <date-picker v-model="sClass.lsc_date" format="yyyy-MM-dd"  />
                     </div>
@@ -305,16 +308,6 @@
                             <col width="8%">
                         </colgroup>
                         <thead>
-                            <!-- <tr>
-                                <td colspan="5" class="right aligned" >
-                                    <a
-                                        style="color:red; cursor:pointer;"
-                                        v-if="sClass.timetables.length-1 == tid"
-                                        @click.prevent="removeTimetable(tid)">
-                                        삭제 <i class="icon minus circle"></i>
-                                    </a>
-                                </td>
-                            </tr> -->
                             <tr>
                                 <td class="center aligned" style="background:#3b485f; color:#fff;">
                                     <h4>03<br>시간</h4>
@@ -407,7 +400,9 @@
 
                     <br>
                     <br>
+
                 </timeline>
+                <button type="button" class="ui button " @click.prevent="modal.addTimetable=true" v-if="session.sessionClass.length>0">템플릿으로 저장</button>
             </div>
 
 
@@ -426,6 +421,7 @@
 
         <br>
         <button type="button" class="ui button basic green fluid" @click.prevent="modal.addTimetable=true" v-if="session.sessionClass.length>0">시간표 추가</button>
+
 
 
     </div>
@@ -699,6 +695,7 @@ import {
 
 // 데이트픽커
 import DatePicker from 'vuejs-datepicker'
+
 
 
 

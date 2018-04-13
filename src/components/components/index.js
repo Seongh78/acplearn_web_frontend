@@ -20,6 +20,7 @@ import Rating from './Rating'
 import Pagination from './Pagination'
 import Comment from './Comment'
 import Loading from './Loading'
+import Chart from './Chart/Chart'
 
 
 export {
@@ -44,5 +45,6 @@ export {
     Rating,
     Pagination,
     Comment,
-    Loading
+    Loading,
+    Chart,
 }

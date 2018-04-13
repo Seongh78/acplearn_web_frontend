@@ -846,42 +846,178 @@
     <!-- ======================== 액션플랜 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
 
-        <div class="ui form">
+        <!-- <div class="ui form">
             <div class="inline fields" style="font-size:1.1em;">
                 <div class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" name="fruit"  tabindex="0" class="hidden">
+                    <h3><i class="icon filter"></i> 분류 &nbsp;&nbsp;&nbsp;</h3>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='all'">
+                        <input type="radio" name="fruit"  value="all" class="hidden" v-model="thisCategory">
                         <label>전체</label>
                     </div>
                 </div>
                 <div class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" name="fruit" tabindex="0" class="hidden" checked="">
-                        <label>팀별</label>
+                    <div class="ui radio checkbox " @click.prevent="thisCategory='group'">
+                        <input type="radio" name="fruit" value="group" class="hidden" v-model="thisCategory">
+                        <label>조별</label>
                     </div>
                 </div>
                 <div class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" name="fruit" tabindex="0" class="hidden">
-                        <label>기업별</label>
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='department'">
+                        <input type="radio" name="fruit" value="department" class="hidden" v-model="thisCategory">
+                        <label>부서별</label>
                     </div>
                 </div>
                 <div class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" name="fruit" tabindex="0" class="hidden">
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='position'">
+                        <input type="radio" name="fruit" value="position" class="hidden" v-model="thisCategory">
+                        <label>직급별</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='gender'">
+                        <input type="radio" name="fruit" value="gender" class="hidden" v-model="thisCategory">
+                        <label>성별</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='age'">
+                        <input type="radio" name="fruit" value="age" class="hidden" v-model="thisCategory">
+                        <label>연령별</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='joinYear'">
+                        <input type="radio" name="fruit" value="joinYear" class="hidden" v-model="thisCategory">
+                        <label>입사연차별</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox" @click.prevent="thisCategory='personal'">
+                        <input type="radio" name="fruit" value="personal" class="hidden" v-model="thisCategory">
                         <label>개인별</label>
                     </div>
                 </div>
             </div>
 
+        </div> -->
+
+
+
+
+
+        <h3><i class="icon filter"></i> 분류 &nbsp;&nbsp;&nbsp;</h3>
+        <div class="ui top attached tabular menu eight item viewLoadAnimation">
+            <div class="item" @click.prevent="thisCategory='all'" :class="[thisCategory=='all' ? 'active ' : '']">전체</div>
+            <div class="item" @click.prevent="thisCategory='group'" :class="[thisCategory=='group' ? 'active' : '']">조별</div>
+            <div class="item" @click.prevent="thisCategory='department'" :class="[thisCategory=='department' ? 'active' : '']">부서별</div>
+            <div class="item" @click.prevent="thisCategory='position'" :class="[thisCategory=='position' ? 'active' : '']">직급별</div>
+            <div class="item" @click.prevent="thisCategory='gender'" :class="[thisCategory=='gender' ? 'active' : '']">성별</div>
+            <div class="item" @click.prevent="thisCategory='age'" :class="[thisCategory=='age' ? 'active' : '']">연령별</div>
+            <div class="item" @click.prevent="thisCategory='joinYear'" :class="[thisCategory=='joinYear' ? 'active' : '']">입사연차별</div>
+            <div class="item" @click.prevent="thisCategory='personal'" :class="[thisCategory=='personal' ? 'active' : '']">개인별</div>
         </div>
-        <hr class="opacity3">
+        <br>
+
+
+        <div class="ui form">
+            <div class="inline fields" style="font-size:1.1em;">
+                <div class="field">
+                    <h3>행동역량</h3>
+                </div>
+                <div class="two field">
+                    <select class="ui fluid search dropdown" style="padding: 15px 25px; width:180px;">
+                        <option value="전체">&nbsp;전체&nbsp;&nbsp;&nbsp;</option>
+                        <option v-for="(k, kid)  in  kpi" :value="k.lk_idx">&nbsp;{{k.cc2_name}}&nbsp;&nbsp;&nbsp;</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="">
+            <!-- <h4><i class="icon chart line"></i> 조직활성화</h4>
+            <table class="ui table fluid celled">
+                <tr>
+                    <th class="center aligned">강의차수</th>
+                    <th class="center aligned" v-for="(sess, ii) in lecture.sessions">{{ii+1}}차</th>
+                    <td class="center aligned" rowspan="2">평균</td>
+                </tr>
+                <tr>
+                    <td  class="center aligned">APL기간</td>
+                    <td  class="center aligned" v-for="(sess, jj) in lecture.sessions">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</td>
+                </tr>
+            </table> -->
+            <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">주 1회 개별면담 진행</h3>
+            <div class="ui attached segment" style="padding:0;">
+              <chart />
+
+                <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
+                    <colgroup>
+                        <col width="12%">
+                        <col width="3.5%">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col width="3.5%">
+                    </colgroup>
+                    <tr>
+                        <th class="borderTop">자가평가</th>
+                        <td class="center aligned planScoreBtn" rowspan="3">
+                            <i class="icon chevron left"></i>
+                        </td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned planScoreBtn" rowspan="3">
+                            <i class="icon chevron right"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop">GAP</th>
+                        <td class="center aligned">-</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop">팀원평가</th>
+                        <td class="center aligned">-</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                        <td class="center aligned">2</td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+
+
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
         <div class="ui secondary menu">
             <a class="item active" data-tab="first">전체</a>
             <a class="item" data-tab="second">A01팀</a>
             <a class="item" data-tab="third">A02팀</a>
           </div>
+
         <hr class="opacity3">
+
+
 
         <div class="ui grid">
             <!-- Registration목록 -->
@@ -924,11 +1060,23 @@
                     </div>
 
                     <div class="ui bottom tab segment" v-bind:class="[actionplanSessionTab < 0?'active viewLoadAnimation':'']">
-                        <vue-highcharts :options="options" ref="lineCharts" style="box-shadow:none; border:none; margin:0; height:450px;"></vue-highcharts>
+                        <h4><i class="icon chart line"></i> 조직활성화</h4>
+                        <table class="ui table fluid celled">
+                            <tr>
+                                <th class="center aligned">강의차수</th>
+                                <th class="center aligned" v-for="(sess, ii) in lecture.sessions">{{ii+1}}차</th>
+                                <td class="center aligned" rowspan="2">평균</td>
+                            </tr>
+                            <tr>
+                                <td  class="center aligned">APL기간</td>
+                                <td  class="center aligned" v-for="(sess, jj) in lecture.sessions">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</td>
+                            </tr>
+                        </table>
+                        <chart />
+
                     </div>
                     <div class="ui bottom tab segment" v-for="(sess, jj) in lecture.sessions"
                     v-bind:class="[actionplanSessionTab==jj+1?'active viewLoadAnimation':'']">
-                        <vue-highcharts :options="options" ref="lineCharts" style="box-shadow:none; border:none; margin:0; height:450px;"></vue-highcharts>
                         <!-- <h3>플랜리스트</h3> -->
                         <table class="ui table actionPlan selectable single line " style="padding:0;">
                             <colgroup>
@@ -1314,7 +1462,8 @@ import {
     NoContents,
     Rating,
     Comment,
-    Loading
+    Loading,
+    Chart
 } from '../../components'
 
 import LectureModule from './LectureModule'
@@ -1326,16 +1475,17 @@ export default {
     name: 'LectureDetail',
 
     components : {
-        'modal'             : Modal,
-        'search-form'   : SearchForm,
-        'timeline'          : Timeline,
-        'feed'                : Feed,
-        'no-contents'    : NoContents,
-        'rating'              : Rating,
-        'comment'        : Comment,
-        'lecture-module': LectureModule,
-        'loading' : Loading,
-        VueHighcharts
+        Modal,
+        SearchForm,
+        Timeline,
+        Feed,
+        NoContents,
+        Rating,
+        Comment,
+        LectureModule,
+        Loading,
+        VueHighcharts,
+        Chart
     },
 
     data () {
@@ -1387,63 +1537,8 @@ export default {
             selectedStudent:-1, // 선택된 수강생
             plans : [], // 선택된 수강생의 플랜들
             plan : {}, // 선택된 수강생의 상세플랜
+            thisCategory:'all',
 
-
-            chartData: {}, // 차트데이터
-            options: {
-                chart: {},
-                title: { text: '' },
-                subtitle: { text: '' },
-                xAxis: {
-                    categories: ['1일차', '2일차', '3일차', '4일차', '5일차'],
-                    offset: 20,
-                },
-                yAxis: {
-                    title: { text: '' },
-                    max: 5, // 최대값
-                    tickAmount: 6, // 표시할 줄의 수
-                    labels: {
-                        formatter () { return this.value + '점'; }
-                    }
-                },
-                tooltip: {
-                    crosshairs: true,
-                    shared: true
-                },
-                credits: {
-                    enabled: false
-                },
-                plotOptions: {
-                    spline: {
-                        marker: {
-                            radius: 5,
-                            lineColor: '#fff',
-                            symbolColor:'#FF5E00',
-                            lineWidth: 1
-                        }
-                    }
-                },
-
-                series : [
-                    {
-                        data: [2.5, 1.9, 1.5, 0.5, 4.2] ,
-                        name: '자가평가',
-                        color:'#7cb5ec',
-                        type: 'column'
-                    },
-                    {
-                        data: [3.5, 2.3, 1.5, 2.5, 5] ,
-                        name: '팀원평가',
-                        color:'#90ed7d',
-                        type: 'column'
-                    },
-                    {
-                        data: [2.5, 2.1, 1.5, 1.5, 4.7] ,
-                        name: 'GAP',
-                        color:'#FF8224'
-                    },
-                ] // series
-            }// option
           // === 액션플랜 === //
 
         }
@@ -1759,41 +1854,6 @@ export default {
         },// 액션플랜 상세
 
 
-
-        // 개인별 차트
-        personalChartLoad(){
-            this.$set(this, 'chartData', this.options)
-        },
-
-        // 하이차트 테스트
-        chartLoad(){
-            var series= [
-                {
-                    data: [2.5, 1.9, 1.5, 0.5, 4.2] ,
-                    name: '자가평가',
-                    color:'#7cb5ec',
-                    type: 'column'
-                },
-                {
-                    data: [3.5, 2.3, 1.5, 2.5, 5.2] ,
-                    name: '팀원평가',
-                    color:'#90ed7d',
-                    type: 'column'
-                },
-                {
-                    data: [2.5, 2.1, 1.5, 1.5, 4.7] ,
-                    name: 'GAP',
-                    color:'#FF8224'
-                },
-            ] // series
-              let lineCharts = this.$refs.lineCharts;
-              for(var ii  in  series){
-                // lineCharts.addSeries(series[ii]);
-                this.options.series.push(series[ii])
-              }
-              // lineCharts.addSeries(asyncData);
-              // lineCharts.hideLoading();
-        },
 
         // ========== 액션플랜 ========== //
 

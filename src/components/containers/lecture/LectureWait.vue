@@ -46,11 +46,12 @@
 
         <table class="ui celled padded table ">
             <colgroup>
-                <col width="7.5%">
-                <col width="38.5%">
-                <col width="21.5%">
-                <col width="5%">
-                <col width="10%">
+                <col width="8%">
+                <col >
+                <col width="19%">
+                <col width="7%">
+                <col width="7%">
+                <col width="7%">
                 <col width="6%">
             </colgroup>
             <thead>
@@ -58,9 +59,10 @@
                     <th class="center aligned">상태</th>
                     <th class="center aligned">강의명</th>
                     <th class="center aligned">액션러닝기간</th>
-                    <th class="center aligned">회차</th>
+                    <th class="center aligned">차수</th>
                     <th class="center aligned">시간</th>
                     <th class="center aligned">인원</th>
+                    <th class="center aligned">취소</th>
 
                 </tr>
             </thead>
@@ -83,6 +85,9 @@
                     <td class="center aligned">{{ lec.lec_sessionCount }}회</td>
                     <td class="center aligned">-</td>
                     <td class="center aligned">{{ lec.lec_personnel }}명</td>
+                    <td class="center aligned" style="padding:0;">
+                        <a style="color:red; font-weight:bold; text-decoration:underline;">삭제</a>
+                    </td>
                 </tr>
             </tbody>
         </table>

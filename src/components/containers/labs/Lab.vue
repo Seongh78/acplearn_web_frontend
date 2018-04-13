@@ -10,7 +10,35 @@
 
     <page-layout>
 
+
+
+
+
+        <h3>LectureAcplearnDay</h3>
+
+        <lecture-acplearn-day />
+
+
+        <hr>
+        <br>
+        <br>
+        <br>
+
+
+
+
+
+
+
+
+
+
+
         <h4>Highcharts TEST</h4>
+        <date-picker-two v-model="time1" :first-day-of-week="1" lang="en" type="datetime" format="yyyy-MM-dd hh:mm:ss"></date-picker-two>
+        <date-picker-two v-model="time2" range :shortcuts="shortcuts"></date-picker-two>
+        {{time1}}
+        <hr>
         <!-- <date-picker v-model="ddd" placeholder="년-월-일" format="yyyy-MM-dd" type="date" /> -->
         <date-picker v-model="ddd" placeholder="년-월-일"  type="date" :first-day-of-week="1" />
         {{ddd}}
@@ -117,6 +145,7 @@ import {
     Rating,
     Pagination
 } from '@/components/components'
+import { LectureAcplearnDay } from './TestComponents'
 
 
 
@@ -125,6 +154,7 @@ import Reactivity from './Reactivity'
 import Timepicker from './Timepicker'
 import TimePickerTest from './TimePickerTest'
 import VerticalTab from './VerticalTab'
+import DatePickerTwo from 'vue2-datepicker'
 
 // import DatePickerTest from './DatePickerTest.vue';
 
@@ -151,7 +181,7 @@ const asyncData = {
     },
     data: [
         { data: [3.5, 2.9, 1.5, 0.5, 4.2] },
-        { data: [3.5, 2.9, 1.5, 0.5, 4.2] }
+        { data: [3.5, 2.9, 1.5, 0.5, 4.2] },
     ]
 }
 
@@ -179,7 +209,9 @@ export default {
         // DatePickerTest,
         TimePickerTest,
         'vertical-tab' : VerticalTab,
-        VueHighcharts
+        VueHighcharts,
+        DatePickerTwo,
+        LectureAcplearnDay
     },
 
     data () {
@@ -264,7 +296,19 @@ export default {
                 //     },
                 // ] // series
 
-            }// option
+            },// option
+
+            // ===== vue2-datepicker ===== //
+            time1: '',
+            time2: '',
+            shortcuts: [
+                {
+                    text: 'Today',
+                    start: new Date(),
+                    end: new Date()
+                }
+            ]
+            // ===== vue2-datepicker ===== //
         }
     }, //data
 
