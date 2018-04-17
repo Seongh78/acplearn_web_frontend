@@ -21,6 +21,7 @@ import Pagination from './Pagination'
 import Comment from './Comment'
 import Loading from './Loading'
 import Chart from './Chart/Chart'
+import ScrollChart from './Chart/ScrollChart'
 
 
 export {
@@ -47,4 +48,5 @@ export {
     Comment,
     Loading,
     Chart,
+    ScrollChart,
 }

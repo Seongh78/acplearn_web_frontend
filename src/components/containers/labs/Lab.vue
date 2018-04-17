@@ -14,9 +14,21 @@
 
 
 
-        <h3>LectureAcplearnDay</h3>
+        <h3>Scroll Chart</h3>
 
-        <lecture-acplearn-day />
+        <scroll-chart />
+
+
+        <hr>
+        <br>
+        <br>
+        <br>
+
+
+
+        <!-- <h3>LectureAcplearnDay</h3> -->
+
+        <!-- <lecture-acplearn-day /> -->
 
 
         <hr>
@@ -143,7 +155,8 @@ import {
     TopLayout,
     PageLayout ,
     Rating,
-    Pagination
+    Pagination,
+    ScrollChart
 } from '@/components/components'
 import { LectureAcplearnDay } from './TestComponents'
 
@@ -211,7 +224,8 @@ export default {
         'vertical-tab' : VerticalTab,
         VueHighcharts,
         DatePickerTwo,
-        LectureAcplearnDay
+        LectureAcplearnDay,
+        ScrollChart
     },
 
     data () {
@@ -314,31 +328,43 @@ export default {
 
     created() {
 
-        var aa = new Date("10:20:32")
-        // console.log("aa.getHours : ");
-        // console.log(aa.getTime());
+        // var aa = new Date("10:20:32")
+        // // console.log("aa.getHours : ");
+        // // console.log(aa.getTime());
+        //
+        // sessionStorage.clear();
+        // this.$EventBus.$on('add-item', this.addToCart)
+        // this.$EventBus.$on('save', this.save)
+        // this.$EventBus.$on('toto', this.toto)
+        // this.$EventBus.$on('dateTest', this.dtdt)
+        //
+        //
+        // // 날짜 일수 차이구하기
+        // var sdt = new Date('2018-09-10');
+        // var edt = new Date('2018-09-15');
+        // // console.log(sdt.getTime());
+        // // console.log(edt.getTime());
+        // var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+        // // var d = diffDate('Tue Jan 16 2018 09:00:00 GMT+0900 (KST)', 'Wed Jan 17 2018 09:00:00 GMT+0900 (KST)')
+        // console.log( "DATE : ", dateDiff );
+        //
+        // var temDate = new Date();
+        // for(var ii=0;  ii<=dateDiff;  ii++){
+        //     temDate.setDate(sdt.getDate()+ii)
+        //     console.log(temDate.getFullYear()+"-"+(temDate.getMonth()+1)+"-"+temDate.getDate());
+        // }
 
-        sessionStorage.clear();
-        this.$EventBus.$on('add-item', this.addToCart)
-        this.$EventBus.$on('save', this.save)
-        this.$EventBus.$on('toto', this.toto)
-        this.$EventBus.$on('dateTest', this.dtdt)
+        var aaa = [0,0,0,0,1]
+        var res = JSON.stringify(aaa)
 
+        console.log("res.substring(res.length-1, 1) :");
+        console.log(res.substring(res.length-1, 1));
+        // console.log(res.substring(res.length-1, 1));
 
-        // 날짜 일수 차이구하기
-        var sdt = new Date('2018-09-10');
-        var edt = new Date('2018-09-15');
-        // console.log(sdt.getTime());
-        // console.log(edt.getTime());
-        var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
-        // var d = diffDate('Tue Jan 16 2018 09:00:00 GMT+0900 (KST)', 'Wed Jan 17 2018 09:00:00 GMT+0900 (KST)')
-        console.log( "DATE : ", dateDiff );
+        var asd = '[0,0,1]'
+        var dsa = JSON.parse(asd)
+        console.log(dsa);
 
-        var temDate = new Date();
-        for(var ii=0;  ii<=dateDiff;  ii++){
-            temDate.setDate(sdt.getDate()+ii)
-            console.log(temDate.getFullYear()+"-"+(temDate.getMonth()+1)+"-"+temDate.getDate());
-        }
       },
 
 

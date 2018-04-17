@@ -3,12 +3,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'// 라우터
 import axios from 'axios' // http모듈
+import  store  from './vuex/store' // vuex
 
-
-import  store  from './vuex/store'
-
-
-console.log(store);
 
 // =============== 미들웨어 =============== //
 

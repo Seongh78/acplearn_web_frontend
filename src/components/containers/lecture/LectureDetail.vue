@@ -404,7 +404,7 @@
                         v-bind:rowspan="lecture.sessions.length"
                         style="text-align:center;">
                         <div class="ui small statistic">
-                          <!-- <div class="label">평균 출석률</div> -->
+                          <div class="label">평균 출석률</div>
                           <div class="value">  {{ attendancePercentAvg() }}%</div>
                         </div>
                     </td>
@@ -473,7 +473,8 @@
                                 <td class="center aligned">{{ std.stu_position }}</td>
                                 <td class="center aligned">{{ std.stu_name }}</td>
                                 <td class="center aligned">-</td>
-                                <td class="center aligned ui form" v-for="(atd, atdId)  in  JSON.parse(std.stu_attendance)">
+                                <!-- 출석관리 -->
+                                <td class="center aligned ui form" v-for="(atd, atdId)  in  attendanceParser(std.stu_attendance)">
                                     <div class="inline field">
                                         <div class="ui checkbox " @click.prevent="attendanceCheck(stdId, atdId)">
                                             <input type="checkbox" tabindex="0" class="hidden" :checked="atd">
@@ -846,68 +847,7 @@
     <!-- ======================== 액션플랜 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
 
-        <!-- <div class="ui form">
-            <div class="inline fields" style="font-size:1.1em;">
-                <div class="field">
-                    <h3><i class="icon filter"></i> 분류 &nbsp;&nbsp;&nbsp;</h3>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='all'">
-                        <input type="radio" name="fruit"  value="all" class="hidden" v-model="thisCategory">
-                        <label>전체</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox " @click.prevent="thisCategory='group'">
-                        <input type="radio" name="fruit" value="group" class="hidden" v-model="thisCategory">
-                        <label>조별</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='department'">
-                        <input type="radio" name="fruit" value="department" class="hidden" v-model="thisCategory">
-                        <label>부서별</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='position'">
-                        <input type="radio" name="fruit" value="position" class="hidden" v-model="thisCategory">
-                        <label>직급별</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='gender'">
-                        <input type="radio" name="fruit" value="gender" class="hidden" v-model="thisCategory">
-                        <label>성별</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='age'">
-                        <input type="radio" name="fruit" value="age" class="hidden" v-model="thisCategory">
-                        <label>연령별</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='joinYear'">
-                        <input type="radio" name="fruit" value="joinYear" class="hidden" v-model="thisCategory">
-                        <label>입사연차별</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox" @click.prevent="thisCategory='personal'">
-                        <input type="radio" name="fruit" value="personal" class="hidden" v-model="thisCategory">
-                        <label>개인별</label>
-                    </div>
-                </div>
-            </div>
-
-        </div> -->
-
-
-
-
-
-        <h3><i class="icon filter"></i> 분류 &nbsp;&nbsp;&nbsp;</h3>
+        <h3><i class="icon filter"></i> 분류</h3>
         <div class="ui top attached tabular menu eight item viewLoadAnimation">
             <div class="item" @click.prevent="thisCategory='all'" :class="[thisCategory=='all' ? 'active ' : '']">전체</div>
             <div class="item" @click.prevent="thisCategory='group'" :class="[thisCategory=='group' ? 'active' : '']">조별</div>
@@ -937,8 +877,9 @@
 
         <br>
 
+        <!-- === 통계데이터 반복 === -->
         <div class="">
-            <!-- <h4><i class="icon chart line"></i> 조직활성화</h4>
+            <h4><i class="icon chart line"></i> 조직활성화</h4>
             <table class="ui table fluid celled">
                 <tr>
                     <th class="center aligned">강의차수</th>
@@ -949,65 +890,50 @@
                     <td  class="center aligned">APL기간</td>
                     <td  class="center aligned" v-for="(sess, jj) in lecture.sessions">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</td>
                 </tr>
-            </table> -->
-            <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">주 1회 개별면담 진행</h3>
-            <div class="ui attached segment" style="padding:0;">
-              <chart />
+            </table>
 
-                <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
-                    <colgroup>
-                        <col width="12%">
-                        <col width="3.5%">
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                        <col width="3.5%">
-                    </colgroup>
-                    <tr>
-                        <th class="borderTop">자가평가</th>
-                        <td class="center aligned planScoreBtn" rowspan="3">
-                            <i class="icon chevron left"></i>
-                        </td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned planScoreBtn" rowspan="3">
-                            <i class="icon chevron right"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="borderTop">GAP</th>
-                        <td class="center aligned">-</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                    </tr>
-                    <tr>
-                        <th class="borderTop">팀원평가</th>
-                        <td class="center aligned">-</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                        <td class="center aligned">2</td>
-                    </tr>
-                </table>
+
+            <!-- 액플런 전체 - 그래프 -->
+            <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">액플런 전체 평균</h4>
+            <div class="ui attached segment" style="padding:0;">
+                <chart />
+            </div>
+            <br>
+            <br>
+
+
+
+            <!-- KPI 별 - 그래프 -->
+            <div v-for="(k, kid)  in  kpi" :value="k.lk_idx">
+                <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">{{k.cc2_name}} 평균</h4>
+                <div class="ui attached segment" style="padding:0;">
+                    <chart table="kpi" :value="k.lk_idx" />
+                </div>
+                <br>
+                <br>
             </div>
 
 
         </div>
+        <!-- === 통계데이터 반복 === -->
 
 
 
+
+
+
+
+
         <br>
         <br>
         <br>
         <br>
         <br>
+
+
+
+
+
 
         <div class="ui secondary menu">
             <a class="item active" data-tab="first">전체</a>
@@ -1607,14 +1533,14 @@ export default {
             // return
             this.$http.get('/api/lectures/detail/'+Number(id))
             .then(resp=>{
-                // console.log(resp.data.students);
+                console.log(resp.data);
                 this.$set(this, 'lecture', resp.data.lecture)
                 this.$set(this, 'companies', resp.data.companies)
                 this.$set(this, 'groups', resp.data.groups)
                 this.$set(this, 'students', resp.data.students)
                 this.$set(this, 'kpi', resp.data.kpi)
             }).catch(err=>{
-                // console.log(err);
+                console.log(err);
                 alert('Error')
             })
         }, // getLecture
@@ -1622,6 +1548,27 @@ export default {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+        // ========== 출석 ========== //
+
+        // 출석데이터 파서
+        attendanceParser(atd){
+            /*
+            atd : 출석원본데이터 - ex) 0,0,1,0
+            */
+            var parseAtd = JSON.parse('['+atd+']')
+            return parseAtd
+        },
 
         // 차시별 출석률 퍼센테이지 구하기
         attendancePercent(sid){
@@ -1631,7 +1578,7 @@ export default {
             var temp
             var sum=0
             for(var ii  in  stds){
-                temp = JSON.parse(stds[ii].stu_attendance)
+                temp = JSON.parse('['+stds[ii].stu_attendance+']')
                 sum+=temp[sid] ? 1 : 0
             }
             var ff = (sum/all) * 100
@@ -1643,6 +1590,7 @@ export default {
                 return ff.toFixed(1)
             }//else
 
+            this.attendancePercentAvg()
         }, // attendancePercent
 
 
@@ -1668,23 +1616,17 @@ export default {
 
 
 
-
-
         // 출석체크
         attendanceCheck(stdId, atdId){
             /*
             stdId : 학생 아이디
-            atdId : 체크한 출석배열 번지수
+            atdId : 체크한 출석배열 번지수 - 차시와 같음
             */
 
-            // var ar = this.students.findIndex((std)=>{
-            //     return std.stu_idx == stdId
-            // })
-
-
-
-            var attd = JSON.parse(this.students[stdId].stu_attendance) // 출석 형변환
+            var attd = JSON.parse('['+this.students[stdId].stu_attendance+']') // 출석 형변환
             attd[atdId] = attd[atdId]==1 ? 0 : 1
+            attd = JSON.stringify(attd)
+            attd = attd.substring(attd.length-1, 1) // 디비포맷
 
 
             // 서버로
@@ -1694,7 +1636,7 @@ export default {
                 attendance : attd
             })
             .then(resp=>{
-                this.students[stdId].stu_attendance = JSON.stringify(attd)
+                this.$set(this.students[stdId], 'stu_attendance', attd)
             })
             .catch(err=>{
                 console.log("통신에러");
@@ -1703,6 +1645,19 @@ export default {
             })
 
         }, // 출석체크
+
+        // ========== 출석 ========== //
+
+
+
+
+
+
+
+
+
+
+
 
 
 
