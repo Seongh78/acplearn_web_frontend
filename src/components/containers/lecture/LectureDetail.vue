@@ -848,16 +848,10 @@
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
 
         <h3><i class="icon filter"></i> 분류</h3>
-        <div class="ui top attached tabular menu eight item viewLoadAnimation">
-            <div class="item" @click.prevent="thisCategory='all'" :class="[thisCategory=='all' ? 'active ' : '']">전체</div>
-            <div class="item" @click.prevent="thisCategory='group'" :class="[thisCategory=='group' ? 'active' : '']">조별</div>
-            <div class="item" @click.prevent="thisCategory='department'" :class="[thisCategory=='department' ? 'active' : '']">부서별</div>
-            <div class="item" @click.prevent="thisCategory='position'" :class="[thisCategory=='position' ? 'active' : '']">직급별</div>
-            <div class="item" @click.prevent="thisCategory='gender'" :class="[thisCategory=='gender' ? 'active' : '']">성별</div>
-            <div class="item" @click.prevent="thisCategory='age'" :class="[thisCategory=='age' ? 'active' : '']">연령별</div>
-            <div class="item" @click.prevent="thisCategory='joinYear'" :class="[thisCategory=='joinYear' ? 'active' : '']">입사연차별</div>
-            <div class="item" @click.prevent="thisCategory='personal'" :class="[thisCategory=='personal' ? 'active' : '']">개인별</div>
-        </div>
+
+        <!-- 탭메뉴 -->
+        <!-- <tab-menu v-model="thisCategoryFunc" :menus="reportMenus" /> -->
+        <tab-menu @input="thisCategoryFunc" v-model="thisCategory" :menus="reportMenus" />
         <br>
 
 
@@ -873,191 +867,64 @@
                     </select>
                 </div>
             </div>
+            <br>
         </div>
-
-        <br>
 
         <!-- === 통계데이터 반복 === -->
         <div class="">
-            <h4><i class="icon chart line"></i> 조직활성화</h4>
+            <!-- <h4><i class="icon chart line"></i> 조직활성화</h4> -->
             <table class="ui table fluid celled">
                 <tr>
                     <th class="center aligned">강의차수</th>
-                    <th class="center aligned" v-for="(sess, ii) in lecture.sessions">{{ii+1}}차</th>
-                    <td class="center aligned" rowspan="2">평균</td>
+                    <th class="center aligned" v-for="(sess, ii) in lecture.sessions">
+                        <span class="center aligned ui form">
+                            <div class="inline field">
+                                <div class="ui checkbox ">
+                                    <input type="checkbox" tabindex="0" class="hidden" checked>
+                                    <label>{{ii+1}}차</label>
+                                </div>
+                            </div>
+                        </span>
+                    </th>
                 </tr>
                 <tr>
-                    <td  class="center aligned">APL기간</td>
+                    <th  class="center aligned borderTop">APL기간</th>
                     <td  class="center aligned" v-for="(sess, jj) in lecture.sessions">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</td>
                 </tr>
             </table>
 
-
-            <!-- 액플런 전체 - 그래프 -->
-            <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">액플런 전체 평균</h4>
-            <div class="ui attached segment" style="padding:0;">
-                <chart />
-            </div>
             <br>
             <br>
-
-
-
-            <!-- KPI 별 - 그래프 -->
-            <div v-for="(k, kid)  in  kpi" :value="k.lk_idx">
-                <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">{{k.cc2_name}} 평균</h4>
-                <div class="ui attached segment" style="padding:0;">
-                    <chart table="kpi" :value="k.lk_idx" />
-                </div>
-                <br>
-                <br>
-            </div>
-
-
         </div>
         <!-- === 통계데이터 반복 === -->
 
 
 
 
+        <!-- === 리포트 === -->
+        <div class="ui  tab  active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
 
+            <!-- 리포트 컴포넌트 동적 바인딩 -->
+            <component :is="menu.component" :from="menu.from"></component>
+            <!-- 리포트 컴포넌트 동적 바인딩 -->
+
+        </div>
+        <!-- === 리포트 === -->
 
 
 
         <br>
         <br>
-        <br>
-        <br>
-        <br>
 
 
 
 
-
-
-        <div class="ui secondary menu">
-            <a class="item active" data-tab="first">전체</a>
-            <a class="item" data-tab="second">A01팀</a>
-            <a class="item" data-tab="third">A02팀</a>
-          </div>
-
+        <h3><i class="icon users"></i> 수강생</h3>
         <hr class="opacity3">
 
 
 
-        <div class="ui grid">
-            <!-- Registration목록 -->
-            <div class="three wide column">
-                <div class="ui list secondary vertical menu actionPlanUserList" style="width:100%;">
-                    <div
-                        class="item"
-                        v-for="(std, sid)  in  students"
-                        v-bind:class="[std.stu_idx==selectedStudent?'active':'']"
-                        @click.prevent="getActionPlan(std.stu_idx)">
-                        <img class="ui avatar image" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_female2-64.png">
-                        <div class="content">
-                            <div class="header">{{ std.stu_name }}</div>
-                            <div class="description">{{ std.stu_department }} {{ std.stu_position }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-
-
-            <!--PLAN목록 -->
-            <div class="thirteen wide column">
-                <div class=""  >
-                    <!-- 탭메뉴 -->
-                    <div class="ui top secondary pointing menu ">
-                        <a
-                            class="item"
-                            v-bind:class="[actionplanSessionTab < 0?'active':'']"
-                            @click.prevent="actionplanSessionTab=(-1)">
-                            전체
-                        </a>
-                        <a
-                            class="item"
-                            v-for="(sess, jj) in lecture.sessions"
-                            v-bind:class="[actionplanSessionTab==jj+1?'active':'']"
-                            @click.prevent="actionplanSessionTab=(jj+1)">
-                            {{ jj+1 }}회
-                        </a>
-                    </div>
-
-                    <div class="ui bottom tab segment" v-bind:class="[actionplanSessionTab < 0?'active viewLoadAnimation':'']">
-                        <h4><i class="icon chart line"></i> 조직활성화</h4>
-                        <table class="ui table fluid celled">
-                            <tr>
-                                <th class="center aligned">강의차수</th>
-                                <th class="center aligned" v-for="(sess, ii) in lecture.sessions">{{ii+1}}차</th>
-                                <td class="center aligned" rowspan="2">평균</td>
-                            </tr>
-                            <tr>
-                                <td  class="center aligned">APL기간</td>
-                                <td  class="center aligned" v-for="(sess, jj) in lecture.sessions">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</td>
-                            </tr>
-                        </table>
-                        <chart />
-
-                    </div>
-                    <div class="ui bottom tab segment" v-for="(sess, jj) in lecture.sessions"
-                    v-bind:class="[actionplanSessionTab==jj+1?'active viewLoadAnimation':'']">
-                        <!-- <h3>플랜리스트</h3> -->
-                        <table class="ui table actionPlan selectable single line " style="padding:0;">
-                            <colgroup>
-                                <col>
-                                <col width="17%">
-                                <col width="17%">
-                                <col width="15%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th >플랜명</th>
-                                    <th class="center aligned">KPI</th>
-                                    <th class="center aligned">평점</th>
-                                    <th class="center aligned">진행률</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="plans.length>0" >
-                                <tr class="viewLoadAnimation"
-                                v-for="(plan, pid)  in  plans"
-                                :key="pid"
-                                @click.prevent="selectPlan(plan.lap_idx)"
-                                v-if="actionplanSessionTab==plan.lec_seq || actionplanSessionTab<0">
-                                    <td><a>{{ plan.lap_text }}</a> </td>
-                                    <td class="center aligned"><div class="ui basic label">{{ plan.cc2_name }}</div></td>
-                                    <td class="center aligned">
-                                        <rating privat="true" v-bind:score="plan.lap_othersAverage" />
-                                    </td>
-                                    <td class="center aligned">72%</td>
-                                </tr>
-                                <tr class="viewLoadAnimation" v-else>
-                                    <td colspan="5"class="center aligned">
-                                        <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                            <tbody class="viewLoadAnimation" v-else>
-                                <tr>
-                                    <td colspan="5"class="center aligned">
-                                        <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
-
-
-
-
-                </div>
-
-
-            </div>
-        </div>
     </div>
     <!-- ======================== 액션플랜 ============================ -->
 
@@ -1379,6 +1246,7 @@
 
 
 <script>
+// 공통 컴포넌트
 import {
     Modal,
     SearchForm,
@@ -1389,10 +1257,26 @@ import {
     Rating,
     Comment,
     Loading,
-    Chart
+    Chart,
+    TabMenu
 } from '../../components'
 
+// 리포트 뷰
+import {
+    ReportAll,
+    ReportGroup,
+    ReportDepartment,
+    ReportPosition,
+    ReportGender,
+    ReportAge,
+    ReportJoinYear,
+    ReportPersonal,
+} from './Report'
+
+
 import LectureModule from './LectureModule'
+
+
 
 // Highcharts - 그래프
 import VueHighcharts from 'vue2-highcharts'
@@ -1400,6 +1284,8 @@ import VueHighcharts from 'vue2-highcharts'
 export default {
     name: 'LectureDetail',
 
+
+    // ===== Components ===== //
     components : {
         Modal,
         SearchForm,
@@ -1411,9 +1297,22 @@ export default {
         LectureModule,
         Loading,
         VueHighcharts,
-        Chart
+        Chart,
+        TabMenu,
+
+        ReportAll,
+        ReportGroup,
+        ReportDepartment,
+        ReportPosition,
+        ReportGender,
+        ReportAge,
+        ReportJoinYear,
+        ReportPersonal,
     },
 
+
+
+    // ===== Data ===== //
     data () {
         return {
             modal: {
@@ -1464,7 +1363,16 @@ export default {
             plans : [], // 선택된 수강생의 플랜들
             plan : {}, // 선택된 수강생의 상세플랜
             thisCategory:'all',
-
+            reportMenus : [ // 리포트용 메뉴 - 탭관리
+                { id: 'all', name: '전체' , component: 'ReportAll' },
+                { id: 'group', name: '조별' , component: 'ReportGroup', from:'groups' },
+                { id: 'department', name: '부서별' , component: 'ReportDepartment' },
+                { id: 'position', name: '직급별' , component: 'ReportPosition' },
+                { id: 'gender', name: '성별' , component: 'ReportGender' },
+                { id: 'age', name: '연령별' , component: 'ReportAge' },
+                { id: 'joinYear', name: '입사연차별' , component: 'ReportJoinYear' },
+                { id: 'personal', name: '개인별' , component: 'ReportPersonal' },
+            ]
           // === 액션플랜 === //
 
         }
@@ -1472,7 +1380,11 @@ export default {
 
 
 
-    // Filter
+
+
+
+
+    // ===== Fillters ===== //
     filters: {
       capitalize: function (value) {
         if (!value) return ''
@@ -1484,6 +1396,9 @@ export default {
 
 
 
+
+
+    // ===== Created ===== //
     created(){
         var id = this.$ro.history.current.params.id
         // this.$set(this, 'lec_idx', id)
@@ -1501,8 +1416,12 @@ export default {
 
 
 
+
+
+    // ===== Methods ===== //
     methods: {
 
+        // === 그룹선택 === //
         chooseGroup(id){
             if(id != -1){
                 var sid = this.groups.findIndex((g)=>{
@@ -1514,20 +1433,32 @@ export default {
 
         },
 
-        // 탭메뉴선택
+
+
+        // === 탭메뉴선택 === //
         selectTab(s) {
             this.tab=s;
         },
 
+
+
+        // === 세션 선택/변경 === //
         sessionTabChange(jj){
             this.$set(this, 'sessionTab', jj)
             this.$set(this, 'classTab', 0)
         },
 
+
+
+        // === 교육진행 세션 선택/변경 === //
         sessionTabChange2(jj){
             this.$set(this, 'sessionTab2', jj)
         },
 
+
+
+
+        // === 강의정보 조회 === //
         getLecture(id){
             // alert(typeof id)
             // return
@@ -1807,6 +1738,26 @@ export default {
                 alert('Error - ')
             })
         },// 액션플랜 상세
+
+
+
+        // 탭메뉴 선택시  리포트에 들어갈 데이터 바인딩
+        thisCategoryFunc(){
+            // 해당 리포트메뉴의 아이디 찾기
+            var category = this.thisCategory
+            var idx = this.reportMenus.findIndex((m)=>{
+                return m.id === category
+            })
+
+            // 리포트로 바인딩시킬 데이터 맵핑
+            switch (category) {
+                case 'group':
+                    this.$set(this.reportMenus[idx], 'from', this.groups)
+                    break;
+                default:
+
+            }
+        },
 
 
 

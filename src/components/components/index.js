@@ -23,6 +23,11 @@ import Loading from './Loading'
 import Chart from './Chart/Chart'
 import ScrollChart from './Chart/ScrollChart'
 
+// 탭 - 메뉴
+import TabMenu from './UIComponents/TabMenu'
+// 탭 - 컨텐트
+// import ScrollChart from './Chart/ScrollChart'
+
 
 export {
     Button,
@@ -49,4 +54,6 @@ export {
     Loading,
     Chart,
     ScrollChart,
+
+    TabMenu,
 }

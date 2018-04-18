@@ -14,7 +14,22 @@
 
 
 
-        <h3>Scroll Chart</h3>
+        <h3>TabMenu <small>[this tab: {{tabId}}]</small></h3>
+
+        <tab-menu v-model="tabId" :menus="[
+            {id: 'all', name: '전체'},
+            {id: 'first', name: '첫번째'},
+            {id: 'second', name: '두번째'},
+        ]" />
+
+
+        <hr>
+        <br>
+        <br>
+        <br>
+
+
+        <!-- <h3>Scroll Chart</h3>
 
         <scroll-chart />
 
@@ -22,7 +37,7 @@
         <hr>
         <br>
         <br>
-        <br>
+        <br> -->
 
 
 
@@ -156,7 +171,8 @@ import {
     PageLayout ,
     Rating,
     Pagination,
-    ScrollChart
+    ScrollChart,
+    TabMenu
 } from '@/components/components'
 import { LectureAcplearnDay } from './TestComponents'
 
@@ -225,11 +241,13 @@ export default {
         VueHighcharts,
         DatePickerTwo,
         LectureAcplearnDay,
-        ScrollChart
+        ScrollChart,
+        TabMenu
     },
 
     data () {
         return {
+            tabId:null, // TabMenu TEST
             items:0,
             ddd:0,
             // tdtd : '2018-02-26 10:00:00'

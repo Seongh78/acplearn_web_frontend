@@ -12,34 +12,42 @@
             height:255px;
             width:100%; ">
     </vue-highcharts>
-
     <table style="width:100%; margin:0; border:none;" class="structured ui table celled">
         <colgroup>
             <col width="12%">
-            <col>
-            <col>
-            <col>
-            <col>
-            <col>
         </colgroup>
-        <tbody v-if="chartData.length>0">
+        <tbody v-if="chartData.length>0 && chartData[0].data.length>0">
+            <tr>
+                <th class="borderTop">평가항목</th>
+                <th class="borderTop center aligned" :colspan="chartData[0].data.length">평가항목</th>
+                <th class="borderTop" width="9%">평균</th>
+            </tr>
             <tr>
                 <th class="borderTop">자가평가</th>
                 <td class="center aligned borderTop" v-for="(self, sid)  in  chartData[0].data">{{ self.toFixed(1) }}</td>
+                <td>평균</td>
             </tr>
             <tr v-if="chartData.length>2">
                 <th class="borderTop">GAP</th>
                 <td class="center aligned" v-for="(gap, gid)  in  chartData[2].data">{{ gap.toFixed(1) }}</td>
+                <td>평균</td>
             </tr>
             <tr>
                 <th class="borderTop">팀원평가</th>
                 <td class="center aligned" v-for="(others, oid)  in  chartData[1].data">{{ others.toFixed(1) }}</td>
+                <td>평균</td>
             </tr>
         </tbody>
         <tbody v-else>
             <tr>
                 <th class="borderTop">자가평가</th>
-                <td class="center aligned" >asdasds</td>
+                <td class="center aligned borderTop" rowspan="3">평가 데이터가 없습니다.</td>
+            </tr>
+            <tr>
+                <th class="borderTop">GAP</th>
+            </tr>
+            <tr>
+                <th class="borderTop">팀원평가</th>
             </tr>
         </tbody>
     </table>
