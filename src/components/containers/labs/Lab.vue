@@ -14,7 +14,28 @@
 
 
 
-        <h3>TabMenu <small>[this tab: {{tabId}}]</small></h3>
+        <h3>Graph</h3>
+
+
+        <div class="ui grid">
+                <div class="sixteen wide column" style=" height:auto; overflow-x:scroll; padding:0; border:1px dotted rgba(0,0,0,0.15);">
+                    <slide-graph2 />
+                </div>
+        </div>
+
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+        <!-- <h3>TabMenu <small>[this tab: {{tabId}}]</small></h3>
 
         <tab-menu v-model="tabId" :menus="[
             {id: 'all', name: '전체'},
@@ -26,7 +47,7 @@
         <hr>
         <br>
         <br>
-        <br>
+        <br> -->
 
 
         <!-- <h3>Scroll Chart</h3>
@@ -75,11 +96,7 @@
 
 
 
-        <h4>Highcharts TEST</h4>
-        <div class="">
-            <vue-highcharts :options="chartData" ref="lineCharts" style="box-shadow:none;"></vue-highcharts>
-            <button @click="load">load</button>
-        </div>
+
 
 
 
@@ -123,34 +140,14 @@
 
 
 
-        <br>
-        <br>
-        <br>
+         <react />
 
 
 
-
-        <button type="button" class="ui green button" @click="callTest">call test{{ddd}}</button>
-        <button type="button" class="ui blue button" @click="callTest2">call test2 {{ddd}}</button>
-        <button type="button" class="ui red button" @click="$EventBus.$emit('close')">to child</button>
-
-        <event-bus >
-            <h3>{{ items }}</h3>
-        </event-bus>
-
-        <br>
-        <br>
-        <br>
-
-         <react /> -->
-
-
-        <h4>Timepicker TEST</h4>
-
-
-        <hr>
         <h4>Rating TEST</h4>
         <rating />
+
+         -->
 
 
     </page-layout>
@@ -174,7 +171,12 @@ import {
     ScrollChart,
     TabMenu
 } from '@/components/components'
-import { LectureAcplearnDay } from './TestComponents'
+
+import {
+    LectureAcplearnDay,
+    SlideGraph,
+    SlideGraph2,
+} from './TestComponents'
 
 
 
@@ -242,7 +244,9 @@ export default {
         DatePickerTwo,
         LectureAcplearnDay,
         ScrollChart,
-        TabMenu
+        TabMenu,
+        SlideGraph,
+        SlideGraph2
     },
 
     data () {

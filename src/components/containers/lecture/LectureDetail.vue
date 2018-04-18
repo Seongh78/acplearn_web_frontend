@@ -1258,7 +1258,8 @@ import {
     Comment,
     Loading,
     Chart,
-    TabMenu
+    TabMenu,
+    SlideGraph,
 } from '../../components'
 
 // 리포트 뷰
@@ -1298,6 +1299,7 @@ export default {
         Loading,
         VueHighcharts,
         Chart,
+        SlideGraph,
         TabMenu,
 
         ReportAll,

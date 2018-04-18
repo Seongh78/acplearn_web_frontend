@@ -22,6 +22,7 @@ import Comment from './Comment'
 import Loading from './Loading'
 import Chart from './Chart/Chart'
 import ScrollChart from './Chart/ScrollChart'
+import SlideGraph from './Chart/SlideGraph'
 
 // 탭 - 메뉴
 import TabMenu from './UIComponents/TabMenu'
@@ -54,6 +55,6 @@ export {
     Loading,
     Chart,
     ScrollChart,
-
     TabMenu,
+    SlideGraph,
 }

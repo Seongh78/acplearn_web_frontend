@@ -4,9 +4,16 @@
     <!-- 전체 - 통계 -->
     <h4 class="ui block attached header " style="border-top:1px solid #d7d7d7;">액플런 전체 평균</h4>
 
+    <div class="ui attached segment" style="padding:0; overflow-x:scroll;">
+        <slide-graph />
+    </div>
+
+    <br>
     <div class="ui attached segment" style="padding:0;">
         <chart />
     </div>
+
+
 
     <br>
     <br>
@@ -28,7 +35,8 @@ import {
     Comment,
     Loading,
     Chart,
-    TabMenu
+    TabMenu,
+    SlideGraph,
 } from '../../../components'
 
 
@@ -49,7 +57,8 @@ export default {
         Comment,
         Loading,
         Chart,
-        TabMenu
+        TabMenu,
+        SlideGraph,
     },
 
 
