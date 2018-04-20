@@ -17,11 +17,11 @@
         <h3>Graph</h3>
 
 
-        <div class="ui grid">
+        <!-- <div class="ui grid">
                 <div class="sixteen wide column" style=" height:auto; overflow-x:scroll; padding:0; border:1px dotted rgba(0,0,0,0.15);">
                     <slide-graph2 />
                 </div>
-        </div>
+        </div> -->
 
 <br>
 <br>
@@ -174,8 +174,6 @@ import {
 
 import {
     LectureAcplearnDay,
-    SlideGraph,
-    SlideGraph2,
 } from './TestComponents'
 
 
@@ -245,8 +243,6 @@ export default {
         LectureAcplearnDay,
         ScrollChart,
         TabMenu,
-        SlideGraph,
-        SlideGraph2
     },
 
     data () {

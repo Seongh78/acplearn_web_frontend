@@ -2,6 +2,31 @@
 <div class="graphContainer" style="position:relative;">
 
 
+<!--
+
+사용데이터 :
+
+props
+
+    'chart' , //=> 표시할 데이터
+    예시)
+    [
+        { 
+            lad_date: '2018-01-01' ,
+            avgSelfScore: 5,
+            avgOthersScore: 4
+        },
+        {
+            lad_date: '2018-01-02' ,
+            avgSelfScore: 3,
+            avgOthersScore: 5
+        }
+    ]
+ -->
+
+
+
+
     <div class="" style="display:flex; position:relative;">
 
 
@@ -16,7 +41,7 @@
                     <div class="">
 
                         <div class="graphBody">
-                            <div class="back viewLoadAnimationTop">
+                            <div class="back ">
                                 <hr class="bgLine ">
                                 <hr class="bgLine">
                                 <hr class="bgLine">
@@ -56,19 +81,25 @@
 
 
         <div class="scsc" style="display:flex; width:100%;">
-            <div style="border-right:1px solid rgba(0,0,0,0.2);"  v-for="(sess, sid)  in  sessions" >
+
+            <!-- 월 또는 회차 반복 시 Props로 받아서 이 부분에서 반복 -->
+            <div style="border-right:1px solid rgba(0,0,0,0.2);"  >
                 <div class="sessionHeader" style="width:100%;">
-                    <p>{{ sess.ls_seq }}차시 - {{ sess.ls_startDate }} ~ {{ sess.ls_endDate }}</p>
+                    <!-- <p>{{ sess.ls_seq }}차시 - {{ sess.ls_startDate }} ~ {{ sess.ls_endDate }}</p> -->
+                    <p>-</p>
                 </div>
 
-                <div class="" style="display:flex; width:100%;">
-                    <div class="scoreRepeat" v-for="(sc, scid) in  score" v-if="sc.ls_seq===sess.ls_seq">
+                <div class="scale-in-hor-left" style="display:flex; width:100%;">
+
+                    <!-- 일별 데이터 반복부분 -->
+                    <div class="scoreRepeat "  v-for="(sc, scid)  in  chart">
                             <div class="">
                                 <div class="graphHeader">
-                                    <p>{{sc.lad_date}}</p>
+                                    <p>{{ sc.lad_date }}</p>
                                 </div>
 
                                 <div class="graphBody">
+                                    <!-- 배경라인 -->
                                     <div class="back viewLoadAnimationTop">
                                         <hr class="bgLine">
                                         <hr class="bgLine">
@@ -77,18 +108,38 @@
                                         <hr class="bgLine">
                                     </div>
 
-                                    <div class="selfScore viewLoadAnimation" :style="{height: sc.avgSelfScore.toFixed(1)/5*100 +'%'}"></div>
-                                    <div class="othersScore viewLoadAnimation" :style="{height: sc.avgOthersScore.toFixed(1)/5*100 +'%'}"></div>
+                                    <!-- 막대 그래프 -->
+
+                                        <!-- 자가평가 -->
+                                        <div class="selfScore viewLoadAnimation" :style="{height: (sc.avgSelfScore!=null || sc.avgSelfScore!=undefined ? (sc.avgSelfScore.toFixed(1)/5*100) : 0) +'%'} "></div>
+
+                                        <!-- 팀원평가 -->
+                                        <div class="othersScore viewLoadAnimation" :style="{height: (sc.avgOthersScore!=null ? (sc.avgOthersScore.toFixed(1)/5*100) : 0) +'%'}"></div>
+
+                                    <!-- 막대 그래프 -->
+
                                 </div>
                             </div>
 
-                            <!--  -->
+                            <!-- 점수표 -->
                             <div class="scoreTable">
-                                <p class="gapTitle">{{( sc.avgOthersScore.toFixed(1) - sc.avgSelfScore.toFixed(1)).toFixed(1) }}</p>
-                                <p class="selfTitle">{{ sc.avgSelfScore.toFixed(1) }}</p>
-                                <p class="othersTitle">{{ sc.avgOthersScore.toFixed(1) }}</p>
+                                <p class="gapTitle">
+                                {{
+                                    sc.avgOthersScore != null  ||  sc.avgOthersScore != undefined ?
+                                    (sc.avgOthersScore.toFixed(1) - sc.avgSelfScore.toFixed(1)).toFixed(1) :
+                                    0
+                                }}
+                                </p>
+                                <p class="selfTitle">
+                                    {{ sc.avgSelfScore!=null  ||  sc.avgSelfScore!=undefined ? (sc.avgSelfScore.toFixed(1)) : 0 }}
+                                </p>
+                                <p class="othersTitle">
+                                    {{ sc.avgOthersScore!=null  ||  sc.avgOthersScore!=undefined ? (sc.avgOthersScore.toFixed(1)) : 0 }}
+                                </p>
                             </div>
                     </div>
+                    <!-- 일별 데이터 반복부분 -->
+
                 </div>
             </div>
         </div>
@@ -119,16 +170,16 @@
                                 <hr class="bgLine">
                             </div>
 
-                            <div class="selfScore viewLoadAnimation"></div>
-                            <div class="othersScore viewLoadAnimation"></div>
+                            <div class="selfScore viewLoadAnimation" :style="{height: avgSelfAll.toFixed(1)/5*100 +'%'}"></div>
+                            <div class="othersScore viewLoadAnimation" :style="{height: avgOthersAll.toFixed(1)/5*100 +'%'}"></div>
                         </div>
                     </div>
 
                     <!--  -->
                     <div class="scoreTable">
-                        <p class="gapTitle">GAP</p>
-                        <p class="selfTitle">자가평가</p>
-                        <p class="othersTitle">팀원평가</p>
+                        <p class="gapTitle">{{ (avgOthersAll - avgSelfAll).toFixed(1) }}</p>
+                        <p class="selfTitle">{{ avgSelfAll.toFixed(1) }}</p>
+                        <p class="othersTitle">{{ avgOthersAll.toFixed(1) }}</p>
                     </div>
                 </div>
             </div>
@@ -139,6 +190,9 @@
 
 
     </div>
+
+
+
 </div>
 </template>
 
@@ -147,171 +201,34 @@
 
 
 <script>
-const name = ''
+const name = 'SlideGraph'
 
 export default {
     name: name,
 
 
     // ===== Props ===== //
-    props:[],
+    props:[
+        'chart', // 그래프데이터
+        'sessionData', // 회차정보
+
+    ],
 
 
 
     // ===== Data ===== //
     data(){ return {
-        score: [
-            {
-            "lad_date": "04-01",
-            "avgSelfScore": 3,
-            "avgOthersScore": 4,
-            "ls_seq" : 1
-            },
-            {
-            "lad_date": "04-02",
-            "avgSelfScore": 2,
-            "avgOthersScore": 3,
-            "ls_seq" : 1
-            },
-            {
-            "lad_date": "04-03",
-            "avgSelfScore": 3,
-            "avgOthersScore": 4,
-            "ls_seq" : 1
-            },
-            {
-            "lad_date": "04-04",
-            "avgSelfScore": 1,
-            "avgOthersScore": 2,
-            "ls_seq" : 1
-            },
-            {
-            "lad_date": "04-05",
-            "avgSelfScore": 4,
-            "avgOthersScore": 3,
-            "ls_seq" : 1
-            },
-            {
-            "lad_date": "04-06",
-            "avgSelfScore": 3,
-            "avgOthersScore": 4,
-            "ls_seq" : 2
-            },
-            {
-            "lad_date": "04-07",
-            "avgSelfScore": 3,
-            "avgOthersScore": 2,
-            "ls_seq" : 2
-            },
-            {
-            "lad_date": "04-08",
-            "avgSelfScore": 3,
-            "avgOthersScore": 4,
-            "ls_seq" : 2
-            },
-            {
-            "lad_date": "04-09",
-            "avgSelfScore": 3,
-            "avgOthersScore": 4,
-            "ls_seq" : 2
-            },
-            {
-            "lad_date": "04-10",
-            "avgSelfScore": 3,
-            "avgOthersScore": 3,
-            "ls_seq" : 2
-            },
-            {
-            "lad_date": "04-11",
-            "avgSelfScore": 3,
-            "avgOthersScore": 2,
-            "ls_seq" : 2
-            },
-            {
-            "lad_date": "04-12",
-            "avgSelfScore": 4,
-            "avgOthersScore": 3,
-            "ls_seq" : 3
-            },
-            {
-            "lad_date": "04-13",
-            "avgSelfScore": 4,
-            "avgOthersScore": 5,
-            "ls_seq" : 3
-            },
-            {
-            "lad_date": "04-14",
-            "avgSelfScore": 3,
-            "avgOthersScore": 4,
-            "ls_seq" : 3
-            },
-            {
-            "lad_date": "04-15",
-            "avgSelfScore": 2,
-            "avgOthersScore": 4,
-            "ls_seq" : 3
-            },
-            {
-            "lad_date": "04-16",
-            "avgSelfScore": 2,
-            "avgOthersScore": 3,
-            "ls_seq" : 3
-            },
-            {
-            "lad_date": "04-17",
-            "avgSelfScore": 4.6667,
-            "avgOthersScore": 3.6667,
-            "ls_seq" : 4
-            },
-            {
-            "lad_date": "04-18",
-            "avgSelfScore": 2.75,
-            "avgOthersScore": 3,
-            "ls_seq" : 4
-            },
-            {
-            "lad_date": "04-19",
-            "avgSelfScore": 2,
-            "avgOthersScore": 3,
-            "ls_seq" : 4
-            },
-            {
-            "lad_date": "04-20",
-            "avgSelfScore": 2,
-            "avgOthersScore": 5,
-            "ls_seq" : 4
-            }
-        ],
-        //
-        sessions: [
-            {
-                ls_startDate:'2018-01-01',
-                ls_endDate:'2018-01-01',
-                ls_seq: 1
-            },
-            {
-                ls_startDate:'2018-02-01',
-                ls_endDate:'2018-02-01',
-                ls_seq: 2
-            },
-            {
-                ls_startDate:'2018-03-01',
-                ls_endDate:'2018-03-01',
-                ls_seq: 3
-            },
-            {
-                ls_startDate:'2018-04-01',
-                ls_endDate:'2018-04-01',
-                ls_seq: 4
-            },
-        ]
+        avgSelfAll : 0, // 전체평균
+        avgOthersAll : 0, // 전체평균
 
+        ddd:[]
     }},
 
 
 
     // ===== Created ===== //
     created(){
+        this.avgFunc()
 
     },
 
@@ -319,13 +236,34 @@ export default {
 
     // ===== Updated ===== //
     updated(){
-
+        this.avgFunc()
     },
+
+
+
+
+    // ===== Mounted ===== //
+    mounted(){
+    },
+
+
 
 
 
     // ===== Methods ===== //
     methods:{
+
+        // 전체평균
+        avgFunc(){
+            var sumSelf = 0, sumOthers=0
+            var temp = Object.keys(this.chart)
+            for(var ii  in  temp){
+                sumSelf+=Number(this.chart[ii].avgSelfScore)
+                sumOthers+=Number(this.chart[ii].avgOthersScore)
+            }
+            this.$set(this, 'avgSelfAll', sumSelf / temp.length)
+            this.$set(this, 'avgOthersAll', sumOthers / temp.length)
+        }//
 
     },
 
@@ -389,7 +327,7 @@ export default {
             .selfScore, .othersScore{
                 position: absolute;
                 width: 7px;
-                height: 20%;
+                height: 0%;
                 bottom:0;
                 z-index: 50;
                 border-radius: 15px 15px 0 0 ;
@@ -473,4 +411,9 @@ export default {
                     margin:0;
                 }
 
+
+
+    .scale-in-hor-left{-webkit-animation:scale-in-hor-left .5s cubic-bezier(.25,.46,.45,.94) both;animation:scale-in-hor-left .5s cubic-bezier(.25,.46,.45,.94) both}
+
+    @-webkit-keyframes scale-in-hor-left{0%{-webkit-transform:scaleX(0);transform:scaleX(0);-webkit-transform-origin:0 0;transform-origin:0 0;opacity:1}100%{-webkit-transform:scaleX(1);transform:scaleX(1);-webkit-transform-origin:0 0;transform-origin:0 0;opacity:1}}@keyframes scale-in-hor-left{0%{-webkit-transform:scaleX(0);transform:scaleX(0);-webkit-transform-origin:0 0;transform-origin:0 0;opacity:1}100%{-webkit-transform:scaleX(1);transform:scaleX(1);-webkit-transform-origin:0 0;transform-origin:0 0;opacity:1}}
 </style>

@@ -57,17 +57,12 @@
                 <td>매일 13:00~17:00</td>
             </tr>
             <tr>
-                <td>장소</td>
-                <td>부산광역시 남구 수영대로 99-1 부산본사</td>
-                <td>강의시간</td>
-                <td>4일 25시간</td>
-            </tr>
-            <tr>
                 <td>참여기업</td>
                 <td>
                     <span v-for="(com,i) in companies">
-                        <span v-if="(i>0)"> , </span>
-                        <a @click.prevent="$EventBus.$emit('onModal', 'companyDetail', true, {a:1})">{{ com.com_name }}</a>
+                        <div class="ui basic button tiny" @click.prevent="$EventBus.$emit('onModal', 'companyDetail', true, {a:1})">
+                        {{ com.com_name }}
+                        </div>
                     </span>
                 </td>
                 <td>인원</td>
@@ -77,7 +72,7 @@
                 <td>KPI</td>
                 <!-- <td colspan="3" class="ui tag labels"> -->
                 <td colspan="3">
-                        <div class="ui basic label" v-for="k  in  kpi">{{ k.cc2_name }}</div>
+                        <div class="ui basic button tiny" v-for="k  in  kpi" :title="k.lk_idx">{{ k.cc2_name }}</div>
                 </td>
             </tr>
         </tbody>
@@ -193,7 +188,14 @@
         <!-- ===== 회차 탭메뉴 ===== -->
         <div class="ui top secondary pointing menu">
             <a class="item" v-bind:class="[sessionTab < 0?'active':'']" @click.prevent="sessionTabChange(-1)">전체</a>
-            <a class="item" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab==jj?'active':'']" @click.prevent="sessionTabChange(jj)">{{ jj+1 }}회</a>
+            <a
+                class="item"
+                v-for="(sess, jj) in lecture.sessions"
+                v-bind:class="[sessionTab==jj?'active':'']"
+                @click.prevent="sessionTabChange(jj)"
+                :title="sess.ls_idx">
+                {{ jj+1 }}회
+            </a>
         </div>
 
 
@@ -466,7 +468,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(std, stdId)  in  students" v-if="std.group_idx==groupTab || groupTab==''">
+                            <tr v-for="(std, stdId)  in  students" v-if="std.group_idx==groupTab || groupTab==''" :title="std.stu_idx">
                                 <td> {{ std.group_idx }} </td>
                                 <td>{{ std.com_name  }}</td>
                                 <td>{{ std.stu_department }}</td>
@@ -905,7 +907,7 @@
         <div class="ui  tab  active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
 
             <!-- 리포트 컴포넌트 동적 바인딩 -->
-            <component :is="menu.component" :from="menu.from"></component>
+            <component :is="menu.component" :from="menu.from" ></component>
             <!-- 리포트 컴포넌트 동적 바인딩 -->
 
         </div>
@@ -919,8 +921,8 @@
 
 
 
-        <h3><i class="icon users"></i> 수강생</h3>
-        <hr class="opacity3">
+
+
 
 
 
@@ -1324,13 +1326,21 @@ export default {
                 lectureComments : false, //강의활동내역 상세보기
             },
             msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
+
+
+            // === 강의기본정보 === //
             lec_idx:null,
             lecture:{},
             companies: [],
+            departments: [],
+            position: [],
             groups:[],
             students: [],
             tempStudents:[] ,  // 렌더링 전용 학생목록
             kpi:[],
+            // === 강의기본정보 === //
+
+
             sessionTab:-1,
             sessionTab2:-1, // 교육진행 내 차시 탭
             groupTab:'' , // 선택한 그룹아이디
@@ -1360,15 +1370,14 @@ export default {
 
 
             // === 액션플랜 === //
-            actionplanSessionTab : -1, // 세션탭
             selectedStudent:-1, // 선택된 수강생
             plans : [], // 선택된 수강생의 플랜들
             plan : {}, // 선택된 수강생의 상세플랜
             thisCategory:'all',
             reportMenus : [ // 리포트용 메뉴 - 탭관리
                 { id: 'all', name: '전체' , component: 'ReportAll' },
-                { id: 'group', name: '조별' , component: 'ReportGroup', from:'groups' },
-                { id: 'department', name: '부서별' , component: 'ReportDepartment' },
+                { id: 'group', name: '조별' , component: 'ReportGroup', },
+                { id: 'department', name: '부서별' , component: 'ReportDepartment', },
                 { id: 'position', name: '직급별' , component: 'ReportPosition' },
                 { id: 'gender', name: '성별' , component: 'ReportGender' },
                 { id: 'age', name: '연령별' , component: 'ReportAge' },
@@ -1466,9 +1475,11 @@ export default {
             // return
             this.$http.get('/api/lectures/detail/'+Number(id))
             .then(resp=>{
-                console.log(resp.data);
+                console.log(resp.data.departments);
                 this.$set(this, 'lecture', resp.data.lecture)
                 this.$set(this, 'companies', resp.data.companies)
+                this.$set(this, 'departments', resp.data.departments)
+                this.$set(this, 'position', resp.data.position)
                 this.$set(this, 'groups', resp.data.groups)
                 this.$set(this, 'students', resp.data.students)
                 this.$set(this, 'kpi', resp.data.kpi)
@@ -1752,13 +1763,36 @@ export default {
             })
 
             // 리포트로 바인딩시킬 데이터 맵핑
+            var temp={}
             switch (category) {
                 case 'group':
-                    this.$set(this.reportMenus[idx], 'from', this.groups)
+                    temp= {
+                        groups: this.groups,
+                        students: this.students,
+                    }
+                    break;
+                case 'department':
+                    temp= {
+                        departments: this.departments,
+                        students: this.students,
+                    }
+                    break;
+                case 'position':
+                    temp= {
+                        position: this.position,
+                        students: this.students,
+                    }
+                    break;
+                case 'personal':
+                    temp= {
+                        sessions: this.lecture.sessions,
+                        students: this.students,
+                    }
                     break;
                 default:
 
             }
+            this.$set(this.reportMenus[idx], 'from', temp)
         },
 
 

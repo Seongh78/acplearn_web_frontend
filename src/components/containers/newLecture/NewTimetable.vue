@@ -645,7 +645,7 @@
 
                 <div class="field">
                     <label>주제</label>
-                    <input placeholder="" type="text" v-model="temp.module.lm_title='대인관계능력 실습'">
+                    <input placeholder="" type="text" v-model="temp.module.lm_title">
                 </div>
 
                 <div class="three fields">

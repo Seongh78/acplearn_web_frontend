@@ -2,22 +2,21 @@
 <div class="">
 
     <!-- 팀별 - 통계 -->
-    <!-- KPI 별 - 그래프 -->
-    <!-- <div v-for="(k, kid)  in  kpi" :value="k.lk_idx">
-        <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">{{k.cc2_name}} 평균</h4>
-        <div class="ui attached segment" style="padding:0;">
-            <chart table="kpi" :value="k.lk_idx" />
-        </div>
-        <br>
-        <br>
-    </div> -->
 
-    <div v-for="(group, gid)  in  from" :key="gid">
-        <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">{{ group.group_name }} 조 평균</h4>
+    <div v-for="(group, gid)  in  from.groups" :key="gid">
+        <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+            {{ group.group_name }}(조) 평균
+            <hr class="opacity3">
+            <small>
+                <a v-for="(std,stdId) in  from.students" v-if="std.group_idx===group.group_idx">
+                     [{{ std.stu_name }}] &nbsp;
+                </a>
+            </small>
+        </h3>
 
 
-        <div class="ui attached segment" style="padding:0;">
-            <chart table="group" :value="group.group_idx" />
+        <div class="ui attached segment" style="padding:0; overflow-x: scroll;">
+            <slide-graph :chart="chartData" />
         </div>
 
         <br>
@@ -42,7 +41,8 @@ import {
     Comment,
     Loading,
     Chart,
-    TabMenu
+    TabMenu,
+    SlideGraph
 } from '../../../components'
 
 const name = 'ReportGroup'
@@ -62,7 +62,8 @@ export default {
         Comment,
         Loading,
         Chart,
-        TabMenu
+        TabMenu,
+        SlideGraph
     },
 
 
@@ -74,7 +75,8 @@ export default {
     // ===== Data ===== //
     data(){ return {
 
-        groups:[]
+        groups:[],
+        chartData:[]
 
     }},
 
@@ -82,7 +84,7 @@ export default {
 
     // ===== Created ===== //
     created(){
-        // this.$set(this, 'groups', this.from)
+        this.allAvgFunc()
     },
 
 
@@ -96,6 +98,25 @@ export default {
 
     // ===== Methods ===== //
     methods:{
+
+
+
+        // === 전체 평균데이터 === //
+        allAvgFunc(){
+            // base URL
+            var baseURL = '/api/plans/score/'+14+'?_filter=kpi&_value=52'
+
+            this.$http.get(baseURL)
+            .then(resp=>{
+                this.$set(this, 'chartData', resp.data.score)
+            })
+            .catch(err=>{
+                alert('Error - '+err)
+                console.log(err);
+            })
+        },
+
+
 
     },
 

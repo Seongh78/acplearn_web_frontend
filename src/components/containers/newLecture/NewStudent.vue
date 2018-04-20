@@ -1037,6 +1037,8 @@ export default {
                 lec_idx : this.lec_idx
             })
             .then(resp=>{
+                // console.log(resp);
+                // return
                 var stdIdx = resp.data.studentsIdx
                 for(var ii  in  this.companies){
                     for(var jj  in  this.companies[ii].students){
