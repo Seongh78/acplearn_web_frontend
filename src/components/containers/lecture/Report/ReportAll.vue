@@ -171,6 +171,7 @@ export default {
 
             this.$http.get(baseURL)
             .then(resp=>{
+                // console.log(resp.data.score);
                 this.$set(this, 'chartData', resp.data.score)
             })
             .catch(err=>{

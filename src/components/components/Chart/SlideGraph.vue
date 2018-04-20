@@ -11,7 +11,7 @@ props
     'chart' , //=> 표시할 데이터
     예시)
     [
-        { 
+        {
             lad_date: '2018-01-01' ,
             avgSelfScore: 5,
             avgOthersScore: 4
@@ -125,7 +125,8 @@ props
                             <div class="scoreTable">
                                 <p class="gapTitle">
                                 {{
-                                    sc.avgOthersScore != null  ||  sc.avgOthersScore != undefined ?
+                                    (sc.avgSelfScore != null  ||  sc.avgSelfScore != undefined) &&
+                                    (sc.avgOthersScore != null  ||  sc.avgOthersScore != undefined) ?
                                     (sc.avgOthersScore.toFixed(1) - sc.avgSelfScore.toFixed(1)).toFixed(1) :
                                     0
                                 }}

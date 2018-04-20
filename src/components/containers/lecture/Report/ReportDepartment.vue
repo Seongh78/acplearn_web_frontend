@@ -1,13 +1,13 @@
 <template lang="html">
 <div class="">
 
-    <!-- 부서별 - 통계 -->
-    <div v-for="(dept, gid)  in  from.departments" :key="gid">
+    <!-- 직급별 - 통계 -->
+    <div v-for="(dep, gid)  in  departments" :key="gid">
         <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
-            {{ dept.stu_department }} 부서
+            {{ dep.stu_department }}
             <hr class="opacity3">
             <small>
-                <a v-for="(std,stdId) in  from.students" v-if="std.stu_department===dept.stu_department">
+                <a v-for="(std,stdId) in  from.students" v-if="std.stu_department==dep.stu_department">
                      [{{ std.stu_name }}] &nbsp;
                 </a>
             </small>
@@ -15,7 +15,7 @@
 
 
         <div class="ui attached segment" style="padding:0; overflow-x: scroll;">
-            <slide-graph :chart="allAvgFunc(lec_idx, dept.stu_departmen)" />
+            <slide-graph :chart="dep.score" />
         </div>
 
         <br>
@@ -56,7 +56,8 @@ export default {
     data(){ return {
 
         lec_idx : null , // 강의아이디
-        chartData:[]
+        chartData: [],
+        departments : []
 
     }},
 
@@ -66,7 +67,13 @@ export default {
     created(){
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
-        this.allAvgFunc()
+        this.$set(this, 'departments', this.from.departments)
+
+
+
+        this.departments.forEach(dep=>{
+            this.allAvgFunc(dep.stu_department)
+        })
     },
 
 
@@ -84,21 +91,23 @@ export default {
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(lec_idx, _value){
-            // base URL
-            var baseURL = '/api/plans/score/'+lec_idx+'?_filter=department&_value='+_value
+        allAvgFunc(val){
+                console.log(val);
+                var baseURL = '/api/plans/score/departments/'+this.lec_idx+'/'+val
+                // var baseURL = '/api/plans/score/departments/18/사원'
 
-            this.$http.get(baseURL)
-            .then(resp=>{
-                console.log(resp.data.score);
-                return resp.data.score
-                // this.$set(this, 'chartData', resp.data.score)
-                // console.log(this.chartData);
-            })
-            .catch(err=>{
-                alert('Error - '+err)
-                console.log(err);
-            })
+                this.$http.get(baseURL)
+                .then((resp)=>{
+                    console.log(resp.data);
+                    var rid = this.departments.findIndex(po=>{
+                        return po.stu_department == val
+                    })
+                    this.$set(this.departments[rid], 'score', resp.data.score)
+                })
+                .catch((err)=>{
+                    alert('Error - '+err)
+                    console.log(err);
+                })
         },
 
 

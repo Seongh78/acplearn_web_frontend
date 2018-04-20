@@ -1475,7 +1475,7 @@ export default {
             // return
             this.$http.get('/api/lectures/detail/'+Number(id))
             .then(resp=>{
-                console.log(resp.data.departments);
+                // console.log(resp.data.departments);
                 this.$set(this, 'lecture', resp.data.lecture)
                 this.$set(this, 'companies', resp.data.companies)
                 this.$set(this, 'departments', resp.data.departments)
