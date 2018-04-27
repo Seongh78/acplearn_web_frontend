@@ -168,7 +168,6 @@ import {
     PageLayout ,
     Rating,
     Pagination,
-    ScrollChart,
     TabMenu
 } from '@/components/components'
 
@@ -197,22 +196,12 @@ import DatePicker from 'vuejs-datepicker'
 "D dsu MMM yyyy"  D dsu MMM yyyy     - e.g       Sat 12th Feb 2016
 */
 
-import VueHighcharts from 'vue2-highcharts'
 
 
 
 
-// 차트 데이터
-const asyncData = {
-    name: '자가평가',
-    marker: {
-        symbol: 'round'
-    },
-    data: [
-        { data: [3.5, 2.9, 1.5, 0.5, 4.2] },
-        { data: [3.5, 2.9, 1.5, 0.5, 4.2] },
-    ]
-}
+
+
 
 
 
@@ -238,10 +227,8 @@ export default {
         // DatePickerTest,
         TimePickerTest,
         'vertical-tab' : VerticalTab,
-        VueHighcharts,
         DatePickerTwo,
         LectureAcplearnDay,
-        ScrollChart,
         TabMenu,
     },
 

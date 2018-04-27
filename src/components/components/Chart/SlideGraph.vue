@@ -31,9 +31,45 @@ props
 
 
         <!-- ===== 사전 ===== -->
-        <div style="position:fixed; margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " >
-            <div class="sessionHeader" style="width:100%; min-width:100px; height:64px; padding:20px;">
-                <p>사전점수</p>
+        <div style=" margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " >
+            <div class="sessionHeader" style="width:100%; min-width:50px; height:50px; padding:15px 0;">
+                <p>사전</p>
+            </div>
+
+            <div class="" style="display:flex; width:100%; margin">
+                <div class="scoreRepeat" style="widh:100%;">
+                    <div class="">
+
+                        <div class="graphBody">
+                            <div class="back ">
+                                <hr class="bgLine ">
+                                <hr class="bgLine">
+                                <hr class="bgLine">
+                                <hr class="bgLine">
+                                <hr class="bgLine">
+                            </div>
+
+
+                            <div class="selfScore" style="margin-left:0;"></div>
+                            <!-- <div class="othersScore"></div> -->
+                        </div>
+                    </div>
+
+                    <!--  -->
+                    <div class="scoreTable">
+                        <p class="gapTitle">-</p>
+                        <p class="selfTitle">자가</p>
+                        <p class="othersTitle">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div style="position:fixed; margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " > -->
+        <div style=" margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " >
+            <div class="sessionHeader" style="width:100%; min-width:50px; height:50px; padding:20px 15px; ">
+                <p>&nbsp;</p>
             </div>
 
             <div class="" style="display:flex; width:100%; margin">
@@ -55,6 +91,7 @@ props
                                 <li>3</li>
                                 <li>2</li>
                                 <li>1</li>
+                                <!-- <li>0</li> -->
                             </ui>
 
                             <div class="selfScore" style="margin-left:0;"></div>
@@ -65,8 +102,8 @@ props
                     <!--  -->
                     <div class="scoreTable">
                         <p class="gapTitle">GAP</p>
-                        <p class="selfTitle">자가평가</p>
-                        <p class="othersTitle">팀원평가</p>
+                        <p class="selfTitle">자가</p>
+                        <p class="othersTitle">팀원</p>
                     </div>
                 </div>
             </div>
@@ -154,7 +191,7 @@ props
 
         <!-- ===== 평균 ===== -->
         <div style=" z-index:99; background:#fff; box-shadow:-3px 1px 4.5px 0 rgba(0,0,0, 0.15);" >
-            <div class="sessionHeader" style="width:100%; min-width:100px; height:64px; padding:20px;">
+            <div class="sessionHeader" style="width:100%; min-width:80px; height:50px; padding:20px;">
                 <p>평균</p>
             </div>
 
@@ -257,13 +294,13 @@ export default {
         // 전체평균
         avgFunc(){
             var sumSelf = 0, sumOthers=0
-            var temp = Object.keys(this.chart)
-            for(var ii  in  temp){
+            // var temp = Object.keys(this.chart)
+            for(var ii  in  this.chart){
                 sumSelf+=Number(this.chart[ii].avgSelfScore)
                 sumOthers+=Number(this.chart[ii].avgOthersScore)
             }
-            this.$set(this, 'avgSelfAll', sumSelf / temp.length)
-            this.$set(this, 'avgOthersAll', sumOthers / temp.length)
+            this.$set(this, 'avgSelfAll', sumSelf / this.chart.length)
+            this.$set(this, 'avgOthersAll', sumOthers / this.chart.length)
         }//
 
     },
@@ -299,19 +336,19 @@ export default {
 
 
     .scsc{
-        margin-left:100px;
+        /*margin-left:100px;*/
     }
 
 
     /* 그래프 */
     .scoreRepeat{
         position:relative;
-        min-width:70px;
+        min-width:50px;
         width:100%;
         border-left:1px solid rgba(0,0,0, 0.05);
     }
         .graphHeader{
-            padding:7px;
+            padding:0px;
             border-bottom: 1px solid #f1f1f1;
             position: relative;
         }
@@ -373,12 +410,14 @@ export default {
             .scoreNumber{
                 position: absolute;
                 list-style: none;
-                line-height: 185%;
-                right:0;
+                line-height: 180%;
+                margin-top: -8px;
+                right:-3px;
                 text-align: right;
                 padding-right: 4.5px;
                 font-size: 1.45em;
                 opacity: .25;
+                z-index: 95;
             }
 
     /* 점수표 */

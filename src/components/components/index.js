@@ -20,9 +20,10 @@ import Rating from './Rating'
 import Pagination from './Pagination'
 import Comment from './Comment'
 import Loading from './Loading'
-import Chart from './Chart/Chart'
-import ScrollChart from './Chart/ScrollChart'
+
+
 import SlideGraph from './Chart/SlideGraph'
+import PolarChart from './Chart/PolarChart'
 
 // 탭 - 메뉴
 import TabMenu from './UIComponents/TabMenu'
@@ -53,8 +54,7 @@ export {
     Pagination,
     Comment,
     Loading,
-    Chart,
-    ScrollChart,
     TabMenu,
     SlideGraph,
+    PolarChart
 }

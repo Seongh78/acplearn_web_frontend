@@ -3,26 +3,49 @@
 
     <!-- 팀별 - 통계 -->
 
-    <div v-for="(group, gid)  in  from.groups" :key="gid">
-        <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+    <div v-for="(group, gid)  in  groups" :key="gid">
+
+        <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ group.group_name }}(조) 평균
             <hr class="opacity3">
             <small>
-                <a v-for="(std,stdId) in  from.students" v-if="std.group_idx===group.group_idx">
+                <a
+                    class="cursorPointer"
+                    v-for="(std,stdId) in  from.students"
+                    v-if="std.group_idx===group.group_idx"
+                    @click.prevent="personalGraph(std.stu_idx)">
                      [{{ std.stu_name }}] &nbsp;
                 </a>
             </small>
-        </h3>
+        </h4>
 
+        <div class="ui grid">
+            <div class="eleven wide column">
+                <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
+                    <slide-graph :chart="group.score" />
+                </div>
+            </div>
 
-        <div class="ui attached segment" style="padding:0; overflow-x: scroll;">
-            <slide-graph :chart="chartData" />
+            <div class="five wide column">
+                <loading v-if="group.kpi==undefined || group.kpi == null" />
+                <polar-chart :data="group.kpi" size="100%" v-else></polar-chart>
+            </div>
         </div>
+
+
+
 
         <br>
         <br>
         <br>
     </div>
+
+
+
+
+
+
+
 
 </div>
 </template>
@@ -40,9 +63,9 @@ import {
     Rating,
     Comment,
     Loading,
-    Chart,
     TabMenu,
-    SlideGraph
+    SlideGraph,
+    PolarChart,
 } from '../../../components'
 
 const name = 'ReportGroup'
@@ -61,9 +84,9 @@ export default {
         Rating,
         Comment,
         Loading,
-        Chart,
         TabMenu,
-        SlideGraph
+        SlideGraph,
+        PolarChart
     },
 
 
@@ -74,9 +97,73 @@ export default {
 
     // ===== Data ===== //
     data(){ return {
-
+        lec_idx : null,
+        modal : {
+            personalGraph : true
+        },
         groups:[],
-        chartData:[]
+        chartData:[],
+
+
+options: {
+    chart: {
+        polar: true,
+        type: 'line'
+    },
+
+    title: {
+        text: null,
+        // x: -80
+    },
+
+    pane: {
+        size: '75%'
+    },
+
+    xAxis: {
+        categories: ['Sales', 'Marketing', 'Development', 'Customer', 'Admin'],
+        tickmarkPlacement: 'on',
+        lineWidth: 0
+    },
+
+    yAxis: {
+        gridLineInterpolation: 'polygon',
+        lineWidth: 0,
+        min: 0
+    },
+
+    tooltip: {
+        shared: true,
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+    },
+
+    legend: {
+        align: 'right',
+        // layout: 'vertical'
+    },
+
+    series: [
+        {
+            name: '자가',
+            data: [5, 2, 3, 4, 5],
+            pointPlacement: 'on',
+            color:'#7cb5ec'
+        },
+        {
+            name: '팀원',
+            data: [2, 3, 4, 4, 2],
+            pointPlacement: 'on',
+            color:'#90ed7d'
+        },
+        {
+            name: 'GAP',
+            data: [5, 3, 4, 3, 2],
+            pointPlacement: 'on',
+            color:'#FF8224'
+        }
+    ]
+}
+
 
     }},
 
@@ -84,7 +171,14 @@ export default {
 
     // ===== Created ===== //
     created(){
-        this.allAvgFunc()
+        // 강의아이디
+        var lid = this.$router.history.current.params.id
+        this.$set(this, 'lec_idx', lid)
+        this.$set(this, 'groups', this.from.groups)
+
+        this.groups.forEach(g=>{
+            this.allAvgFunc(g.group_idx)
+        })
     },
 
 
@@ -102,13 +196,17 @@ export default {
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(){
-            // base URL
-            var baseURL = '/api/plans/score/'+14+'?_filter=kpi&_value=52'
+        allAvgFunc(val){
+            // base URL - 그룹별
+            var baseURL = '/api/plans/score/'+this.lec_idx+'/group/'+val
 
             this.$http.get(baseURL)
             .then(resp=>{
-                this.$set(this, 'chartData', resp.data.score)
+                var rid = this.groups.findIndex(g=>{
+                    return g.group_idx == val
+                })
+                this.$set(this.groups[rid], 'score', resp.data.score)
+                this.$set(this.groups[rid], 'kpi', resp.data.kpiAvg)
             })
             .catch(err=>{
                 alert('Error - '+err)
@@ -117,6 +215,37 @@ export default {
         },
 
 
+        // === 개별데이터 === //
+        personalGraph(stu_idx){
+
+            // this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx)
+
+            this.$http.all([
+                this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx),
+                this.$http.get('/api/plans/comments/'+stu_idx)
+            ])
+            .then(this.$http.spread((resp, resp2)=>{
+
+                //누적데이터
+                var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
+                var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                var comments = resp2.data.comments
+
+                // 모달 ON
+                this.$EventBus.$emit('modal', {
+                    name : 'personalGraph',
+                    stu_idx,
+                    score : resp.data.plans,
+                    kpiAvg,
+                    allAvg,
+                    comments
+                })
+            }))
+            .catch(err=>{
+                console.log(err);
+                alert('Error - personal plans')
+            })
+        },// === 개별데이터 === //
 
     },
 

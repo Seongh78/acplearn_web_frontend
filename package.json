@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "bootstrap-vue": "^2.0.0-rc.1",
+    "chart.js": "^2.7.2",
     "highcharts": "^6.1.0",
     "semantic-ui-vue": "^0.1.7",
     "vue": "^2.5.2",
+    "vue-chartjs": "^3.3.1",
+    "vue-highcharts": "0.0.10",
     "vue-router": "^3.0.1",
     "vue-timepicker": "0.0.3",
     "vue2-datepicker": "^1.9.3",

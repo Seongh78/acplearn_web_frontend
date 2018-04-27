@@ -4,17 +4,28 @@
     <!-- 전체 - 통계 -->
     <h4 class="ui block attached header " style="border-top:1px solid #d7d7d7;">액플런 전체 평균</h4>
 
-    <!-- 데이터가 있는경우 -->
-    <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-        <slide-graph :chart="chartData" />
+
+    <div class="ui grid">
+        <div class="eleven wide column">
+            <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
+                <slide-graph :chart="chartData" />
+            </div>
+        </div>
+
+        <div class="five wide column">
+            <loading v-if="kpiAvg.length<1" />
+            <polar-chart :data="kpiAvg" size="100%" v-else />
+        </div>
     </div>
 
 
 
+
+
+
+
+
     <br>
-
-
-
     <br>
     <br>
 
@@ -36,14 +47,14 @@ import {
     Loading,
     Chart,
     TabMenu,
-    SlideGraph
+    SlideGraph,
+    PolarChart,
 } from '../../../components'
 
 
-// import  SlideGraph  from '../../../components/Chart/SlideGraph'
 
 
-const name = 'ReportAll'
+
 
 
 export default {
@@ -61,6 +72,7 @@ export default {
         Loading,
         TabMenu,
         SlideGraph,
+        PolarChart
     },
 
 
@@ -72,72 +84,73 @@ export default {
 
     // ===== Data ===== //
     data(){ return {
-        sess:[],
-        chartData:[], // 차트데이터
-        xAxis:[],
-        options: {
-            chart: {},
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                // categories: ['2018-01-01', '2018-01-02', '2018-01-03', '2018-01-03', '2018-01-04'],
-                categories: [],
-                lineWidth:1,
-                min: 0,
-                max: 15,
-                scrollbar: {
-                     height: 30
-                },
-                tickLength: 0
-            },
-            yAxis: {
-                title: { text: null },
-                max: 5, // 최대값
-                min:-5,
-                tickAmount: 5, // 표시할 줄의 수
-                labels: {
-                    formatter () { return this.value + '점'; }
-                },
+        sess : [],
+        chartData : [], // 차트데이터
+        kpiAvg: [],
 
-            },
-            tooltip: {
-                crosshairs: true,
-                shared: true
-            },
+options: {
+    chart: {
+        polar: true,
+        type: 'line'
+    },
 
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
+    title: {
+        text: null,
+        // x: -80
+    },
 
+    pane: {
+        size: '75%'
+    },
 
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                },
-                column: {
-                    borderWidth: 0,
-                    // pointWidth: 15
-                },
-                spline: {
-                    marker: {
-                        radius: 5,
-                        lineColor: '#fff',
-                        symbolColor:'#FF5E00',
-                        lineWidth: 1
-                    }
-                }
-            },
+    xAxis: {
+        categories: ['Sales', 'Marketing', 'Development', 'Customer', 'Admin'],
+        tickmarkPlacement: 'on',
+        lineWidth: 0
+    },
 
-            series : [] // series
+    yAxis: {
+        gridLineInterpolation: 'polygon',
+        lineWidth: 0,
+        min: 0
+    },
 
-        }// option
+    tooltip: {
+        shared: true,
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+    },
+
+    legend: {
+        align: 'right',
+        // layout: 'vertical'
+    },
+
+    series: [
+        {
+            name: '자가',
+            data: [5, 2, 3, 4, 5],
+            pointPlacement: 'on',
+            color:'#7cb5ec'
+        },
+        {
+            name: '팀원',
+            data: [2, 3, 4, 4, 2],
+            pointPlacement: 'on',
+            color:'#90ed7d'
+        },
+        {
+            name: 'GAP',
+            data: [5, 3, 4, 3, 2],
+            pointPlacement: 'on',
+            color:'#FF8224'
+        }
+    ]
+}
+
 
     }},
+
+
 
 
 
@@ -173,12 +186,19 @@ export default {
             .then(resp=>{
                 // console.log(resp.data.score);
                 this.$set(this, 'chartData', resp.data.score)
+                this.$set(this, 'kpiAvg', resp.data.kpiAvg)
             })
             .catch(err=>{
                 alert('Error - '+err)
                 console.log(err);
             })
         },
+
+
+        // === 하이차트 로드 === //
+        load(){
+
+        },// === 하이차트 로드 === //
 
 
     },

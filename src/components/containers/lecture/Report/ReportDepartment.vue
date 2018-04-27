@@ -3,20 +3,36 @@
 
     <!-- 직급별 - 통계 -->
     <div v-for="(dep, gid)  in  departments" :key="gid">
-        <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+        <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ dep.stu_department }}
             <hr class="opacity3">
             <small>
-                <a v-for="(std,stdId) in  from.students" v-if="std.stu_department==dep.stu_department">
+                <a
+                    class="cursorPointer"
+                    v-for="(std,stdId) in  from.students"
+                    v-if="std.stu_department==dep.stu_department"
+                    @click.prevent="personalGraph(std.stu_idx)">
                      [{{ std.stu_name }}] &nbsp;
                 </a>
             </small>
-        </h3>
+        </h4>
 
 
-        <div class="ui attached segment" style="padding:0; overflow-x: scroll;">
-            <slide-graph :chart="dep.score" />
+
+        <div class="ui grid">
+            <div class="eleven wide column">
+                <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
+                    <slide-graph :chart="dep.score" />
+                </div>
+            </div>
+
+            <div class="five wide column">
+                <loading v-if="dep.kpi==undefined || dep.kpi==null" />
+                <polar-chart :data="dep.kpi" size="100%" v-else></polar-chart>
+            </div>
         </div>
+
+
 
         <br>
         <br>
@@ -32,7 +48,9 @@
 
 <script>
 import {
-    SlideGraph
+    SlideGraph,
+    Loading,
+    PolarChart,
 } from '../../../components'
 
 const name = ''
@@ -43,7 +61,9 @@ export default {
 
     // ===== Components ===== //
     components:{
-        SlideGraph
+        SlideGraph,
+        Loading,
+        PolarChart,
     },
 
 
@@ -92,23 +112,57 @@ export default {
 
         // === 전체 평균데이터 === //
         allAvgFunc(val){
-                console.log(val);
-                var baseURL = '/api/plans/score/departments/'+this.lec_idx+'/'+val
+                // 부서별
+                var baseURL = '/api/plans/score/'+this.lec_idx+'/departments/'+val
                 // var baseURL = '/api/plans/score/departments/18/사원'
 
                 this.$http.get(baseURL)
                 .then((resp)=>{
-                    console.log(resp.data);
+                    // 찾은데이터 푸시할 배열번지 찾기
                     var rid = this.departments.findIndex(po=>{
                         return po.stu_department == val
                     })
                     this.$set(this.departments[rid], 'score', resp.data.score)
+                    this.$set(this.departments[rid], 'kpi', resp.data.kpiAvg)
                 })
                 .catch((err)=>{
                     alert('Error - '+err)
                     console.log(err);
                 })
         },
+
+
+
+
+
+        // === 개별데이터 === //
+        personalGraph(stu_idx){
+
+            this.$http.all([
+                this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx),
+                this.$http.get('/api/plans/comments/'+stu_idx)
+            ])
+            .then(this.$http.spread((resp, resp2)=>{
+                //누적데이터
+                var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
+                var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                var comments = resp2.data.comments
+
+                // 모달 ON
+                this.$EventBus.$emit('modal', {
+                    name : 'personalGraph',
+                    stu_idx,
+                    score : resp.data.plans,
+                    kpiAvg,
+                    allAvg,
+                    comments
+                })
+            }))
+            .catch(err=>{
+                console.log(err);
+                alert('Error - personal plans')
+            })
+        },// === 개별데이터 === //
 
 
 

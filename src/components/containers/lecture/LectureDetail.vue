@@ -852,29 +852,30 @@
         <h3><i class="icon filter"></i> 분류</h3>
 
         <!-- 탭메뉴 -->
-        <!-- <tab-menu v-model="thisCategoryFunc" :menus="reportMenus" /> -->
         <tab-menu @input="thisCategoryFunc" v-model="thisCategory" :menus="reportMenus" />
         <br>
 
 
+        <!-- === 행동역량 셀렉트 === -->
         <div class="ui form">
             <div class="inline fields" style="font-size:1.1em;">
                 <div class="field">
                     <h3>행동역량</h3>
                 </div>
                 <div class="two field">
-                    <select class="ui fluid search dropdown" style="padding: 15px 25px; width:180px;">
-                        <option value="전체">&nbsp;전체&nbsp;&nbsp;&nbsp;</option>
+                    <select class="ui fluid search dropdown" style="padding: 15px 25px; width:180px;" @change="kpiChange" v-model="actionplanKpi">
+                        <option value="-1">&nbsp;전체&nbsp;&nbsp;&nbsp;</option>
                         <option v-for="(k, kid)  in  kpi" :value="k.lk_idx">&nbsp;{{k.cc2_name}}&nbsp;&nbsp;&nbsp;</option>
                     </select>
                 </div>
             </div>
             <br>
         </div>
+        <!-- === 행동역량 셀렉트 === -->
 
-        <!-- === 통계데이터 반복 === -->
+
+        <!-- === 강의차수 === -->
         <div class="">
-            <!-- <h4><i class="icon chart line"></i> 조직활성화</h4> -->
             <table class="ui table fluid celled">
                 <tr>
                     <th class="center aligned">강의차수</th>
@@ -898,7 +899,7 @@
             <br>
             <br>
         </div>
-        <!-- === 통계데이터 반복 === -->
+        <!-- === 강의차수 === -->
 
 
 
@@ -907,23 +908,15 @@
         <div class="ui  tab  active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
 
             <!-- 리포트 컴포넌트 동적 바인딩 -->
-            <component :is="menu.component" :from="menu.from" ></component>
+            <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi"></component>
             <!-- 리포트 컴포넌트 동적 바인딩 -->
 
         </div>
         <!-- === 리포트 === -->
 
 
-
         <br>
         <br>
-
-
-
-
-
-
-
 
 
 
@@ -1235,6 +1228,175 @@
     </div>
 </modal>
 
+
+
+
+
+
+
+
+<!-- 액션플랜 개별 통계 -->
+<modal v-if="modal.personalGraph" @close="modal.personalGraph = false" w="w-50" h="h-70">
+    <h3 slot="header">개별 리포트</h3>
+    <div slot="body" class="ui form">
+
+
+        <table class="ui table celled" style="padding:0;">
+            <colgroup>
+                <col width="9%">
+                <col width="25%">
+                <col width="9%">
+                <col width="25%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="center aligned" colspan="5">수강생 정보</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="borderTop center aligned">이름</th>
+                    <td>{{ personalProfile.stu_name }} </td>
+                    <th class="borderTop center aligned">소속</th>
+                    <td>{{ personalProfile.com_name }}</td>
+                    <td rowspan="5">
+                        <!-- KPI차트 -->
+                        <polar-chart :data="personalProfile.kpiAvg" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="borderTop center aligned">부서</th>
+                    <td>{{ personalProfile.stu_department }}</td>
+                    <th class="borderTop center aligned">직급</th>
+                    <td>{{ personalProfile.stu_position }}</td>
+                </tr>
+                <tr>
+                    <th class="borderTop center aligned">성별</th>
+                    <td >{{ personalProfile.stu_gender }} </td>
+                    <th class="borderTop center aligned">입사년도</th>
+                    <td >{{ personalProfile.stu_joinYear }} </td>
+                </tr>
+                <tr>
+                    <th class="borderTop center aligned">플랜</th>
+                    <td>{{ personalScore.length }}개 진행중</td>
+                    <th class="borderTop center aligned">점수</th>
+                    <td>{{ personalProfile.stu_score }}점</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="center aligned" colspan="5"></th>
+                </tr>
+            </tfoot>
+        </table>
+        <br>
+
+
+
+        <div class="ui horizontal divider"> <h4>플랜별 통계</h4> </div>
+        <br>
+
+        <div class="" style="width:100%;  ">
+            <div>
+                <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">전체</h3>
+
+                <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
+                    <slide-graph :chart="personalScore.allAvg" style="position:relative;" />
+                </div>
+
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+
+        <!-- <h3 class="ui header">플랜 정보</h3> -->
+        <div class="" style="width:100%;  ">
+            <div v-for="(sc, scId)  in  personalScore.score" :key="scId">
+                <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+                    {{ sc.lap_text }}
+                    <div class="ui basic label small">KPI: {{ sc.cc2_name }}</div>
+                </h3>
+
+                <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
+                    <slide-graph :chart="sc.score" style="position:relative;" />
+                </div>
+
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="ui horizontal divider"> <h4>피드</h4> </div>
+        <!-- <hr class="opacity3"> -->
+        <div style="text-align:center;" v-if="personalScore.comments.length<1">
+            <no-contents header-text="등록된 피드가 없습니다." />
+        </div>
+
+
+        <div class="ui feed" v-else>
+            <div class="event" v-for="(comment, cid)  in  personalScore.comments">
+                <div class="label">
+                    <img src="https://cdn2.iconfinder.com/data/icons/scenarium-vol-4/128/006_avatar_worker_employee_man_account_manager_clerk-128.png" v-if="comment.stu_gender=='남'">
+                    <img src="https://cdn2.iconfinder.com/data/icons/scenarium-vol-4/128/019_avatar_woman_girl_female_account_profile_user-128.png" v-if="comment.stu_gender=='여'">
+                    <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg" v-if="comment.stu_gender=='-' ||  comment.stu_gender==null">
+                </div>
+                <div class="content">
+                    <div class="summary">
+                        <a class="user">
+                            {{ comment.stu_name }}
+                            <a class="ui green circular label mini" v-if="comment.ac_flag=='강사'">강사님의 응원글</a>
+                        </a><div class="date">{{ comment.ac_date }}</div>
+                        <br>
+                        {{ comment.ac_contents }}
+                    </div>
+                    <div class="extra" v-if="comment.ac_img">
+                        <a><img :src="comment.ac_img" width="270"></a>
+                    </div>
+                    <div class="meta">
+                        <a class="like"><i class="like icon"></i> 0 Likes</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <!-- 댓글 입력 -->
+        <form class="ui reply form ">
+            <div class="inline fields">
+                <div class="fourteen wide field">
+                    <textarea placeholder="개발테스트기능 - 댓글을 입력해 주세요" rows="3"></textarea>
+                </div>
+                <div class="two wide field" style="padding:0; height:100%;">
+                    <button type="button" class="ui button green" style="width:100%; height:75px;">등록</button>
+                </div>
+            </div>
+
+
+
+            <div class="ui basic labeled small submit icon button">
+                <i class="icon camera"></i> 사진
+            </div>
+
+        </form>
+
+
+
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.personalGraph=false">확인</div>
+        </div>
+    </div>
+</modal>
+
 <!-- ======================== Modal ============================ -->
 
 
@@ -1259,9 +1421,9 @@ import {
     Rating,
     Comment,
     Loading,
-    Chart,
     TabMenu,
     SlideGraph,
+    PolarChart,
 } from '../../components'
 
 // 리포트 뷰
@@ -1282,7 +1444,7 @@ import LectureModule from './LectureModule'
 
 
 // Highcharts - 그래프
-import VueHighcharts from 'vue2-highcharts'
+// import VueHighcharts from 'vue2-highcharts'
 
 export default {
     name: 'LectureDetail',
@@ -1299,9 +1461,9 @@ export default {
         Comment,
         LectureModule,
         Loading,
-        VueHighcharts,
-        Chart,
-        SlideGraph,
+
+
+
         TabMenu,
 
         ReportAll,
@@ -1312,6 +1474,9 @@ export default {
         ReportAge,
         ReportJoinYear,
         ReportPersonal,
+
+        SlideGraph,
+        PolarChart,
     },
 
 
@@ -1324,8 +1489,9 @@ export default {
                 actionPlan : false, //액션플랜 상세보기
                 addActionPlan : false, //액션플랜 추가 상세보기
                 lectureComments : false, //강의활동내역 상세보기
+                personalGraph : false, // 액션플랜 개별 통계
             },
-            msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
+            // msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
 
 
             // === 강의기본정보 === //
@@ -1380,10 +1546,16 @@ export default {
                 { id: 'department', name: '부서별' , component: 'ReportDepartment', },
                 { id: 'position', name: '직급별' , component: 'ReportPosition' },
                 { id: 'gender', name: '성별' , component: 'ReportGender' },
-                { id: 'age', name: '연령별' , component: 'ReportAge' },
-                { id: 'joinYear', name: '입사연차별' , component: 'ReportJoinYear' },
+                { id: 'age', name: '연령별-개발' , component: 'ReportAge' },
+                { id: 'joinYear', name: '입사연차별-개발' , component: 'ReportJoinYear' },
                 { id: 'personal', name: '개인별' , component: 'ReportPersonal' },
-            ]
+            ],
+            personalScore:{
+                all : [],
+                score : []
+            }, // 개별점수  - 모달에 표시
+            personalProfile:[], // 개별점수  - 모달에 표시
+            actionplanKpi:-1,
           // === 액션플랜 === //
 
         }
@@ -1420,6 +1592,26 @@ export default {
 
         // $On
         this.$EventBus.$on('addTeam', this.addTeam)
+
+        // Modal ON
+        this.$EventBus.$on('modal', (data) => {
+            switch (data.name) {
+                case 'personalGraph': // 개별통계
+                    // 수강생아이디 찾기
+                    var sid = this.students.findIndex((std)=>{
+                        return std.stu_idx == data.stu_idx
+                    })
+                    // 모달 데이터
+                    this.students[sid].kpiAvg = data.kpiAvg // 방사형 데이터
+                    this.$set(this, 'personalProfile', this.students[sid]) // 유저정보
+                    this.$set(this.personalScore, 'allAvg', data.allAvg) // 전체평균 점수표
+                    this.$set(this.personalScore, 'score', data.score) // 점수표
+                    this.$set(this.personalScore, 'comments', data.comments) // 피드데이터
+                    this.modal.personalGraph = true
+                break;
+            }// switch
+
+        }) // 통계 상세리포트 모달
     },
 
 
@@ -1789,10 +1981,25 @@ export default {
                         students: this.students,
                     }
                     break;
+                case 'gender':
+                    temp= {
+                        gender: [
+                            {text:'남', socre:[], kpi:[]},
+                            {text:'여', socre:[], kpi:[]},
+                        ],
+                        students: this.students,
+                    }
+                    break;
                 default:
 
             }
             this.$set(this.reportMenus[idx], 'from', temp)
+        },
+
+
+
+        kpiChange(){
+            alert(this.actionplanKpi)
         },
 
 

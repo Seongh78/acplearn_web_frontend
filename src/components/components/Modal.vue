@@ -73,12 +73,14 @@ export default {
         height: 100% !important;
         background-color: rgba(0, 0, 0, .5);
         display: table;
+        overflow-y: hidden !important;
         transition: opacity .2s ease;
     }
 
     .modal-wrapper {
         display: table-cell;
         vertical-align: middle;
+        overflow-y: hidden !important;
     }
 
 
@@ -107,6 +109,7 @@ export default {
 .modal-container {
   /*min-width: 300px;
   max-width: 1000px;*/
+  position: relative;
   margin: 0px auto;
   padding:0 1px;
   background-color: #fff;
@@ -114,6 +117,7 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
+
 }
 
 .modalCon{

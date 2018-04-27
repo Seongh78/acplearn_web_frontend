@@ -6,7 +6,18 @@ import axios from 'axios' // http모듈
 import  store  from './vuex/store' // vuex
 
 
+// Highcharts - 그래프
+import VueHighcharts from 'vue-highcharts';
+import More from 'highcharts/highcharts-more'
+import Highcharts from 'highcharts'
+
+
+
+
+
 // =============== 미들웨어 =============== //
+
+
 
 // 서버와 분리시 세션유지
 axios.defaults.withCredentials = true
@@ -26,6 +37,11 @@ Vue.config.productionTip = true
 
 // EventBus 사용
 Vue.prototype.$EventBus = new Vue();
+
+
+// 사용차트 확창 - 방사형/분포도 등등
+More(Highcharts)
+Vue.use(VueHighcharts, { Highcharts });
 
 
 

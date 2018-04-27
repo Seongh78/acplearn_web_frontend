@@ -157,6 +157,35 @@ export default {
             })
         },
 
+
+
+
+
+        // === 개별데이터 === //
+        personalGraph(stu_idx){
+
+            this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx)
+            .then(resp=>{
+                //누적데이터
+                var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
+                var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                // 모달 ON
+                this.$EventBus.$emit('modal', {
+                    name : 'personalGraph',
+                    stu_idx,
+                    score : resp.data.plans,
+                    kpiAvg,
+                    allAvg
+                })
+            })
+            .catch(err=>{
+                console.log(err);
+                alert('Error - personal plans')
+            })
+        },// === 개별데이터 === //
+
+        
+
     },
 
 }
