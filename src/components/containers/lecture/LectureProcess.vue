@@ -93,26 +93,27 @@
 
         <br>
         <div class="ui two column centered grid">
-          <div class="ui centered pagination menu">
-                  <a class="icon item">
+            <div class="ui centered pagination menu">
+                <a class="icon item">
                     <i class="left chevron icon"></i>
-                  </a>
-                  <a class="item">1</a>
-                  <a class="item">2</a>
-                  <a class="item">3</a>
-                  <a class="item">4</a>
-                  <a class="icon item">
+                </a>
+                <a class="item">1</a>
+                <a class="item">2</a>
+                <a class="item">3</a>
+                <a class="item">4</a>
+                <a class="icon item">
                     <i class="right chevron icon"></i>
-                  </a>
-                </div>
+                </a>
+            </div>
 
-                <router-link tag="a" :to="{path:'/new/summary'}">
+            <router-link tag="a" :to="{path:'/new/summary'}">
                 <div class="ui  animated button" tabindex="0" style="position:absolute; right:25px; height:40px; background:#4374D9; color: #fff;">
-                  <div class="visible content ">강의개설</div>
-                  <div class="hidden content">
-                    <i class="right arrow icon"></i>
-                  </div>
-              </div></router-link>
+                    <div class="visible content ">강의개설</div>
+                    <div class="hidden content">
+                        <i class="right arrow icon"></i>
+                    </div>
+                </div>
+            </router-link>
         </div>
 
 

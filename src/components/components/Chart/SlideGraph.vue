@@ -129,7 +129,7 @@ props
                 <div class="scale-in-hor-left" style="display:flex; width:100%;">
 
                     <!-- 일별 데이터 반복부분 -->
-                    <div class="scoreRepeat "  v-for="(sc, scid)  in  chart">
+                    <div class="scoreRepeat "  v-for="(sc, scid)  in  chart" :key="scid">
                             <div class="">
                                 <div class="graphHeader">
                                     <p>{{ sc.lad_date }}</p>
@@ -239,10 +239,8 @@ props
 
 
 <script>
-const name = 'SlideGraph'
-
 export default {
-    name: name,
+    name: 'SlideGraph',
 
 
     // ===== Props ===== //
@@ -266,15 +264,15 @@ export default {
 
     // ===== Created ===== //
     created(){
-        this.avgFunc()
-
+        // this.avgFunc()
     },
 
 
 
     // ===== Updated ===== //
     updated(){
-        this.avgFunc()
+        // this.avgFunc()
+
     },
 
 

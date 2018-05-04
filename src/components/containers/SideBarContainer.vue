@@ -64,37 +64,7 @@
 
 
 
-            <!-- 팀생성 모달 -->
-            <modal v-if="modal.companyDetail" @close="modal.companyDetail = false" w="w-30" h="">
-                <h3 slot="header">기업정보</h3>
-                <div slot="body" class="ui form">
 
-                    <table width="100%">
-                        <colgroup>
-                            <col width="10%">
-                        </colgroup>
-                        <tr>
-                            <td>팀명</td>
-                            <td class="field">
-                                  <input type="text" placeholder="미 입력시 생성된 순서의 번호로 자동생성됩니다." >
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>설명</td>
-                            <td class="field">
-                                  <textarea rows="2"></textarea>
-                            </td>
-                        </tr>
-                    </table>
-
-                </div>
-                <div slot="footer">
-                    <div class="ui two bottom attached buttons">
-                        <div class="ui button" @click.prevent="modal.companyDetail=false">닫기</div>
-                        <div class="ui button blue" >등록</div>
-                    </div>
-                </div>
-            </modal>
 
 
 
@@ -144,7 +114,7 @@
 
 
 
-            
+
 
         <!-- ======================== Modal ============================ -->
 
@@ -183,7 +153,6 @@ export default {
             msg: 'LectureContainer',
             modal :{
                 addGroup : false,
-                companyDetail : false,
                 groupScoreModal : false,
                 actionPlan : false,
             },// modal

@@ -60,7 +60,7 @@
                 <td>참여기업</td>
                 <td>
                     <span v-for="(com,i) in companies">
-                        <div class="ui basic button tiny" @click.prevent="$EventBus.$emit('onModal', 'companyDetail', true, {a:1})">
+                        <div class="ui basic button tiny" @click.prevent="modal.companyDetail = true, companyDetailFunc(com.com_code)">
                         {{ com.com_name }}
                         </div>
                     </span>
@@ -72,7 +72,7 @@
                 <td>KPI</td>
                 <!-- <td colspan="3" class="ui tag labels"> -->
                 <td colspan="3">
-                        <div class="ui basic button tiny" v-for="k  in  kpi" :title="k.lk_idx">{{ k.cc2_name }}</div>
+                        <div class="ui basic button tiny" v-for="k  in  kpi" :title="k.lk_idx">{{ k.cc2_name }} ({{k.lk_idx}})</div>
                 </td>
             </tr>
         </tbody>
@@ -113,15 +113,15 @@
 
 
         <h3><i class="align left icon"></i> 강의목표</h3>
-        <p>{{ lecture.lec_goal }}</p>
+        <p style="white-space: pre-line">{{ lecture.lec_goal }}</p>
         <br>
 
         <h3><i class="align left icon"></i> 내용</h3>
-        <p>{{ lecture.lec_content }}</p>
+        <p style="white-space: pre-line">{{ lecture.lec_content }}</p>
         <br>
 
         <h3><i class="align left icon"></i> 기대효과</h3>
-        <p>{{ lecture.lec_effect }}</p>
+        <p style="white-space: pre-line">{{ lecture.lec_effect }}</p>
         <br>
 
         <h3><i class="align left icon"></i> 강의대상</h3>
@@ -152,7 +152,7 @@
 
 
 
-    <!-- ======================== 세션/시간표 ============================ -->
+    <!-- ======================== 일정/시간표 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==1?'active viewAnimate':'']" >
         <h3><i class="align left icon"></i> 강의정보</h3>
         <table class="ui table celled">
@@ -174,7 +174,7 @@
             <tr>
                 <th class="borderTop">교육일자</th>
                 <td colspan="3">
-                    <p v-for="(sess, ii) in lecture.sessions">{{ii+1}}회 - {{sess.ls_startDate}} (강의장소: {{sess.ls_location}})</p>
+                    <p v-for="(sess, ii) in lecture.sessions">{{ii+1}}회({{sess.ls_idx}}) - {{sess.ls_startDate}} (강의장소: {{sess.ls_location}})</p>
                 </td>
             </tr>
         </table>
@@ -348,7 +348,7 @@
 
 
     </div>
-    <!-- ======================== 세션/시간표 ============================ -->
+    <!-- ======================== 일정/시간표 ============================ -->
 
 
 
@@ -551,20 +551,33 @@
             <!-- 집합교육 탭메뉴 -->
             <div class="ui grid verticalTab" style="padding:10px 0;">
 
-                <div class="three wide column">
-                    <div class="ui vertical fluid attached menu listTab pointing">
+
+                <!-- === 집합교육 - 목록 탭 === -->
+                <div class="three wide column" >
+                    <h3><i class="align left icon"></i> 교육목록</h3>
+                    <div class="ui secondary vertical menu" style="width:100%;">
                         <!-- 강의회차 탭-->
-                        <a class="item" v-for="(sClass, scid) in sess.sessionClass" v-bind:class="[sessionTab2==jj?'active':'']">
-                            <b>{{scid+1}}차</b> 교육 - {{ sClass.lsc_date }}
+                        <a
+                            class="item"
+                            v-for="(sClass2, scid2) in sess.sessionClass"
+                            v-bind:class="[classTab2==scid2?'active':'']"
+                            @click.prevent="classTab2=scid2">
+                            {{scid2+1}}차 교육 - {{ sClass2.lsc_date }}
                         </a>
                         <!-- 강의회차 탭-->
                     </div>
                 </div>
+                <!-- === 집합교육 - 목록 탭 === -->
 
                 <div class="thirteen wide stretched column ">
-                    <div class="ui segment attached contentTab" v-for="(sClass, kk) in sess.sessionClass" style="padding:0 !important; border:none; ">
+                    <div
+                        class="ui segment tab attached contentTab viewLoadAnimation"
+                        style="padding:0 !important; border:none; "
+                        v-for="(sClass2, scid2) in sess.sessionClass"
+                        v-bind:class="[classTab2==scid2?'active':'']"
+                        :key="scid2">
                         <!-- 강의내용 -->
-                        <timeline class="container33" v-for="(timetable, tid)  in  sClass.timetables" :key="timetable.lt_idx">
+                        <timeline class="container33" v-for="(timetable, tid)  in  sClass2.timetables" :key="timetable.lt_idx">
                             <table class="ui table celled structured">
                                 <!-- 상세시간표가 있을 경우 -->
                                 <colgroup>
@@ -846,7 +859,7 @@
 
 
 
-    <!-- ======================== 액션플랜 ============================ -->
+    <!-- ======================== #액션플랜 ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
 
         <h3><i class="icon filter"></i> 분류</h3>
@@ -879,12 +892,12 @@
             <table class="ui table fluid celled">
                 <tr>
                     <th class="center aligned">강의차수</th>
-                    <th class="center aligned" v-for="(sess, ii) in lecture.sessions">
+                    <th class="center aligned" v-for="(sess, ii) in lecture.sessions" :key="ii">
                         <span class="center aligned ui form">
                             <div class="inline field">
                                 <div class="ui checkbox ">
-                                    <input type="checkbox" tabindex="0" class="hidden" checked>
-                                    <label>{{ii+1}}차</label>
+                                    <input type="checkbox" tabindex="0"  v-model="checkedSessions" :value="sess.ls_idx" :id="'cs-'+sess.ls_idx">
+                                    <label :for="'cs-'+sess.ls_idx">{{ii+1}}차</label>
                                 </div>
                             </div>
                         </span>
@@ -892,7 +905,9 @@
                 </tr>
                 <tr>
                     <th  class="center aligned borderTop">APL기간</th>
-                    <td  class="center aligned" v-for="(sess, jj) in lecture.sessions">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</td>
+                    <td  class="center aligned" v-for="(sess, jj) in lecture.sessions" >
+                        <label :for="'cs-'+sess.ls_idx">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</label>
+                    </td>
                 </tr>
             </table>
 
@@ -906,9 +921,9 @@
 
         <!-- === 리포트 === -->
         <div class="ui  tab  active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
-
+            {{ checkedSessions }}
             <!-- 리포트 컴포넌트 동적 바인딩 -->
-            <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi"></component>
+            <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions"></component>
             <!-- 리포트 컴포넌트 동적 바인딩 -->
 
         </div>
@@ -921,7 +936,7 @@
 
 
     </div>
-    <!-- ======================== 액션플랜 ============================ -->
+    <!-- ======================== #액션플랜 ============================ -->
 
 
 
@@ -1006,6 +1021,60 @@
 
 
 <!-- ======================== Modal ============================ -->
+
+
+
+<!-- 기업별 상세정보 모달 -->
+<modal v-if="modal.companyDetail" @close="modal.companyDetail = false" w="w-40" h="">
+    <h3 slot="header">기업정보</h3>
+    <div slot="body" class="ui form">
+
+        <table width="100%" class="ui table celled">
+            <colgroup>
+                <col width="17%">
+            </colgroup>
+            <tr>
+                <th class="borderTop">기업명</th>
+                <td>{{ company.com_name }}</td>
+            </tr>
+            <tr>
+                <th class="borderTop">업종</th>
+                <td>{{ company.com_category }}</td>
+            </tr>
+            <tr>
+                <th class="borderTop">주소</th>
+                <td>{{ company.com_location }}</td>
+            </tr>
+            <tr>
+                <th class="borderTop">담당자</th>
+                <td>{{ company.mg_name }}</td>
+            </tr>
+            <tr>
+                <th class="borderTop">연락처</th>
+                <td>{{ company.mg_phone }}</td>
+            </tr>
+        </table>
+
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.companyDetail=false">닫기</div>
+        </div>
+    </div>
+</modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- 플랜상세 모달 -->
 <modal v-if="modal.actionPlan" @close="modal.actionPlan = false" w="w-50" h="h-70">
@@ -1397,6 +1466,85 @@
     </div>
 </modal>
 
+
+
+
+
+
+
+
+
+
+<!-- 차트별 액션플랜목록 -->
+<modal v-if="modal.planList" @close="modal.planList = false" w="w-60" h="h-70">
+    <h3 slot="header">액션플랜</h3>
+    <div slot="body" class="ui form">
+
+        <table class="ui table celled">
+            <colgroup>
+                <col width="10%">
+            </colgroup>
+            <tr>
+                <th>차수선택</th>
+                <td class="center aligned" v-for="(planSession, psid)  in  lecture.sessions">
+                    <div class="ui test checkbox">
+                      <input type="checkbox" :id="'cps-'+planSession.ls_idx"  v-model="checkedPlanSessions" v-bind:value="planSession.ls_idx" >
+                      <label :for="'cps-'+planSession.ls_idx">{{ psid+1 }}차수</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+        <table class="ui single line table selectable celled cursorPointer cardbox" style="padding:0;">
+            <colgroup>
+                <col width="12%">
+                <col width="50%">
+                <col width="15%">
+                <!-- <col width="6%">
+                <col width="6%">
+                <col width="6%">
+                <col width="6%"> -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="center aligned">이름</th>
+                    <th>플랜</th>
+                    <th class="center aligned">KPI</th>
+                    <th class="center aligned">사전평가</th>
+                    <th class="center aligned" style="background:#9FC93C; color:#fff;">자가평가</th>
+                    <th class="center aligned" style="background:#3DB7CC; color:#fff;">팀원평가</th>
+                    <th class="center aligned">GAP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr v-for="(plan, pid)  in  plans" :key="plan.lap_idx"> -->
+                <tr v-for="(plan, pid)  in  filteredPlans" :key="plan.lap_idx">
+                    <td class="center aligned">{{ plan.stu_name }}</td>
+                    <td>{{ plan.lap_text }}</td>
+                    <td class="center aligned">{{ plan.cc2_name }}</td>
+                    <td class="center aligned">{{ plan.beforeScore==undefined ? 0 : plan.beforeScore.toFixed(1) }}</td>
+                    <td class="center aligned" style="background:#9FC93C; color:#fff;">{{ plan.selfScore==undefined ? 0 : plan.selfScore.toFixed(1) }}</td>
+                    <td class="center aligned" style="background:#3DB7CC; color:#fff;">{{ plan.othersScore==undefined ? 0 : plan.othersScore.toFixed(1) }}</td>
+                    <td class="center aligned">{{ (plan.othersScore - plan.selfScore).toFixed(1) }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+
+
+
+
+
+
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.planList=false">확인</div>
+        </div>
+    </div>
+</modal>
+
 <!-- ======================== Modal ============================ -->
 
 
@@ -1486,10 +1634,12 @@ export default {
         return {
             modal: {
                 aadd:false, // 테스트모달
+                companyDetail : false,
                 actionPlan : false, //액션플랜 상세보기
                 addActionPlan : false, //액션플랜 추가 상세보기
                 lectureComments : false, //강의활동내역 상세보기
                 personalGraph : false, // 액션플랜 개별 통계
+                planList : false, // 차트별 플랜목록
             },
             // msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
 
@@ -1497,7 +1647,8 @@ export default {
             // === 강의기본정보 === //
             lec_idx:null,
             lecture:{},
-            companies: [],
+            company: {}, // 선택된 기업정보
+            companies: [], // 강의에 참여하는 기업들
             departments: [],
             position: [],
             groups:[],
@@ -1528,18 +1679,19 @@ export default {
 
             // === 교육진행 === //
             accordion : -1 , // 펼쳐보기 탭
-            comments: [], // 선택된 모듈의 내용들
+            comments : [], // 선택된 모듈의 내용들
             groupCommentTab : -1,
+            classTab2 : 0, // 집합교육 탭
             // === 교육진행 === //
 
 
 
 
             // === 액션플랜 === //
-            selectedStudent:-1, // 선택된 수강생
+            selectedStudent : -1, // 선택된 수강생
             plans : [], // 선택된 수강생의 플랜들
             plan : {}, // 선택된 수강생의 상세플랜
-            thisCategory:'all',
+            thisCategory : 'all',
             reportMenus : [ // 리포트용 메뉴 - 탭관리
                 { id: 'all', name: '전체' , component: 'ReportAll' },
                 { id: 'group', name: '조별' , component: 'ReportGroup', },
@@ -1550,12 +1702,14 @@ export default {
                 { id: 'joinYear', name: '입사연차별-개발' , component: 'ReportJoinYear' },
                 { id: 'personal', name: '개인별' , component: 'ReportPersonal' },
             ],
-            personalScore:{
+            personalScore : {
                 all : [],
                 score : []
             }, // 개별점수  - 모달에 표시
-            personalProfile:[], // 개별점수  - 모달에 표시
-            actionplanKpi:-1,
+            personalProfile : [], // 개별점수  - 모달에 표시
+            actionplanKpi : -1,
+            checkedSessions : [], // 선택된 차시
+            checkedPlanSessions : [], // 선택된 차시 - 차시별액션플랜 모달에 있음
           // === 액션플랜 === //
 
         }
@@ -1579,16 +1733,31 @@ export default {
 
 
 
+    // ===== Computed ===== //
+    computed:{
+        filteredPlans(){
+            if (!this.checkedPlanSessions.length){
+               return []
+            }
+            return this.plans.filter(p => this.checkedPlanSessions.includes(p.ls_idx))
+        }
+    },
+
+
+
+
 
 
     // ===== Created ===== //
     created(){
         var id = this.$ro.history.current.params.id
+
         // this.$set(this, 'lec_idx', id)
         this.$set(this, 'lec_idx', id)  //  테스트 컨텐츠
 
         this.getLecture(id) // 강의정보
         this.getComments('feedback', id) // 활동내역
+
 
         // $On
         this.$EventBus.$on('addTeam', this.addTeam)
@@ -1607,11 +1776,33 @@ export default {
                     this.$set(this.personalScore, 'allAvg', data.allAvg) // 전체평균 점수표
                     this.$set(this.personalScore, 'score', data.score) // 점수표
                     this.$set(this.personalScore, 'comments', data.comments) // 피드데이터
-                    this.modal.personalGraph = true
+                    // this.modal.personalGraph = true
+                break;
+
+                case 'planList': // 플랜리스트
+                    this.plans =  data.plans
+                    // 초기 전체선택을 위한 데이터
+                    this.lecture.sessions.forEach((sess)=>{
+                        this.checkedPlanSessions.push(sess.ls_idx)
+                    })
                 break;
             }// switch
 
+            this.$set(this.modal, data.name, true) // 모달 ON
         }) // 통계 상세리포트 모달
+
+    },
+
+
+
+
+
+
+    // ===== Mounted ===== //
+    mounted(){
+        // this.getActionPlanFunc() // 액션플랜목록
+
+
     },
 
 
@@ -1653,10 +1844,27 @@ export default {
 
 
 
+
+
+
         // === 교육진행 세션 선택/변경 === //
         sessionTabChange2(jj){
             this.$set(this, 'sessionTab2', jj)
         },
+
+
+
+
+
+        // === 기업정보 상세 === //
+        companyDetailFunc(com_code){
+            var fid = this.companies.findIndex(com=>{
+                return com.com_code === com_code
+            })
+            this.$set(this, 'company', this.companies[fid])
+        },
+
+
 
 
 
@@ -1675,6 +1883,11 @@ export default {
                 this.$set(this, 'groups', resp.data.groups)
                 this.$set(this, 'students', resp.data.students)
                 this.$set(this, 'kpi', resp.data.kpi)
+
+                // 액션플랜 - 디폴트설정 - 모든차시선택
+                resp.data.lecture.sessions.forEach((sess)=>{
+                    this.checkedSessions.push(sess.ls_idx)
+                })
             }).catch(err=>{
                 console.log(err);
                 alert('Error')
@@ -1916,15 +2129,19 @@ export default {
 
 
         // 액션플랜 목록 조회
-        getActionPlan( stu_idx ){
-            this.$set(this, 'selectedStudent', stu_idx)
-            var url = '/api/plans/'+this.lec_idx+'/'+stu_idx
-            this.$http.get(url)
+        getActionPlanFunc(){
+            var url = '/api/plans/'+this.lec_idx
+            // alert(url)
+            // return
+            this.$http.get("/api/plans/18")
             .then(resp=>{
-                this.$set(this, 'plans', resp.data.plans)
+                console.log(resp.data.plans);
+                // this.$set(this, 'plans', resp.data.plans)
+                this.plans = resp.data.plans
             })
             .catch(err=>{
                 alert('error')
+                console.log(err);
             })
         },
 

@@ -5,6 +5,7 @@
     <div v-for="(g, gid)  in  gender" :key="gid">
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ g.text }}
+            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('gender', g.text)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
                 <a
@@ -113,18 +114,15 @@ export default {
         allAvgFunc(val){
                 var baseURL = '/api/plans/score/'+this.lec_idx+'/gender/'+val
 
-                this.$http.all([
-                    this.$http.get(baseURL),
-                    this.$http.get('/api/plans/comments/'+stu_idx)
-                ])
-                .then(this.$http.spread((resp, resp2)=>{
+                this.$http.get(baseURL)
+                .then(resp=>{
 
                     var rid = this.gender.findIndex(g=>{
                         return g.text == val
                     })
                     this.$set(this.gender[rid], 'score', resp.data.score)
                     this.$set(this.gender[rid], 'kpi', resp.data.kpiAvg)
-                }))
+                })
                 .catch((err)=>{
                     alert('Error - '+err)
                     console.log(err);
@@ -136,11 +134,39 @@ export default {
 
 
 
+
+
+        // ===== 해당 차트의 플랜목록 ===== //
+        getPlanListFunc(classification, value){
+            var url = '/api/plans/ap/'+this.lec_idx+'?classification='+classification+'&value='+value
+            this.$http.get(url)
+            .then(resp=>{
+                this.$EventBus.$emit('modal', {
+                    name : 'planList',
+                    plans : resp.data.plans
+                })
+            })
+            .catch(err=>{
+                alert('plans list error')
+            })
+
+        },
+
+
+
+
+
+
+
+
         // === 개별데이터 === //
         personalGraph(stu_idx){
 
-            this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx)
-            .then(resp=>{
+            this.$http.all([
+                this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx),
+                this.$http.get('/api/plans/comments/'+stu_idx) // 피드데이터
+            ])
+            .then(this.$http.spread((resp,resp2)=>{
                 //누적데이터
                 var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
                 var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
@@ -155,7 +181,7 @@ export default {
                     allAvg,
                     comments
                 })
-            })
+            }))
             .catch(err=>{
                 console.log(err);
                 alert('Error - personal plans')

@@ -13,8 +13,15 @@
 
 
 
+        <div class="">
+            <textarea v-model="replaceText" rows="8" cols="80"></textarea>
+            <button type="button" class="ui button" @click.prevent="replaceTextFunc()">R</button>
+            <hr>
+            <p v-html="replaceText"></p>
+        </div>
 
-        <h3>Graph</h3>
+
+        <!-- <h3>Graph</h3> -->
 
 
         <!-- <div class="ui grid">
@@ -245,6 +252,8 @@ export default {
             },
             time:'',
 
+            replaceText:'', // 줄바꿈저장 테스트
+
 
             chartData: {}, // 차트데이터
 
@@ -370,6 +379,18 @@ export default {
         var dsa = JSON.parse(asd)
         console.log(dsa);
 
+
+
+        // 날짜 일수 차이구하기
+        var sdt = new Date('2018-09-15');
+        var edt = new Date('2018-09-15');
+        // console.log(sdt.getTime());
+        // console.log(edt.getTime());
+        var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+        // var d = diffDate('Tue Jan 16 2018 09:00:00 GMT+0900 (KST)', 'Wed Jan 17 2018 09:00:00 GMT+0900 (KST)')
+
+        alert(sdt < edt)
+
       },
 
 
@@ -393,6 +414,12 @@ export default {
 
 
     methods: {
+
+
+        replaceTextFunc(){
+            this.$set(this, 'replaceText', this.replaceText.replace(/\n/g, "<br>"))
+            // alert(this.replaceText)
+        },
 
 
 

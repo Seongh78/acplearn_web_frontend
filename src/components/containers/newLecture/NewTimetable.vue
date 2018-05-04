@@ -467,7 +467,7 @@
 
     <!-- ======================== 모달영역 ============================ -->
 
-    <!-- 세션추가 -->
+    <!-- 세션(회차)추가 -->
     <modal v-if="modal.addSession" @close="modal.addSession = false" w="w-50">
         <h3 slot="header">
             <i class="calendar alternate outline icon"></i> 차시 등록
@@ -478,29 +478,29 @@
             <div class="ui form">
                 <div class="field">
                     <label>회차제목</label>
-                    <input placeholder="" type="text" v-model="temp.session.ls_title">
+                    <input placeholder="" type="text" v-model="temp.session.ls_title"  placeholder="회차의 제목을 입력해 주세요">
                 </div>
 
                 <div class="field">
                     <label>강의장소</label>
-                    <input placeholder="" type="text" v-model="temp.session.ls_location">
+                    <input placeholder="" type="text" v-model="temp.session.ls_location" placeholder="강의장소를 입력해 주세요">
                 </div>
 
                 <div class="three fields">
                     <div class="field">
                         <label>시작일</label>
-                        <date-picker v-model="temp.session.ls_startDate" format="yyyy-MM-dd" />
+                        <date-picker v-model="temp.session.ls_startDate" format="yyyy-MM-dd" placeholder="0000-00-00" />
                     </div>
                     <div class="field">
                         <label>종료일</label>
-                        <date-picker v-model="temp.session.ls_endDate" format="yyyy-MM-dd" />
+                        <date-picker v-model="temp.session.ls_endDate" format="yyyy-MM-dd" placeholder="0000-00-00" />
                     </div>
                 </div>
 
                 <div class="three fields">
                     <div class="field">
                         <label>액플런 시작일</label>
-                        <date-picker v-model="temp.session.ls_aplDate" format="yyyy-MM-dd" />
+                        <date-picker v-model="temp.session.ls_aplDate" format="yyyy-MM-dd" placeholder="0000-00-00" />
                     </div>
                 </div>
 
@@ -518,7 +518,7 @@
             <div class="ui button blue" @click="addSessionFunc">등록</div>
         </div>
     </modal>
-    <!-- 세션추가 -->
+    <!-- 세션(회차)추가 -->
 
 
 
@@ -742,14 +742,21 @@ export default {
             tempModule : {},
             temp : { // 인풋 모델
                 session : {
-                    ls_title : '대인관계능력 실습',
-                    ls_location : '서울특별시 강남구 테헤란로4길 27 (역삼동) 금성빌딩 5층',
-                    ls_startDate : '2018-01-23',
-                    ls_endDate : '2018-02-23',
-                    ls_aplDate : '2018-02-03',
-                    // timetables: [],
+                    ls_title : '',
+                    ls_location : '',
+                    ls_startDate : '',
+                    ls_endDate : '',
+                    ls_aplDate : '',
                     sessionClass: []
                 },
+                // session : { // 테스트용
+                //     ls_title : '대인관계능력 실습',
+                //     ls_location : '서울특별시 강남구 테헤란로4길 27 (역삼동) 금성빌딩 5층',
+                //     ls_startDate : '2018-01-23',
+                //     ls_endDate : '2018-02-23',
+                //     ls_aplDate : '2018-02-03',
+                //     sessionClass: []
+                // },
 
                 sessionClass : {
                     lsc_title : '',
@@ -903,17 +910,24 @@ export default {
 
         // ===== 회차정보 추가 ===== //
         addSessionFunc(){
+            // 시작/종료일 설정확인
+            if ( this.lecture.lec_startDate===undefined || this.lecture.lec_endDate===undefined ){
+                alert('강의 시작일과 종료일을 설정해주세요')
+                this.$set(this.modal , 'addSession', false) // 모달 OFF
+                return
+            }
+
             this.sessions.push(this.temp.session) // 모델로 푸시
             this.$set(this.modal , 'addSession', false) // 모달 OFF
             this.$set(this , 'thisTab', -1)
             // this.$set(this , 'thisTab', this.sessions.length-1)
             // 초기화
             this.$set(this.temp, 'session' , {
-                ls_title : '대인관계능력 실습',
-                ls_location : '서울특별시 강남구 테헤란로4길 27 (역삼동) 금성빌딩 5층',
-                ls_startDate : '2018-01-23',
-                ls_endDate : '2018-02-23',
-                ls_aplDate : '2018-02-03',
+                ls_title : '',
+                ls_location : '',
+                ls_startDate : '',
+                ls_endDate : '',
+                ls_aplDate : '',
                 timetables: [],
                 sessionClass: []
             })

@@ -5,6 +5,7 @@
     <div v-for="(dep, gid)  in  departments" :key="gid">
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ dep.stu_department }}
+            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('departments', dep.stu_department)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
                 <a
@@ -129,6 +130,28 @@ export default {
                     alert('Error - '+err)
                     console.log(err);
                 })
+        },
+
+
+
+
+
+
+
+        // ===== 해당 차트의 플랜목록 ===== //
+        getPlanListFunc(classification, value){
+            var url = '/api/plans/ap/'+this.lec_idx+'?classification='+classification+'&value='+value
+            this.$http.get(url)
+            .then(resp=>{
+                this.$EventBus.$emit('modal', {
+                    name : 'planList',
+                    plans : resp.data.plans
+                })
+            })
+            .catch(err=>{
+                alert('plans list error')
+            })
+
         },
 
 
