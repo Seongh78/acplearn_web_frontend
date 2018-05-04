@@ -2,7 +2,6 @@
 <div class="">
 
     <!-- 팀별 - 통계 -->
-
     <div v-for="(group, gid)  in  groups" :key="gid">
 
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
@@ -24,6 +23,7 @@
             <div class="eleven wide column">
                 <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
                     <slide-graph :chart="group.score" />
+                    <!-- <slide-graph :chart="group.score" /> -->
                 </div>
             </div>
 
@@ -99,79 +99,67 @@ export default {
     // ===== Data ===== //
     data(){ return {
         lec_idx : null,
-        modal : {
-            personalGraph : true
-        },
+
+
         groups:[],
         chartData:[],
 
-
-options: {
-    chart: {
-        polar: true,
-        type: 'line'
-    },
-
-    title: {
-        text: null,
-        // x: -80
-    },
-
-    pane: {
-        size: '75%'
-    },
-
-    xAxis: {
-        categories: ['Sales', 'Marketing', 'Development', 'Customer', 'Admin'],
-        tickmarkPlacement: 'on',
-        lineWidth: 0
-    },
-
-    yAxis: {
-        gridLineInterpolation: 'polygon',
-        lineWidth: 0,
-        min: 0
-    },
-
-    tooltip: {
-        shared: true,
-        pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
-    },
-
-    legend: {
-        align: 'right',
-        // layout: 'vertical'
-    },
-
-    series: [
-        {
-            name: '자가',
-            data: [5, 2, 3, 4, 5],
-            pointPlacement: 'on',
-            color:'#7cb5ec'
-        },
-        {
-            name: '팀원',
-            data: [2, 3, 4, 4, 2],
-            pointPlacement: 'on',
-            color:'#90ed7d'
-        },
-        {
-            name: 'GAP',
-            data: [5, 3, 4, 3, 2],
-            pointPlacement: 'on',
-            color:'#FF8224'
-        }
-    ]
-}
 
 
     }},
 
 
 
+
+
+
+    // ===== Computed ===== //
+    computed:{
+        // 차시별 데이터
+        filteredScore(){
+            if (this.checkedSessions.length<1) {
+                return []
+            }
+
+            // 정렬
+            this.checkedSessions.sort(function(a, b) { // 오름차순
+                return a.ls_seq < b.ls_seq ? -1 : a.ls_seq > b.ls_seq ? 1 : 0;
+            });
+            // this.checkedSessions.sort()
+
+            // 날짜비교
+            var sd = new Date(this.checkedSessions[0].ls_startDate)
+            var ed = new Date(this.checkedSessions[this.checkedSessions.length-1].ls_endDate)
+            var dd
+
+            // 필터링
+            var arr = this.chartData.filter(cd => {
+                dd = new Date(cd.originalDate)
+                return dd >= sd && dd <=ed
+            })
+            return arr
+        }
+    },
+
+
+
+
+
+
+
+    // ===== Watch ===== //
+    // watch()
+
+
+
+
+
+
+
+
     // ===== Created ===== //
     created(){
+
         // 강의아이디
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
@@ -197,7 +185,11 @@ options: {
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(val){
+        allAvgFunc(val, session){
+            /*
+            val : 찾을값
+            session : 차수
+            */
             // base URL - 그룹별
             var baseURL = '/api/plans/score/'+this.lec_idx+'/group/'+val
 

@@ -8,11 +8,14 @@
     </h4>
 
 
-
     <div class="ui attached  grid" style="padding:0;">
         <div class="eleven wide column">
             <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                <slide-graph :chart="chartData"></slide-graph>
+                <slide-graph :chart="filteredScore"></slide-graph>
+
+                <!-- <ul>
+                    <li v-for="cs  in  filteredScore" >{{ cs }}</li>
+                </ul> -->
             </div>
         </div>
 
@@ -85,6 +88,7 @@ export default {
     // ===== Props ===== //
     props:[
         'sessionData',
+        'kpi', // 선택된 KPI
         'checkedSessions' // 선택된 회차목록 - 배열
     ],
 
@@ -105,25 +109,61 @@ export default {
 
 
 
+
+    // ===== Computed ===== //
+    computed:{
+        // 차시별 데이터
+        filteredScore() {
+                if (this.checkedSessions.length<1) {
+                    return []
+                }
+
+                // 정렬
+                this.checkedSessions.sort(function(a, b) { // 오름차순
+                    return a.ls_seq < b.ls_seq ? -1 : a.ls_seq > b.ls_seq ? 1 : 0;
+                });
+                // this.checkedSessions.sort()
+
+                // 날짜비교
+                var sd = new Date(this.checkedSessions[0].ls_startDate)
+                var ed = new Date(this.checkedSessions[this.checkedSessions.length-1].ls_endDate)
+                var dd
+
+                // 필터링
+                var arr = this.chartData.filter(cd => {
+                    dd = new Date(cd.originalDate)
+                    return dd >= sd && dd <=ed
+                })
+                return arr
+        }
+    },
+
+
+
+
+
+
     // ===== Created ===== //
     created(){
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
         this.$set(this, 'sess', this.sessionData)
         this.allAvgFunc()
+
     },
 
 
 
     // ===== Updated ===== //
     updated(){
-        console.log(this.checkedSessions);
+        // console.log(this.checkedSessions);
     },
 
 
 
     // ===== Methods ===== //
     methods:{
+
 
 
 

@@ -28,7 +28,7 @@ export default {
         // 크기를 수동으로 입력했을경우
         if (this.size) {
             this.$set(this.options.pane, 'size', this.size)
-            console.log('this.options.pane.size : ',this.options.pane.size);
+            // console.log('this.options.pane.size : ',this.options.pane.size);
         }
     },
 
@@ -146,7 +146,7 @@ export default {
             // for(var ii  in  tempSeries){
             //     console.log('sid : ', ii);
             // }
-            console.log(this.tempSeries);
+            // console.log(this.tempSeries);
             this.$set(this.options, 'series', tempSeries)
             this.$set(this.options.xAxis, 'categories', tempCategories)
         }// chartMaker

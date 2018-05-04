@@ -53,8 +53,8 @@
             <tr>
                 <td>강의기간</td>
                 <td>{{ lecture.lec_startDate }} ~ {{ lecture.lec_endDate }}</td>
-                <td>시간</td>
-                <td>매일 13:00~17:00</td>
+                <td>강의코드</td>
+                <td>{{ lecture.lec_serialNo }}</td>
             </tr>
             <tr>
                 <td>참여기업</td>
@@ -647,11 +647,30 @@
                                                     <tr v-bind:style="{'display':(module.lm_idx==accordion?'':'none')}">
                                                         <td colspan="6" style="padding:0 27px 20px 27px; border-top:none;">
                                                             <div class="ui divider" style="margin-top:0;"></div>
-
                                                             <!-- 로딩이미지 -->
                                                             <loading v-if="comments.length<1" />
                                                             <!-- 강의모듈이 토론/미션일경우 그룹별 정보조회 가능 -->
-                                                            <div class="" v-if="comments.length>0 && module.lm_type !== '강의'">
+                                                            <div class="ui feed" v-else>
+                                                                <div class="event" v-for="(comment, cmid)  in  comments">
+                                                                    <div class="label">
+                                                                      <img src="https://cdn2.iconfinder.com/data/icons/scenarium-vol-4/128/019_avatar_woman_girl_female_account_profile_user-128.png">
+                                                                    </div>
+                                                                    <div class="content">
+                                                                        <div class="summary">
+                                                                            <a class="user">
+                                                                                {{ comment.stu_name }}
+                                                                                <a class="ui green circular label mini" v-if="comment.lc_flag=='강사'">강사님의 응원글</a>
+                                                                            </a><div class="date">{{ comment.lc_date }}</div>
+                                                                            <br>
+                                                                            {{ comment.lc_text }}
+                                                                        </div>
+                                                                        <div class="extra" v-if="comment.lc_img">
+                                                                            <a><img :src="comment.lc_img" width="270"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                  </div>
+                                                            </div>
+                                                            <!-- <div class="" v-if="comments.length>0 && module.lm_type !== '강의'">
                                                                 <div id="context2">
                                                                     <div class="ui secondary menu">
                                                                         <a class="item" v-bind:class="[groupCommentTab==-1?'active':'']" @click.prevent="groupCommentTab = -1">전체</a>
@@ -660,7 +679,10 @@
                                                                         </a>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
+                                                            <br>
+
+                                                            <button type="button" class="ui button fluid mini" @click="modal.feedbackInput = true, lectureComment_temp.lm_idx=module.lm_idx">피드백 임의입력 - 테스트기능</button>
                                                             <!-- <comment class="viewLoadAnimationTop" v-bind:contents="comments" v-bind:group-filter="groupCommentTab"  /> -->
                                                         </td>
                                                     </tr>
@@ -896,7 +918,17 @@
                         <span class="center aligned ui form">
                             <div class="inline field">
                                 <div class="ui checkbox ">
-                                    <input type="checkbox" tabindex="0"  v-model="checkedSessions" :value="sess.ls_idx" :id="'cs-'+sess.ls_idx">
+                                    <input
+                                        type="checkbox"
+                                        tabindex="0"
+                                        v-model="checkedSessions"
+                                        :value="{
+                                            ls_idx : sess.ls_idx,
+                                            ls_startDate : sess.ls_startDate,
+                                            ls_endDate : sess.ls_endDate,
+                                            ls_seq : sess.ls_seq
+                                            }"
+                                        :id="'cs-'+sess.ls_idx" />
                                     <label :for="'cs-'+sess.ls_idx">{{ii+1}}차</label>
                                 </div>
                             </div>
@@ -921,7 +953,7 @@
 
         <!-- === 리포트 === -->
         <div class="ui  tab  active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
-            {{ checkedSessions }}
+
             <!-- 리포트 컴포넌트 동적 바인딩 -->
             <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions"></component>
             <!-- 리포트 컴포넌트 동적 바인딩 -->
@@ -1545,6 +1577,73 @@
     </div>
 </modal>
 
+
+
+
+
+
+
+
+
+<!-- 피드백 입력 모달 -->
+<modal v-if="modal.feedbackInput" @close="modal.feedbackInput = false" w="w-60" h="h-70">
+    <h3 slot="header">피드백 입력 - 임시기능</h3>
+    <div slot="body" class="ui form">
+
+
+        <table class="ui table celled">
+            <colgroup>
+                <col width="15%">
+            </colgroup>
+            <tr>
+                <th class="borderTop">아이디</th>
+                <td>{{ lectureComment_temp.lm_idx }}</td>
+            </tr>
+            <tr>
+                <th class="borderTop">내용</th>
+                <td class="ui input fluid" >
+                    <input type="text" placeholder="Text..." v-model="lectureComment_temp.lc_text">
+                </td>
+            </tr>
+            <tr>
+                <th class="borderTop">이미지</th>
+                <td class="ui input fluid">
+                    <input type="text" placeholder="Image address..." v-model="lectureComment_temp.lc_img">
+                </td>
+            </tr>
+            <tr>
+                <th class="borderTop">작성자</th>
+                <td class="ui input fluid">
+                    <select class="" name="" v-model="lectureComment_temp.stu_idx">
+                        <option v-for="std in students" :value="std.stu_idx">{{ std.stu_name }}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="borderTop">플래그</th>
+                <td class="ui input fluid">
+                    <select class="" name="" v-model="lectureComment_temp.lc_flag">
+                        <option value="학생">학생</option>
+                        <option value="강사">강사</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <button type="button" class="ui button" @click.prevent="feedbackInputFunc">등록</button>
+
+
+
+        <br>
+
+
+    </div>
+    <div slot="footer">
+        <div class="ui two bottom attached buttons">
+            <div class="ui button" @click.prevent="modal.feedbackInput=false">확인</div>
+        </div>
+    </div>
+</modal>
+
 <!-- ======================== Modal ============================ -->
 
 
@@ -1574,6 +1673,7 @@ import {
     PolarChart,
 } from '../../components'
 
+
 // 리포트 뷰
 import {
     ReportAll,
@@ -1588,7 +1688,7 @@ import {
 
 
 import LectureModule from './LectureModule'
-
+import LoadingCycle from '../../components/LoadingCycle'
 
 
 // Highcharts - 그래프
@@ -1625,6 +1725,8 @@ export default {
 
         SlideGraph,
         PolarChart,
+
+        LoadingCycle
     },
 
 
@@ -1640,6 +1742,7 @@ export default {
                 lectureComments : false, //강의활동내역 상세보기
                 personalGraph : false, // 액션플랜 개별 통계
                 planList : false, // 차트별 플랜목록
+                feedbackInput : false, // 피드백 입력테스트
             },
             // msg: '감성안전을 위한 우리조직 안전리더십 개발 - TEST',
 
@@ -1663,7 +1766,7 @@ export default {
             groupTab:'' , // 선택한 그룹아이디
             chooseTeam:{}, // 선택한 그룹 정보
             companyTab:0,
-            tab:5, // 현재 활성화 탭
+            tab:0, // 현재 활성화 탭
             attendanceCount : 0, // 출석 카운트
             avgAttendancePercent : 0, // 평균출석률
 
@@ -1682,6 +1785,15 @@ export default {
             comments : [], // 선택된 모듈의 내용들
             groupCommentTab : -1,
             classTab2 : 0, // 집합교육 탭
+
+            // 임시기능 데이터
+            selectModule:-1,
+            lectureComment_temp: {
+                lc_text: '',
+                lc_flag: '강사',
+                lm_idx: '',
+                stu_idx: ''
+            },
             // === 교육진행 === //
 
 
@@ -1886,7 +1998,13 @@ export default {
 
                 // 액션플랜 - 디폴트설정 - 모든차시선택
                 resp.data.lecture.sessions.forEach((sess)=>{
-                    this.checkedSessions.push(sess.ls_idx)
+                    console.log(sess);
+                    this.checkedSessions.push({
+                        ls_idx : sess.ls_idx,
+                        ls_startDate : sess.ls_startDate,
+                        ls_endDate : sess.ls_endDate,
+                        ls_seq : sess.ls_seq
+                    })
                 })
             }).catch(err=>{
                 console.log(err);
@@ -2074,6 +2192,20 @@ export default {
 
 
 
+        // === 코멘트 등록 테스트 === //
+        feedbackInputFunc(){
+            // alert(JSON.stringify(this.lectureComment_temp))
+            this.$http.post('/api/comments/comment', { cmt: this.lectureComment_temp})
+            .then(resp=>{
+                // this.modal.feedbackInput = false
+                alert('등록!')
+            })
+            .catch((err) => {
+                alert(err)
+                console.log(err);
+            })
+        },
+
         // ========== 교육진행 / 코멘트 / 활동내용 ========== //
 
 
@@ -2216,7 +2348,7 @@ export default {
 
 
         kpiChange(){
-            alert(this.actionplanKpi)
+            // alert(this.actionplanKpi)
         },
 
 
