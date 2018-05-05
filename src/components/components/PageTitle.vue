@@ -2,7 +2,7 @@
     <div class="container ">
     <div class="sloganWrap">
         <h1>{{ mainTitle }}</h1>
-        <p>{{ subTitle ? subTitle : 'Manage your account settings and set e-mail preferences.' }}</p>
+        <p>{{ subTitle ? subTitle : '' }}</p>
         <slot></slot>
     </div>
     </div>

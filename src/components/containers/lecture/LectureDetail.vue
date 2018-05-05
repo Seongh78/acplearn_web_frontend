@@ -72,7 +72,7 @@
                 <td>KPI</td>
                 <!-- <td colspan="3" class="ui tag labels"> -->
                 <td colspan="3">
-                        <div class="ui basic button tiny" v-for="k  in  kpi" :title="k.lk_idx">{{ k.cc2_name }} ({{k.lk_idx}})</div>
+                        <div class="ui basic button tiny" v-for="k  in  kpi" :title="k.lk_idx">{{ k.cc2_name }}</div>
                 </td>
             </tr>
         </tbody>

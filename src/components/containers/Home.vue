@@ -5,19 +5,36 @@
             <nav-bar bg="true"/>
             <br>
             <br>
-            <page-title mainTitle='"Acplearn"으로 프리미엄 강사가 되어보세요' subTitle="">
+            <page-title mainTitle="" subTitle="" style="height:480px; text-align:left !important;">
                 <br>
                 <br>
-                <div class="form">
+                <p style="text-align:left; font-family: 'Nanum Gothic', cursive; font-size:1.25em;">작은 습관부터 업무까지 <br>나만의 플랜을 설계하고 성취해 보세요</p>
+                <h1 style="font-size:2.95em; font-family: 'Nanum Gothic', cursive; text-align:left; margin-top:0px;">
+                    <small>행동변화 혁신 플랫폼</small> Acplearn <br>
+                    <a href="#serviceInro">
+                    <button type="button" class="ui  button large detailBtn" style="margin-top:25px;">서비스소개</button>
+                    </a>
+                </h1>
+                <!-- <h1 style="font-size:2.2em; font-family: 'Nanum Gothic', cursive; ">성공이란 오래된 습관의 경정체다 - 김승호 <생각의 비밀 중> -</h1> -->
+
+                <!-- <button type="button" class="ui  button large detailBtn" style="">Contact us</button> -->
+                <!-- <div class="form">
                     <input type="text" name="" value="" style="" class="sch" placeholder="지역, 분야, 강의명 등으로 검색해 보세요">
-                </div>
+                </div> -->
                 <br>
                 <br>
             </page-title>
         </top-layout>
 
+        <div class="" style="background:#3781bf; width:100%; padding:25px; text-align:center; color:#fff;">
+            <h3>
+                성공이란 오래된 습관의 경정체다 - 김승호 <생각의 비밀 중> - &nbsp;&nbsp;
+                <button type="button" class="ui button detailBtn" style="padding:12px 20px;">Contact us</button>
+            </h3>
+        </div>
+
         <div class="ui grid service ">
-            <div class="sixteen wide column centered" style="text-align:center;">
+            <div class="sixteen wide column centered" style="text-align:center;"  id="serviceInro">
                 <br>
                 <br>
                 <h2 class="ui icon header">
@@ -204,6 +221,18 @@ export default {
         background: #f4f4f4;
     }
 
+
+    .detailBtn{
+        color:#fff ;
+        border:1px solid #fff !important;
+        padding:17px 57px;
+        /*margin-top:30px;*/
+        background: none;
+    }
+    .detailBtn:hover{
+        color:#333;
+        background: #fff;
+    }
 
 
 
