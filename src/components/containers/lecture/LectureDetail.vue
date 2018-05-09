@@ -22,19 +22,32 @@
             </h2>
         </div>
         <div class="five wide column" style="text-align:right;">
+            <!-- 버튼그룹 -->
             <div class="ui basic buttons small">
-              <div class="ui button basic green " v-if="lecture.lec_flag=='임시저장'">
-                  <i class="icon check circle"></i>승인요청
-              </div>
-              <router-link tag="div" class="ui button" :to="{ path:'/new/summary', query:{flag:lec_idx} }">
-                  <i class="icon edit"></i>수정
-                  <!-- , query: {flag:'edit'} -->
-              </router-link>
-              <div class="ui button" @click.prevent="removeLecture">
-                  <i class="icon minus circle"></i>삭제
-              </div>
+                <!-- 임시저장 -->
+                <div class="ui button basic olive " v-if="lecture.lec_flag=='임시저장'">
+                    <i class="icon check circle"></i>승인요청
+                </div>
+                <!-- 진행중 -->
+                <div class="ui button basic red " v-if="lecture.lec_flag=='진행중'">
+                    <i class="icon check circle"></i>강의종료
+                </div>
+                <!-- 강의전 -->
+                <div class="ui button basic green " v-if="lecture.lec_flag=='강의전'" style="box-shadow:none;" @click.prevent="lectureStart()">
+                    <i class="icon check circle"></i> 강의시작
+                </div>
+                <!-- 수정 -->
+                <router-link tag="div" class="ui button" :to="{ path:'/new/summary', query:{flag:lec_idx} }">
+                    <i class="icon edit"></i>수정
+                    <!-- , query: {flag:'edit'} -->
+                </router-link>
+                <!-- 삭제 -->
+                <div class="ui button" @click.prevent="removeLecture">
+                    <i class="icon minus circle"></i>삭제
+                </div>
               <!-- <div class="ui button">Three</div> -->
             </div>
+            <!-- 버튼그룹 -->
         </div>
     </div>
 
@@ -51,9 +64,9 @@
         </colgroup>
         <tbody>
             <tr>
-                <td>강의기간</td>
+                <td>강좌기간</td>
                 <td>{{ lecture.lec_startDate }} ~ {{ lecture.lec_endDate }}</td>
-                <td>강의코드</td>
+                <td>강좌코드</td>
                 <td>{{ lecture.lec_serialNo }}</td>
             </tr>
             <tr>
@@ -163,13 +176,16 @@
             </colgroup>
             <tr>
                 <th>회차정보</th>
+                <!-- <td v-if="lecture.sessions==undefined">-</td> -->
+                <!-- <td v-else>총 {{ lecture.sessions.length }}회</td> -->
                 <td>총 {{ lecture.sessions.length }}회</td>
             </tr>
             <tr>
                 <th class="borderTop">액션러닝 시작일</th>
-                <td>총 {{ lecture.sessions.length }}회</td>
+                <td>총 -회</td>
                 <th class="borderTop">액션러닝 종료일</th>
-                <td>총 {{ lecture.sessions.length }}회</td>
+                <td>총 -회</td>
+                <!-- <td>총 {{ lecture.sessions.length }}회</td> -->
             </tr>
             <tr>
                 <th class="borderTop">교육일자</th>
@@ -396,9 +412,9 @@
                     <td class="center aligned">1차 - 총 145명</td>
                     <td>
                         <div class="ui basic olive progress" style="margin:0;">
-                            <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
+                            <!-- <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
                                 <div class="progress">{{ lecture.sessions[sid].apa=attendancePercent(sid) }}%</div>
-                            </div>
+                            </div> -->
                         </div>
                     </td>
                     <td
@@ -407,7 +423,7 @@
                         style="text-align:center;">
                         <div class="ui small statistic">
                           <div class="label">평균 출석률</div>
-                          <div class="value">  {{ attendancePercentAvg() }}%</div>
+                          <!-- <div class="value">  {{ attendancePercentAvg() }}%</div> -->
                         </div>
                     </td>
                 </tr>
@@ -461,10 +477,12 @@
                                 <th rowspan="2" class="center aligned">직급</th>
                                 <th rowspan="2" class="center aligned">이름</th>
                                 <th rowspan="2" class="center aligned">성별</th>
-                                <th class="center aligned" v-bind:colspan="lecture.sessions.length">강의출결 </th>
+                                <th class="center aligned" >강의출결 </th>
+                                <!-- <th class="center aligned" v-bind:colspan="lecture.sessions.length">강의출결 </th> -->
                             </tr>
                             <tr>
-                                <th class="center aligned" style="border-left:1px solid #e1e1e1;" v-for="(c1, c2)  in  (lecture.sessions)">{{c2+1}}차시</th>
+                                <th>a</th>
+                                <!-- <th class="center aligned" style="border-left:1px solid #e1e1e1;" v-for="(c1, c2)  in  (lecture.sessions)">{{c2+1}}차시</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -476,14 +494,15 @@
                                 <td class="center aligned">{{ std.stu_name }}</td>
                                 <td class="center aligned">-</td>
                                 <!-- 출석관리 -->
-                                <td class="center aligned ui form" v-for="(atd, atdId)  in  attendanceParser(std.stu_attendance)">
+                                <td>a</td>
+                                <!-- <td class="center aligned ui form" v-for="(atd, atdId)  in  attendanceParser(std.stu_attendance)">
                                     <div class="inline field">
                                         <div class="ui checkbox " @click.prevent="attendanceCheck(stdId, atdId)">
                                             <input type="checkbox" tabindex="0" class="hidden" :checked="atd">
                                             <label></label>
                                         </div>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                     </table>
@@ -633,10 +652,10 @@
                                                             {{ module.lm_title }}
                                                         </td>
                                                         <td class="center aligned " style="border-right:none; border-left:none;">
-                                                            12건
+                                                            {{ module.lm_textCount }}건
                                                         </td>
                                                         <td class="center aligned " style="border-right:none; border-left:none;">
-                                                            12건
+                                                            {{ module.lm_imgCount }}건
                                                         </td>
                                                         <td class="center aligned " style="border-right:none; border-left:none;">
                                                             <a v-if="module.lm_idx!=accordion">열기 <i class="icon angle down"></i></a>
@@ -881,7 +900,11 @@
 
 
 
-    <!-- ======================== #액션플랜 ============================ -->
+    <!-- ===========================
+
+    #액션플랜
+
+    ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==5?'active viewAnimate':'']" >
 
         <h3><i class="icon filter"></i> 분류</h3>
@@ -898,10 +921,11 @@
                     <h3>행동역량</h3>
                 </div>
                 <div class="two field">
-                    <select class="ui fluid search dropdown" style="padding: 15px 25px; width:180px;" @change="kpiChange" v-model="actionplanKpi">
-                        <option value="-1">&nbsp;전체&nbsp;&nbsp;&nbsp;</option>
+                    <select class="ui fluid search dropdown" style="padding: 15px 25px; width:180px;" @change="kpiChangeFunc" v-model="actionplanKpi">
+                        <option value="">&nbsp;전체&nbsp;&nbsp;&nbsp;</option>
                         <option v-for="(k, kid)  in  kpi" :value="k.lk_idx">&nbsp;{{k.cc2_name}}&nbsp;&nbsp;&nbsp;</option>
                     </select>
+                    {{ actionplanKpi }}
                 </div>
             </div>
             <br>
@@ -968,7 +992,9 @@
 
 
     </div>
-    <!-- ======================== #액션플랜 ============================ -->
+    <!-- ========================
+    #액션플랜
+    ============================ -->
 
 
 
@@ -1749,7 +1775,9 @@ export default {
 
             // === 강의기본정보 === //
             lec_idx:null,
-            lecture:{},
+            lecture:{
+                sessions:[]
+            },
             company: {}, // 선택된 기업정보
             companies: [], // 강의에 참여하는 기업들
             departments: [],
@@ -1766,7 +1794,7 @@ export default {
             groupTab:'' , // 선택한 그룹아이디
             chooseTeam:{}, // 선택한 그룹 정보
             companyTab:0,
-            tab:0, // 현재 활성화 탭
+            tab:5, // 현재 활성화 탭
             attendanceCount : 0, // 출석 카운트
             avgAttendancePercent : 0, // 평균출석률
 
@@ -1819,7 +1847,7 @@ export default {
                 score : []
             }, // 개별점수  - 모달에 표시
             personalProfile : [], // 개별점수  - 모달에 표시
-            actionplanKpi : -1,
+            actionplanKpi : '',
             checkedSessions : [], // 선택된 차시
             checkedPlanSessions : [], // 선택된 차시 - 차시별액션플랜 모달에 있음
           // === 액션플랜 === //
@@ -1851,7 +1879,12 @@ export default {
             if (!this.checkedPlanSessions.length){
                return []
             }
-            return this.plans.filter(p => this.checkedPlanSessions.includes(p.ls_idx))
+            // return this.plans.filter(p => this.checkedPlanSessions.includes(p.ls_idx))
+            var plans = this.plans.filter(p => this.checkedPlanSessions.includes(p.ls_idx))
+            if (this.actionplanKpi !== '') {
+                // kpi 찾기
+            }
+            return plans
         }
     },
 
@@ -1926,6 +1959,30 @@ export default {
 
     // ===== Methods ===== //
     methods: {
+
+        // === 강의시작 === //
+        lectureStart(){
+            if ( this.lecture.lec_flag !== '강의전' ) {
+                return
+            }
+
+            if ( !confirm('강좌를 진행하시겠습니까?') ) {
+                return
+            }
+
+            var baseURL = '/api/lectures/start'
+            this.$http.put(baseURL, { lec_idx: this.lecture.lec_idx })
+            .then(value => {
+                alert('강좌진행이 완료되었습니다')
+                this.$set(this.lecture, 'lec_flag', '진행중')
+            })
+            .catch(err => {
+                console.log(err);
+                alert('문제가 발생하여 강의를 시작하지 못했습니다.')
+            })
+        },
+
+
 
         // === 그룹선택 === //
         chooseGroup(id){
@@ -2347,7 +2404,7 @@ export default {
 
 
 
-        kpiChange(){
+        kpiChangeFunc(){
             // alert(this.actionplanKpi)
         },
 

@@ -6,7 +6,7 @@
         <!-- 타이틀 -->
         <div class="cardbox" style="margin:10px 0; padding:25px; ">
             <h2>
-                강의개요
+                강좌개요
                 <small>
                     <!-- <button id="loadTemplate" class="ui button small" @click="showModal = true">강의템플릿</button> -->
                     <button
@@ -222,6 +222,8 @@ export default {
                 lec_goal : '',
                 lec_effect : '',
                 lec_target: '',
+                lec_startDate: '',
+                lec_endDate: '',
             }, // 강의개요
             tempSummary:{}, // 개요 임시저장
             tempLectures:[], // 임시저장 강의 목록
@@ -311,7 +313,7 @@ export default {
             }
 
             // 불러오기
-            this.$http.get('/api/lectures/detail/'+id)
+            this.$http.get('/api/lectures/detail/'+id+'?type=edit')
             .then(resp=>{
                 console.log(resp.data.lecture);
                 var tempLec = resp.data.lecture
@@ -327,11 +329,16 @@ export default {
                 ( da[0].getMonth()+1 < 10 ? '0' : '' ) + (da[0].getMonth()+1) + '-' +
                 ( da[0].getDate() < 10 ? '0' : '' ) + da[0].getDate()
 
+
+
                 // 종료일자 만들기
                 tempLec.lec_endDate =
                 da[1].getFullYear() + '-' +
                 ( da[1].getMonth()+1 < 10 ? '0' : '' ) + (da[1].getMonth()+1) + '-' +
                 ( da[1].getDate() < 10 ? '0' : '' ) + da[1].getDate()
+
+                var std = new Date(tempLec.lec_startDate)
+                var etd = new Date(tempLec.lec_endDate)
 
                 // 메인모델로 푸시
                 this.$set(this, 'summary', {
@@ -343,7 +350,7 @@ export default {
                     lec_startDate     : tempLec.lec_startDate,
                     lec_endDate      : tempLec.lec_endDate
                 })
-                console.log(tempLec.sessions);
+
 
                 this.$set(this, 'lec_idx', id)
                 sessionStorage.setItem('lecture-idx', id)
@@ -352,10 +359,13 @@ export default {
                 // #강의 개요
                 sessionStorage.setItem('lecture-summary', JSON.stringify(this.summary))
 
+
+
                 // #강의 차시
                 if(tempLec.sessions.length>0){
                     sessionStorage.setItem('lecture-term', JSON.stringify({ sessionDetail:tempLec.sessions }))
                     sessionStorage.setItem('lecture-sessions', JSON.stringify(tempLec.sessions))
+                    console.log(tempLec.sessions);
                     sessionStorage.setItem('lecture-sessionCount', tempLec.sessions.length)
                 }
                 // 상세시간표

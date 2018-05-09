@@ -117,7 +117,7 @@ props
 
 
 
-        <div class="scsc" style="display:flex; width:100%;">
+        <div class="scsc " style="display:flex; width:100%;" >
 
             <!-- 월 또는 회차 반복 시 Props로 받아서 이 부분에서 반복 -->
             <div style="border-right:1px solid rgba(0,0,0,0.2);"  >
@@ -129,7 +129,7 @@ props
                 <div class="scale-in-hor-left" style="display:flex; width:100%;">
 
                     <!-- 일별 데이터 반복부분 -->
-                    <div class="scoreRepeat "  v-for="(sc, scid)  in  chart" :key="scid">
+                    <div class="scoreRepeat selectDay"  v-for="(sc, scid)  in  chart" :key="scid" :class="[sc.avgSelfScore==0 ? 'restDay' : '']">
                             <div class="">
                                 <div class="graphHeader">
                                     <p>{{ sc.lad_date }}</p>
@@ -448,6 +448,21 @@ export default {
                     padding:10px;
                     margin:0;
                 }
+
+
+    /* 휴식일 경우 */
+    .restDay{
+        opacity: .45;
+    }
+    /* 선택 일 */
+    .selectDay{
+        cursor: pointer;
+    }
+    .selectDay:hover{
+        background: #f3f3f3;
+        opacity: 0.8;
+    }
+
 
 
 

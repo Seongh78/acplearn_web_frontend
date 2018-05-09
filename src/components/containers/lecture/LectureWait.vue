@@ -44,7 +44,7 @@
 
 
 
-        <table class="ui celled padded table ">
+        <table class="ui celled padded table selectable">
             <colgroup>
                 <col width="8%">
                 <col >

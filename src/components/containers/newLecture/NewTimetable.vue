@@ -211,7 +211,9 @@
             <!-- 회차 시작일 -->
             <div class="three wide column field">
                 <label class="opacity5">액플런 시작일</label>
+                <!-- <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" /> -->
                 <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" />
+                {{ session.ls_aplDate }}
             </div>
         </div>
         <!-- ===== 회차 헤더 ===== -->
@@ -779,7 +781,9 @@ export default {
                     lm_startTime: '',
                     lm_endTime: ''
                 }
-            }
+            },
+
+
         }
     }, //data
 
@@ -818,10 +822,17 @@ export default {
 
         this.$set(this, 'lec_idx', id)
 
-        if (storageLecture!==null && storageLecture!==undefined)
+        console.log(sessionStorage.getItem('lecture-sessions'));
+
+
+        if (storageLecture!=null && storageLecture!=undefined){
             this.$set(this, 'lecture' , storageLecture)
-        if (storageSessions!==null && storageSessions!==undefined)
-            this.$set(this, 'sessions' , storageSessions)
+        }
+        if (storageSessions!=null && storageSessions!=undefined){
+            // this.$set(this, 'sessions' , storageSessions)
+            console.log(storageSessions);
+            this.sessions = storageSessions
+        }
     },
 
 
@@ -1049,7 +1060,7 @@ export default {
         // ===== 저장 ===== //
         save(url){
             // console.log("this.lec_idx : ", this.lecture);
-            console.log(this.sessions);
+            // console.log(JSON.stringify(this.sessions));
             // return
             this.$http.post('/api/lectures/create/sessions', {
                 sessions                : this.sessions,
@@ -1076,6 +1087,7 @@ export default {
                     }
                 }// if
 
+                sessionStorage.setItem('lecture-summary', JSON.stringify(this.lecture))
                 sessionStorage.setItem('lecture-sessions', JSON.stringify(this.sessions))
                 this.$router.push('/new/'+url)
             })

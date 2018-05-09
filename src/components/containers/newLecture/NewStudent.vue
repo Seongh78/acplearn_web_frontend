@@ -146,41 +146,45 @@
 
             <!-- 수강생 -->
             <table class="ui celled table">
+                <colgroup>
+                    <col width="18%">
+                    <col width="12%">
+                    <col width="8%">
+                    <col width="12%">
+                    <col width="7%">
+                    <col width="15%">
+                    <col width="13%">
+                    <col width="15%">
+                </colgroup>
                 <thead>
                     <tr>
-                        <th>소속</th>
-                        <th>부서</th>
+                        <th class="center aligned">소속</th>
+                        <th class="center aligned">부서</th>
                         <th class="center aligned">직급</th>
                         <th class="center aligned">이름</th>
+                        <th class="center aligned">성별</th>
                         <th class="center aligned">연락처</th>
-                        <th class="center aligned">입사날짜</th>
-                        <!-- <th class="center aligned">성별</th> -->
+                        <th class="center aligned">입사일</th>
+                        <th class="center aligned">수정</th>
                     </tr>
                 </thead>
                 <!-- 전체 수강생 목록 -->
-                <tbody v-if="thisTabAddr<0 ">
-                    <tr v-for="std in tempStudents">
-                        <td>{{ std.stu_company }}</td>
-                        <td>{{ std.stu_department }}</td>
+                <tbody v-if="tempStudents.length>0">
+                    <tr v-for="std in tempStudents" v-if="std.com_code==thisTab || thisTabAddr<0">
+                        <td class="center aligned">{{ std.com_name }}</td>
+                        <td class="center aligned">{{ std.stu_department }}</td>
                         <td class="center aligned">{{ std.stu_position }}</td>
                         <td class="center aligned">{{ std.stu_name }}</td>
+                        <td class="center aligned">{{ std.stu_gender }}</td>
                         <td class="center aligned">{{ std.stu_phone }}</td>
                         <td class="center aligned">{{ std.stu_joinYear }}</td>
-                        <!-- <td class="center aligned">{{ std.stu_gender }}</td> -->
+                        <td class="center aligned">
+                            <button type="button" class="ui button basic mini">수정</button>
+                            <button type="button" class="ui button red mini basic">삭제</button>
+                        </td>
                     </tr>
                 </tbody>
-                <!-- 선택된 기업 수강생 목록 -->
-                <tbody v-else>
-                    <tr v-for="std in tempStudents" v-if="std.com_code==thisTab">
-                        <td>{{ std.stu_company }}</td>
-                        <td>{{ std.stu_department }}</td>
-                        <td class="center aligned">{{ std.stu_position }}</td>
-                        <td class="center aligned">{{ std.stu_name }}</td>
-                        <td class="center aligned">{{ std.stu_phone }}</td>
-                        <td class="center aligned">{{ std.stu_joinYear }}</td>
-                        <!-- <td class="center aligned">{{ std.stu_gender }}</td> -->
-                    </tr>
-                </tbody>
+
             </table>
 
             <br>
@@ -356,6 +360,7 @@
                     <input type="text" name="first-name" placeholder="First Name" v-bind:value="getDefaultCompany(thisTab)" disabled>
                 </div>
 
+
                 <div class="field">
                     <label>부서/직급</label>
                     <div class="two fields">
@@ -368,14 +373,35 @@
                     </div>
                 </div>
 
+
                 <div class="field">
                     <label>이름</label>
                     <input type="text" name="last-name" v-model="tempStudent.stu_name" placeholder="이름을 입력해 주세요">
                 </div>
 
+
                 <div class="field">
                     <label>연락처</label>
-                    <input type="text" name="last-name" v-model="tempStudent.stu_phone" placeholder=" '-'(하이픈) 없이 입력해 주세요 ">
+                    <input type="text" name="last-name" v-model="tempStudent.stu_phone" placeholder="이름을 입력해 주세요">
+                </div>
+
+
+                <div class="field">
+                    <label>성별</label>
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="fruit" tabindex="0" class="hidden" v-model="tempStudent.stu_gender">
+                                <label>남자</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="fruit" tabindex="0" class="hidden" v-model="tempStudent.stu_gender">
+                                <label>여자</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -409,19 +435,15 @@
                     </div>
                 </div> -->
 
-
-
                 <!-- <button class="ui button" type="submit">Submit</button> -->
             </form>
-
-
 
 
         </div>
         <div slot="footer">
             <div class="ui two bottom attached buttons">
                 <div class="ui button" @click="modal.newStudent=false">닫기</div>
-                <div class="ui button blue" @click="addStudent">등록</div>
+                <div class="ui button blue" @click="addStudentFunc">등록</div>
             </div>
         </div>
     </modal>
@@ -439,30 +461,30 @@
                 <div class="field">
                     <label>기업명</label>
                     <!-- {{ companyUpdate.com_name }} -->
-                    <input type="text" name="first-name" placeholder="First Name" v-bind:value="companyUpdate.com_name" disabled>
+                    <input type="text" name="first-name" placeholder="First Name" v-bind:value="companyUpdate.com_name" >
                 </div>
 
                 <div class="field">
                     <label>사업자번호</label>
                     <!-- {{ companyUpdate.com_code }} -->
-                    <input type="text" name="first-name" placeholder="First Name" v-bind:value="companyUpdate.com_code" disabled>
+                    <input type="text" name="first-name" placeholder="First Name" v-bind:value="companyUpdate.com_code" >
                 </div>
 
                 <div class="field">
                     <label>업종</label>
                     <!-- {{ companyUpdate.com_category }} -->
-                    <input type="text" name="last-name" v-bind:value="companyUpdate.com_category" placeholder="이름을 입력해 주세요" disabled>
+                    <input type="text" name="last-name" v-bind:value="companyUpdate.com_category" placeholder="이름을 입력해 주세요" >
                 </div>
 
                 <div class="field">
                     <label>주소</label>
                     <!-- {{ companyUpdate.com_location }} -->
-                    <input type="text" name="last-name" v-bind:value="companyUpdate.com_location" placeholder=" '-'(하이픈) 없이 입력해 주세요 " disabled>
+                    <input type="text" name="last-name" v-bind:value="companyUpdate.com_location" placeholder=" '-'(하이픈) 없이 입력해 주세요 " >
                 </div>
 
                 <div class="field">
                     <label>담당자</label>
-                    <input type="text" name="last-name" v-model="companyUpdate.com_managerName">
+                    <input type="text" name="last-name" v-model="companyUpdate.com_mgName" placeholder="이름을 입력해 주세요">
                 </div>
 
                 <div class="field">
@@ -542,11 +564,11 @@ export default {
             newCompany: { // 신규업체
                 com_code : '',
                 com_name : '',
-                com_location : '부산광역시 남구 수영로 221 메디타워',
-                com_managerName : '박길동',
-                com_managerPosition : '팀장',
-                com_managerPhone: '010-2322-4004',
-                com_category : '교육'
+                com_location : '',
+                com_managerName : '',
+                com_managerPosition : '',
+                com_managerPhone: '',
+                com_category : ''
             },
             thisCompany:'', //업체선택
             errors: []
@@ -599,10 +621,15 @@ export default {
     methods: {
 
         // === 탭메뉴 선택 === //
-        selectTab(s,ii) {
-            this.thisTab=s;
+        selectTab(com_code,ii) {
+            /*
+
+            */
+            this.thisTab=com_code;
             this.thisTabAddr=ii;
         },
+
+
 
         // === 탭메뉴 선택 === //
         selectTab2(s) {
@@ -824,7 +851,7 @@ export default {
                     if (this.companies[this.thisTabAddr].com_code == this.thisTab) {
                         // 배열이 아닐 때 배열선언
                         if (this.companies[this.thisTabAddr].students === undefined) {
-                            this.companies[this.thisTabAddr].students = new Array()
+                            this.companies[this.thisTabAddr].students = []
                         }
 
                         stds = text
@@ -967,7 +994,7 @@ export default {
 
 
         // === 단일 수강생 추가 === //
-        addStudent(){
+        addStudentFunc(){
             var std = this.tempStudent // 입력데이터
             if ( // 예외처리
                 std.stu_department === '' ||
@@ -977,14 +1004,37 @@ export default {
                 alert('모든 항목을 채워주세요')
                 return
             }
+
+            // 날짜형식 맞추기
+            var dateFormat = new Date(std.stu_joinYear)
+            var dd =[
+                String(dateFormat.getFullYear()),
+                (dateFormat.getMonth()+1 < 10) ? '0'+String(dateFormat.getMonth()+1) : String(dateFormat.getMonth()+1),
+                (dateFormat.getDate() < 10) ? '0'+String(dateFormat.getDate()) : String(dateFormat.getDate())
+            ]
+            std.stu_joinYear = dd[0]+'-'+dd[1]+'-'+dd[2]
+
             // 기업아이디 찾기
-            var id = this.companies.findIndex((com)=>{
-                return com.com_code === this.thisTab
+            var thisTab = this.thisTab
+            var rid = this.companies.findIndex((com)=>{
+                return com.com_code === thisTab
             })
+
             // 기업정보 추가
-            std.com_code = this.companies[id].com_code
-            std.com_name = this.companies[id].com_name
+            std.com_code = this.companies[rid].com_code
+            std.com_name = this.companies[rid].com_name
+
+
             this.tempStudents.push(std) // 모델로 푸시
+            this.$set(this.modal, 'newStudent', false)
+            this.$set(this, 'tempStudent', { // 초기화
+                stu_department : '',
+                stu_position : '',
+                stu_name : '',
+                stu_phone : '',
+                stu_joinYear : '',
+                stu_gender : ''
+            })
         },
 
 

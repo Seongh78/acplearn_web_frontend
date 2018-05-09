@@ -110,31 +110,53 @@ export default {
 
 
 
+
+
+
+
+
+    // ===== Watch ===== //
+    watch: {
+        kpi(val){
+            this.allAvgFunc(val)
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
     // ===== Computed ===== //
     computed:{
         // 차시별 데이터
         filteredScore() {
-                if (this.checkedSessions.length<1) {
-                    return []
-                }
+            if (this.checkedSessions.length<1) {
+                return []
+            }
 
-                // 정렬
-                this.checkedSessions.sort(function(a, b) { // 오름차순
-                    return a.ls_seq < b.ls_seq ? -1 : a.ls_seq > b.ls_seq ? 1 : 0;
-                });
-                // this.checkedSessions.sort()
+            // 정렬
+            this.checkedSessions.sort(function(a, b) { // 오름차순
+                return a.ls_seq < b.ls_seq ? -1 : a.ls_seq > b.ls_seq ? 1 : 0;
+            });
+            // this.checkedSessions.sort()
 
-                // 날짜비교
-                var sd = new Date(this.checkedSessions[0].ls_startDate)
-                var ed = new Date(this.checkedSessions[this.checkedSessions.length-1].ls_endDate)
-                var dd
+            // 날짜비교
+            var sd = new Date(this.checkedSessions[0].ls_startDate)
+            var ed = new Date(this.checkedSessions[this.checkedSessions.length-1].ls_endDate)
+            var dd
 
-                // 필터링
-                var arr = this.chartData.filter(cd => {
-                    dd = new Date(cd.originalDate)
-                    return dd >= sd && dd <=ed
-                })
-                return arr
+            // 필터링
+            var arr = this.chartData.filter(cd => {
+                dd = new Date(cd.originalDate)
+                return dd >= sd && dd <=ed
+            })
+            return arr
         }
     },
 
@@ -148,7 +170,7 @@ export default {
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
         this.$set(this, 'sess', this.sessionData)
-        this.allAvgFunc()
+        this.allAvgFunc(null)
 
     },
 
@@ -168,12 +190,14 @@ export default {
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(){
-            // 강의아이디
-
+        allAvgFunc(kpi){
+            /*
+            kpi : 선택한 KPI - 기본은 null
+            */
 
             // base URL
             var baseURL = '/api/plans/score/'+this.lec_idx
+            baseURL+= (kpi===null) ? '' : '?kpi='+kpi
 
             this.$http.get(baseURL)
             .then(resp=>{

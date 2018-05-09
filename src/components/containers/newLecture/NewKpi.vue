@@ -16,31 +16,25 @@
     <div class="cardbox ui grid" style="margin:0; padding:25px;">
 
         <!-- 좌측 -->
-        <div class="nine wide column" style="height:600px; overflow:scroll; border:1px solid #f2f2f2;">
+        <div class="nine wide column" style="height:600px; overflow-y:scroll; border:1px solid #f2f2f2;">
 
             <div class="" v-for="(kpi, kpiIndex) in kpiGroup">
-                <h3>{{ kpi.cc1_name }}</h3>
+                <h4>{{ kpi.cc1_name }}</h4>
                 <div class="ui form" >
                     <div class="ui checkbox" v-for="(item, listIndex) in kpi.list">
-                      <input type="checkbox" v-bind:id="item.cc2_idx" v-bind:name="item.cc2_idx" v-bind:value="{cc2_idx: item.cc2_idx, cc2_name: item.cc2_name}" v-model="checkedKPI">
-                      <label :for="item.cc2_idx">{{ item.cc2_name }}&nbsp;&nbsp;</label>
+                        <input
+                            type="checkbox"
+                            v-bind:id="item.cc2_idx"
+                            v-bind:name="item.cc2_idx"
+                            v-bind:value="{cc2_idx: item.cc2_idx, cc2_name: item.cc2_name}"
+                            v-model="checkedKPI">
+                        <label :for="item.cc2_idx">{{ item.cc2_name }}&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     </div>
                 </div>
                 <br>
-                <hr style="opacity:0.15">
+                <hr style="opacity:0.09;">
                 <br>
             </div>
-            <!-- <div class="" >
-                <div class="ui form" >
-                    <div class="ui checkbox" v-for="(item, listIndex) in kpiGroup">
-                      <input type="checkbox" v-bind:id="item.cc2_idx" v-bind:name="item.cc2_name" v-bind:value="item" v-model="checkedKPI">
-                      <label :for="item.cc2_idx">{{ item.cc2_name }}&nbsp;&nbsp;</label>
-                    </div>
-                </div>
-                <br>
-                <hr style="opacity:0.15">
-                <br>
-            </div> -->
 
 
         </div>
@@ -48,11 +42,13 @@
 
 
         <!-- 우측 -->
-        <div class="seven wide column" style="height:600px; overflow:scroll; border:1px solid #f2f2f2;">
+        <div class="seven wide column" style="height:600px; overflow-y:scroll; border:1px solid #f2f2f2;">
+            <h4>선택한 KPI</h4>
             <div class="">
                 <a class="ui label large viewAnimate" style="margin:0 5px 5px 0;" v-for="(kpi, index) in checkedKPI">{{kpi.cc2_name}}<i class="delete icon" @click="unCheck(index)"></i></a>
             </div>
-            <!-- <div class="">
+            <!-- <hr>
+            <div class="">
                 <a class="ui label large viewAnimate" style="margin:0 5px 5px 0;" v-for="(kpi, index) in checkedKPI">{{kpi}}<i class="delete icon" @click="unCheck(index)"></i></a>
             </div> -->
         </div>

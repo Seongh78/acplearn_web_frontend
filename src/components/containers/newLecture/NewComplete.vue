@@ -377,8 +377,8 @@ export default {
                 student_count : stdCount.length
             }
 
-            console.log(sendData);
-
+            // console.log(sendData);
+            // return
 
             this.$http.post('/api/lectures/complete', sendData)
             .then(resp=>{
