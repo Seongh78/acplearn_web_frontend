@@ -222,8 +222,8 @@ export default {
                 lec_goal : '',
                 lec_effect : '',
                 lec_target: '',
-                lec_startDate: '',
-                lec_endDate: '',
+                lec_startDate: '0000-00-00',
+                lec_endDate: '0000-00-00',
             }, // 강의개요
             tempSummary:{}, // 개요 임시저장
             tempLectures:[], // 임시저장 강의 목록

@@ -387,7 +387,11 @@
 
 
 
-    <!-- ======================== 팀/수강생 ============================ -->
+    <!-- ========================
+
+    팀/수강생
+
+    ========================== -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==2?'active viewAnimate':'']" >
         <h3><i class="align left icon"></i> 출석률</h3>
         <div class="ui basic message container" style="text-align:center;" v-if="students.length < 1">

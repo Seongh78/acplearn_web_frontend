@@ -10,7 +10,6 @@
 
             <!-- <div class="cardbox" style="margin:0; padding: 25px 20px;"> -->
             <div class="cardbox" style="margin:0; padding: 0; border:1px solid #eaeaea;">
-
                 <table class="ui celled table lectureInfo " style="padding:0; border-radius:0; border:none;">
                     <colgroup>
                         <col width="10%;">
