@@ -1,5 +1,5 @@
 <template>
-  <div class="hash">
+  <div class="hash viewLoadAnimation">
 
 
       <h1 class="ui header">{{ company.com_name }}</h1>

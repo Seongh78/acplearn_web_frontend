@@ -13,12 +13,33 @@
 
 
 
-        <div class="">
+        <!-- <div class="ui centered pagination menu"> -->
+        <div>
+            <paginate
+                container-class="ui centered pagination menu  "
+                prev-link-class="item"
+                next-link-class="item"
+                page-link-class="item"
+                break-view-link-class="item"
+                :no-li-surround="true"
+                :page-count="20"
+                :page-range="3"
+                :margin-pages="2"
+                :click-handler="clickCallback"
+                prev-text="Prev"
+                next-text="Next"
+                >
+              </paginate>
+        </div>
+
+
+
+        <!-- <div class="">
             <textarea v-model="replaceText" rows="8" cols="80"></textarea>
             <button type="button" class="ui button" @click.prevent="replaceTextFunc()">R</button>
             <hr>
             <p v-html="replaceText"></p>
-        </div>
+        </div> -->
 
 
         <!-- <h3>Graph</h3> -->
@@ -203,8 +224,7 @@ import DatePicker from 'vuejs-datepicker'
 "D dsu MMM yyyy"  D dsu MMM yyyy     - e.g       Sat 12th Feb 2016
 */
 
-
-
+import Paginate from 'vuejs-paginate'
 
 
 
@@ -237,6 +257,7 @@ export default {
         DatePickerTwo,
         LectureAcplearnDay,
         TabMenu,
+        Paginate
     },
 
     data () {
@@ -251,6 +272,8 @@ export default {
                 year: 2017
             },
             time:'',
+
+            thisPage : null , // pagenation 변수
 
             replaceText:'', // 줄바꿈저장 테스트
 
@@ -382,14 +405,13 @@ export default {
 
 
         // 날짜 일수 차이구하기
-        var sdt = new Date('2018-09-15');
-        var edt = new Date('2018-09-15');
+        // var sdt = new Date('2018-09-15');
+        // var edt = new Date('2018-09-15');
         // console.log(sdt.getTime());
         // console.log(edt.getTime());
-        var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+        // var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
         // var d = diffDate('Tue Jan 16 2018 09:00:00 GMT+0900 (KST)', 'Wed Jan 17 2018 09:00:00 GMT+0900 (KST)')
-
-        alert(sdt < edt)
+        // alert(sdt < edt)
 
       },
 
@@ -414,6 +436,10 @@ export default {
 
 
     methods: {
+
+        clickCallback (pageNum) {
+            console.log("pageNum : ",pageNum)
+        },
 
 
         replaceTextFunc(){
@@ -503,4 +529,9 @@ export default {
 </script>
 
 <style lang="css">
+
+
+
+
+
 </style>

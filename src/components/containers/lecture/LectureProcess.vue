@@ -1,7 +1,7 @@
 <template>
-    <div class="">
+    <div class="viewLoadAnimation">
 
-        <h1 class="ui header">승인대기 강의</h1>
+        <h1 class="ui header">진행강의</h1>
         <hr style="opacity:0.3;">
         <div class="ui secondary  menu" style="padding:0;">
             <a class="item active">진행강의</a>
@@ -93,17 +93,22 @@
 
         <br>
         <div class="ui two column centered grid">
-            <div class="ui centered pagination menu">
-                <a class="icon item">
-                    <i class="left chevron icon"></i>
-                </a>
-                <a class="item">1</a>
-                <a class="item">2</a>
-                <a class="item">3</a>
-                <a class="item">4</a>
-                <a class="icon item">
-                    <i class="right chevron icon"></i>
-                </a>
+            <div>
+                <paginate
+                    container-class="ui centered pagination menu  "
+                    prev-link-class="item"
+                    next-link-class="item"
+                    page-link-class="item"
+                    break-view-link-class="item"
+                    :no-li-surround="true"
+                    :page-count="20"
+                    :page-range="3"
+                    :margin-pages="2"
+                    :click-handler="clickCallback"
+                    prev-text="이전"
+                    next-text="다음"
+                    >
+                  </paginate>
             </div>
 
             <router-link tag="a" :to="{path:'/new/summary'}">
@@ -128,10 +133,15 @@
 
 <!-- Script -->
 <script>
+import { Paginate } from '../../components'
 const page = 'LectureWait';
 
 export default {
     name: page,
+
+    components:{
+        Paginate
+    },
 
     created() {
         // var ss = window.sessionStorage;

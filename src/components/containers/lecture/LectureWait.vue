@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="viewLoadAnimation">
 
         <h1 class="ui header">승인대기 강의</h1>
         <hr style="opacity:0.3;">
@@ -128,10 +128,15 @@
 
 <!-- Script -->
 <script>
+import { Paginate } from '../../components'
 const page = 'LectureWait';
 
 export default {
     name: page,
+
+    components:{
+        Paginate
+    },
 
     created() {
         // var ss = window.sessionStorage;

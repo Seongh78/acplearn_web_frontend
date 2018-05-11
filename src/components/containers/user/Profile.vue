@@ -1,5 +1,5 @@
 <template lang="html">
-<div class="">
+<div class="viewLoadAnimation">
 
     <div class="ui grid">
         <div class="eleven wide column">

@@ -416,9 +416,9 @@
                     <td class="center aligned">1차 - 총 145명</td>
                     <td>
                         <div class="ui basic olive progress" style="margin:0;">
-                            <!-- <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
+                            <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
                                 <div class="progress">{{ lecture.sessions[sid].apa=attendancePercent(sid) }}%</div>
-                            </div> -->
+                            </div>
                         </div>
                     </td>
                     <td
@@ -427,7 +427,7 @@
                         style="text-align:center;">
                         <div class="ui small statistic">
                           <div class="label">평균 출석률</div>
-                          <!-- <div class="value">  {{ attendancePercentAvg() }}%</div> -->
+                          <div class="value">  {{ attendancePercentAvg() }}%</div>
                         </div>
                     </td>
                 </tr>
@@ -448,14 +448,31 @@
             <div class="three wide column">
                 <h3><i class="align left icon"></i> 팀</h3>
                 <div class="ui secondary vertical menu " style="width:100%;">
-                <!-- <div class="ui vertical pointing menu " style="width:95%;"> -->
-                    <a class="item" v-bind:class="[groupTab==''?'active':'']" @click.prevent="chooseGroup('')">전체</a>
-                    <a class="item" v-for="(group, gid)  in  groups" v-bind:class="[group.group_idx==groupTab?'active':'']" @click.prevent="chooseGroup(group.group_idx)">
+                    <a
+                        class="item"
+                        v-bind:class="[groupTab==''?'active':'']"
+                        @click.prevent="chooseGroup('')">
+                        전체
+                    </a>
+                    <a
+                        class="item"
+                        v-for="(group, gid)  in  groups"
+                        v-bind:class="[group.group_idx==groupTab?'active':'']"
+                        @click.prevent="chooseGroup(group.group_idx)">
                         {{ group.group_name }}
                     </a>
-                    <a class="item" v-bind:class="[groupTab==null?'active':'']" @click.prevent="chooseGroup(null)">팀미지정</a>
-                    <a class="tiny button ui blue active" style="width:100%;" @click.prevent="$EventBus.$emit('onModal', 'addGroup', true)" >
-                        <i class="icon plus square"></i>팀생성</a>
+                    <a
+                        class="item"
+                        v-bind:class="[groupTab==null?'active':'']"
+                        @click.prevent="chooseGroup(null)">
+                        팀미지정
+                    </a>
+                    <a
+                        class="tiny button ui blue active"
+                        style="width:100%;"
+                        @click.prevent="$EventBus.$emit('onModal', 'addGroup', true)" >
+                        <i class="icon plus square"></i>팀생성
+                    </a>
                 </div>
             </div>
 
@@ -481,16 +498,26 @@
                                 <th rowspan="2" class="center aligned">직급</th>
                                 <th rowspan="2" class="center aligned">이름</th>
                                 <th rowspan="2" class="center aligned">성별</th>
-                                <th class="center aligned" >강의출결 </th>
-                                <!-- <th class="center aligned" v-bind:colspan="lecture.sessions.length">강의출결 </th> -->
+                                <th
+                                    class="center aligned"
+                                    v-bind:colspan="lecture.sessions.length?lecture.sessions.length:0">
+                                    강의출결
+                                </th>
                             </tr>
                             <tr>
-                                <th>a</th>
-                                <!-- <th class="center aligned" style="border-left:1px solid #e1e1e1;" v-for="(c1, c2)  in  (lecture.sessions)">{{c2+1}}차시</th> -->
+                                <th
+                                    class="center aligned"
+                                    style="border-left:1px solid #e1e1e1;"
+                                    v-for="(c1, c2)  in  (lecture.sessions)">
+                                    {{c2+1}}차시
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(std, stdId)  in  students" v-if="std.group_idx==groupTab || groupTab==''" :title="std.stu_idx">
+                            <tr
+                                v-for="(std, stdId)  in  students"
+                                v-if="std.group_idx==groupTab || groupTab==''"
+                                :title="std.stu_idx">
                                 <td> {{ std.group_idx }} </td>
                                 <td>{{ std.com_name  }}</td>
                                 <td>{{ std.stu_department }}</td>
@@ -498,15 +525,16 @@
                                 <td class="center aligned">{{ std.stu_name }}</td>
                                 <td class="center aligned">-</td>
                                 <!-- 출석관리 -->
-                                <td>a</td>
-                                <!-- <td class="center aligned ui form" v-for="(atd, atdId)  in  attendanceParser(std.stu_attendance)">
+                                <td
+                                    class="center aligned ui form"
+                                    v-for="(atd, atdId)  in  attendanceParser(std.stu_attendance)">
                                     <div class="inline field">
                                         <div class="ui checkbox " @click.prevent="attendanceCheck(stdId, atdId)">
                                             <input type="checkbox" tabindex="0" class="hidden" :checked="atd">
                                             <label></label>
                                         </div>
                                     </div>
-                                </td> -->
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -550,8 +578,19 @@
 
         <!-- 탭메뉴 -->
         <div class="ui top secondary pointing menu">
-            <a class="item" v-bind:class="[sessionTab2 < 0?'active':'']" @click.prevent="sessionTabChange2(-1)">전체</a>
-            <a class="item" v-for="(sess, jj) in lecture.sessions" v-bind:class="[sessionTab2==jj?'active':'']" @click.prevent="sessionTabChange2(jj)">{{ jj+1 }}회</a>
+            <a
+                class="item"
+                v-bind:class="[sessionTab2 < 0?'active':'']"
+                @click.prevent="sessionTabChange2(-1)">
+                전체
+            </a>
+            <a
+                class="item"
+                v-for="(sess, jj) in lecture.sessions"
+                v-bind:class="[sessionTab2==jj?'active':'']"
+                @click.prevent="sessionTabChange2(jj)">
+                {{ jj+1 }}회
+            </a>
         </div>
         <br>
 
@@ -600,7 +639,10 @@
                         v-bind:class="[classTab2==scid2?'active':'']"
                         :key="scid2">
                         <!-- 강의내용 -->
-                        <timeline class="container33" v-for="(timetable, tid)  in  sClass2.timetables" :key="timetable.lt_idx">
+                        <timeline
+                            class="container33"
+                            v-for="(timetable, tid)  in  sClass2.timetables"
+                            :key="timetable.lt_idx">
                             <table class="ui table celled structured">
                                 <!-- 상세시간표가 있을 경우 -->
                                 <colgroup>

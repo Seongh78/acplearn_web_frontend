@@ -5,7 +5,7 @@
             <nav-bar bg="true"/>
             <br>
             <br>
-            <page-title mainTitle="" subTitle="" style="height:480px; text-align:left !important;">
+            <page-title mainTitle="" subTitle="" style="height:480px; text-align:left !important;" class="viewLoadAnimationTop">
                 <br>
                 <br>
                 <p style="text-align:left; font-family: 'Nanum Gothic', cursive; font-size:1.25em;">작은 습관부터 업무까지 <br>나만의 플랜을 설계하고 성취해 보세요</p>
@@ -27,7 +27,7 @@
         </top-layout>
 
         <div class="" style="background:#3781bf; width:100%; padding:25px; text-align:center; color:#fff;">
-            <h3>
+            <h3 class="">
                 성공이란 오래된 습관의 경정체다 - 김승호 <생각의 비밀 중> - &nbsp;&nbsp;
                 <button type="button" class="ui button detailBtn" style="padding:12px 20px;">Contact us</button>
             </h3>

@@ -63,10 +63,14 @@
 
 
     <!-- 하단 -->
-    <div class="cardbox" style="margin:10px 0; padding:25px; text-align:center;">
-        <button class="ui button" @click.prevent="save">저장</button>
-        <button class="ui primary button" @click.prevent="goTo">다음페이지</button>
-    </div>
+<!-- ======================== 하단 ============================ -->
+<div class="cardbox" style="margin:10px 0; padding:25px; text-align:center;">
+    <button class="ui basic large button" @click="save('timetable')">이전페이지</button>
+    <!-- <button class="ui button" @click.prevent="save">저장</button> -->
+    <button class="ui basic large button" @click="save('students')">다음페이지</button>
+</div>
+<!-- ======================== 하단 ============================ -->
+
 
 
 
@@ -160,7 +164,7 @@ export default {
         }, // unCheck
 
         // 저장
-        save(){
+        save(url){
             // console.log(this.checkedKPI);
             // return
 
@@ -169,6 +173,7 @@ export default {
                 console.log(resp);
                 sessionStorage.setItem('lecture-kpi', JSON.stringify(this.checkedKPI));
                 alert('KPI가 저장되었습니다.')
+                this.$router.push('/new/'+url)
             }).catch(err=>{
                 console.log(err);
                 alert('Error.')

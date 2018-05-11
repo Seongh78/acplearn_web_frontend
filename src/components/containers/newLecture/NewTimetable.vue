@@ -71,19 +71,21 @@
                 <tr>
                     <th class="center aligned">시작일</th>
                     <th class="center aligned">종료일</th>
-                    <th class="center aligned">시간</th>
                     <th class="center aligned">회차</th>
                 </tr>
             </thead>
             <tbody>
             <tr>
                 <td class="center aligned">
-                    <date-picker format="yyyy-MM-dd" v-model="lecture.lec_startDate" />
+                    <date-picker format="yyyy-MM-dd" v-model="lecture.lec_startDate" language="ko" />
+                    <!-- <date-picker format="yyyy-MM-dd" v-model="lecture.lec_startDate" language="ko" :input="compareDateFunc('start')" /> -->
+                    <!-- <date-picker format="yyyy-MM-dd" v-model="tempDate.lec_startDate" language="ko"  /> -->
                 </td>
                 <td class="center aligned">
-                    <date-picker format="yyyy-MM-dd" v-model="lecture.lec_endDate"  />
+                    <date-picker format="yyyy-MM-dd" v-model="lecture.lec_endDate" language="ko" />
+                    <!-- <date-picker format="yyyy-MM-dd" v-model="lecture.lec_endDate" language="ko" :input="compareDateFunc('end')" /> -->
+                    <!-- <date-picker format="yyyy-MM-dd"  v-model="tempDate.lec_endDate" language="ko"  /> -->
                 </td>
-                <td class="center aligned">0시간</td>
                 <td class="center aligned">
                     총 {{ sessions.length }}회
                 </td>
@@ -133,13 +135,15 @@
                             <date-picker
                                 format="yyyy-MM-dd"
                                 v-model="session.ls_startDate"
-                                @selected="changeDateCheck('start', session.ls_startDate, sid)" />
+                                @selected="changeDateCheck('start', session.ls_startDate, sid)"
+                                language="ko" />
                         </td>
                         <td>
                             <date-picker
                                 format="yyyy-MM-dd"
                                 v-model="session.ls_endDate"
-                                @selected="changeDateCheck('end', session.ls_endDate, sid)" />
+                                @selected="changeDateCheck('end', session.ls_endDate, sid)"
+                                language="ko" />
                         </td>
                         <td><input placeholder="회차 제목을 입력해 주세요" type="text" v-model="session.ls_title"></td>
                         <td><input placeholder="강의장소를 입력해 주세요" type="text" v-model="session.ls_location"></td>
@@ -191,13 +195,13 @@
             <!-- 회차 시작일 -->
             <div class="three wide column field">
                 <label class="opacity5">회차 시작일</label>
-                <date-picker format="yyyy-MM-dd" v-model="session.ls_startDate" />
+                <date-picker format="yyyy-MM-dd" v-model="session.ls_startDate" language="ko" />
             </div>
 
             <!-- 회차 종료일 -->
             <div class="three wide column field">
                 <label class="opacity5">회차 종료일</label>
-                <date-picker format="yyyy-MM-dd" v-model="session.ls_endDate" />
+                <date-picker format="yyyy-MM-dd" v-model="session.ls_endDate" language="ko" />
             </div>
         </div>
 
@@ -212,7 +216,7 @@
             <div class="three wide column field">
                 <label class="opacity5">액플런 시작일</label>
                 <!-- <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" /> -->
-                <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" />
+                <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" language="ko" />
                 {{ session.ls_aplDate }}
             </div>
         </div>
@@ -262,6 +266,8 @@
             </a>
         </div>
         <!-- ========= 집합교육 탭메뉴 ========= -->
+
+
 
         <!-- ========= 집합교육 내용 ========= -->
         <div
@@ -491,11 +497,19 @@
                 <div class="three fields">
                     <div class="field">
                         <label>시작일</label>
-                        <date-picker v-model="temp.session.ls_startDate" format="yyyy-MM-dd" placeholder="0000-00-00" />
+                        <date-picker
+                            v-model="temp.session.ls_startDate"
+                            format="yyyy-MM-dd"
+                            placeholder="0000-00-00"
+                            language="ko" />
                     </div>
                     <div class="field">
                         <label>종료일</label>
-                        <date-picker v-model="temp.session.ls_endDate" format="yyyy-MM-dd" placeholder="0000-00-00" />
+                        <date-picker
+                            v-model="temp.session.ls_endDate"
+                            format="yyyy-MM-dd"
+                            placeholder="0000-00-00"
+                            language="ko" />
                     </div>
                 </div>
 
@@ -556,8 +570,6 @@
         </div>
     </modal>
     <!-- 교육추가 -->
-
-
 
 
 
@@ -741,6 +753,13 @@ export default {
             sessions : [], // 일정표 메인모델
             timetables : [],
 
+
+            tempDate:{
+                lec_startDate:null,
+                lec_endDate:null,
+            },
+
+
             tempModule : {},
             temp : { // 인풋 모델
                 session : {
@@ -797,12 +816,14 @@ export default {
     // ========== Created ========== //
     watch:{
         // 회차 시작일 설정
-        'lecture.lec_startDate'(val){
-            this.compareSessionDate('start', val, this.lecture.lec_endDate)
+        'tempDate.lec_startDate'(val){
+            // this.compareDateFunc('start')
+            // this.compareSessionDate('start', val, this.lecture.lec_endDate)
         },
         // 회차 종료일 설정
-        'lecture.lec_endDate'(val){
-            this.compareSessionDate('end', this.lecture.lec_startDate, val)
+        'tempDate.lec_endDate'(val){
+            // this.compareDateFunc('end')
+            // this.compareSessionDate('end', this.lecture.lec_startDate, val)
         }
     },
 
@@ -827,6 +848,8 @@ export default {
 
         if (storageLecture!=null && storageLecture!=undefined){
             this.$set(this, 'lecture' , storageLecture)
+            this.$set(this.tempDate, 'lec_startDate' , storageLecture.lec_startDate)
+            this.$set(this.tempDate, 'lec_endDate' , storageLecture.lec_endDate)
         }
         if (storageSessions!=null && storageSessions!=undefined){
             // this.$set(this, 'sessions' , storageSessions)
@@ -841,6 +864,104 @@ export default {
 
     // ========== Methods ========== //
     methods : {
+
+
+
+        // ===== 회차날짜 비교  테스트 ===== //
+        compareDateFunc(type, ii=null){
+            /*
+            type : 강의시작(종료), 회차 시작(종료) 비교변수
+            ii : 해당 데이터의 배열번지수 - 강의일경우 필요없음
+            */
+
+            // alert(type)
+            // return
+
+
+            var lec = this.tempDate
+            var start  // 시작일
+            var end // 종료일
+
+            var diff // 차일
+            var lsDiff // 차일
+
+            var firstStart, lastStart // 비교할 차수의 시작일
+            var firstEnd, lastEnd // 비교할 차수의 종료일
+
+
+            start = new Date(lec.lec_startDate);  // 시작일
+            end = new Date(lec.lec_endDate); // 종료일
+            diff = Math.ceil((end.getTime()-start.getTime())/(1000*3600*24)); // 차일
+
+            // 차수가 있을경우
+            if ( lec.sessions!== undefined  &&  lec.sessions.length > 0 ) {
+                firstStart = lec.sessions[0].ls_startDate
+                firstEnd = lec.sessions[0].ls_endDate
+                lastStart = lec.sessions[lec.sessions.length-1].ls_startDate
+                lastEnd = lec.sessions[lec.sessions.length-1].ls_endDate
+                lsDiff = Math.ceil((lastEnd.getTime()-firstStart.getTime())/(1000*3600*24)); // 차일
+
+            }
+
+
+            switch (type) {
+                case 'start':
+                console.log(this.lecture.lec_startDate, this.tempDate.lec_startDate);
+                    // 차수가 있을경우
+                    if ( lec.sessions!== undefined  &&  lec.sessions.length > 0 ) {
+                        if (start >= firstEnd) {
+                            alert('시작시간이 다른 날짜와 겹칩네요 :( ')
+                            this.$set(this.tempDate, 'lec_startDate', this.lecture.lec_startDate)
+                            return
+                        }
+                    }
+
+                    if(start >= end){
+                        alert('시작시간이 다른 날짜와 겹칩네요 :(2 ')
+                        this.$set(this.tempDate, 'lec_startDate', this.lecture.lec_startDate)
+                        return
+                    }
+                    this.$set(this.lecture, 'lec_startDate', this.tempDate.lec_startDate)
+                break;
+
+
+                case 'end':
+                    // 차수가 있을경우
+                    if ( lec.sessions!== undefined  &&  lec.sessions.length > 0 ) {
+                        if (end <= lastStart) {
+                            alert('종료시간이 다른 날짜와 겹칩네요 :( ')
+                            this.$set(this.tempDate, 'lec_endDate', this.lecture.lec_endDate)
+                            return
+                        }
+                    }
+
+                    if(end <= start){
+                        alert('종료시간이 다른 날짜와 겹칩네요 :( ')
+                        this.$set(this.tempDate, 'lec_endDate', this.lecture.lec_endDate)
+                        return
+                    }
+                    this.$set(this.lecture, 'lec_endDate', this.tempDate.lec_endDate)
+                break;
+
+
+                case 'lstart':
+                break;
+                case 'lend':
+
+                break;
+                default:
+
+            }
+
+            // alert(d)
+            // sdt = new Date(sessions[sid].ls_aplDate);  // 시작일
+            // edt = new Date(sessions[sid].ls_endDate); // 종료일
+            // dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24)); // 차일
+        },
+
+
+
+
 
         // ===== 회차날짜 비교 ===== //
         compareSessionDate(thisVal, startVal, endVal){

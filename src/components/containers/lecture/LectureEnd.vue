@@ -1,7 +1,7 @@
 <template>
-    <div class="">
+    <div class="viewLoadAnimation">
 
-        <h1 class="ui header">개설대기강의</h1>
+        <h1 class="ui header">종료강의</h1>
         <hr style="opacity:0.3;">
         <div class="ui secondary  menu" style="padding:0;">
             <router-link href="#" class="item" tag="a" :to="{ name: 'lectures_processes'}">진행강의</router-link>
@@ -124,10 +124,15 @@
 
 <!-- Script -->
 <script>
+import { Paginate } from '../../components'
 const page = 'LectureEnd';
 
 export default {
     name: page,
+
+    components:{
+        Paginate
+    },
 
     created() {
         var ss = window.sessionStorage;

@@ -4,7 +4,7 @@
         <top-layout bg="true">
             <nav-bar bg="true"/>
             <!-- <page-title mainTitle="RecruitmentDetail" subTitle=" " /> -->
-            <page-title v-bind:mainTitle="notice.notice_title" subTitle=" " />
+            <page-title v-bind:mainTitle="notice.notice_title ? notice.notice_title : '-'" subTitle=" " />
         </top-layout>
 
 

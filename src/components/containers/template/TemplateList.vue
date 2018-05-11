@@ -1,6 +1,6 @@
 <template>
     <!-- 진행강의 목록 -->
-    <div class="">
+    <div class="viewLoadAnimation">
 
 
         <h1 class="ui header">강의템플릿 관리</h1>

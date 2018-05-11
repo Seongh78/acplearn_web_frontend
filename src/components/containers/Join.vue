@@ -35,7 +35,7 @@
                     <input type="email" v-model="tutor.email" name="last-name" placeholder="ex) example@example.com">
                 </div>
                 <div class="field">
-                    <label for="">성별 {{tutor.gender}}</label>
+                    <label for="">성별</label>
                     <input type="radio" name="gender" v-model="tutor.gender" value="M">&nbsp;남자&nbsp;&nbsp;
                     <input type="radio" name="gender" v-model="tutor.gender" value="F">&nbsp;여자
                 </div>
@@ -166,7 +166,7 @@ export default {
         idConfirm() {
             var id = this.tutor.id
             console.log(id);
-            if (id.length < 5) {
+            if (id.length < 2) {
                 if (id.length <1 || id == '' || id == undefined) {
                     alert('아이디를 입력해 주세요')
                     return
@@ -181,6 +181,7 @@ export default {
                     this.confirm.id = true
                     return
                 }
+                alert('이미 사용중인 아이디입니다.')
             })
             .catch(err=>{
                 console.log(err);
@@ -276,6 +277,10 @@ export default {
                 career      : tt.id
             }).then(resp=>{
                 console.log(resp);
+                if (resp.status === 200) {
+                    alert('가입이 완료되었습니다.')
+                    this.$router.push({path:'/'})
+                }
             }).catch(err=>{
                 alert('오류가 발생했습니다. 다시 시도해주세요')
             })

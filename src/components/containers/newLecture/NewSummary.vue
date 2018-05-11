@@ -74,10 +74,14 @@
         </div>
 
         <!-- 하단버튼 -->
-        <div class="cardbox" style="margin:10px 0; padding:25px; text-align:center;">
+        <!-- <div class="cardbox" style="margin:10px 0; padding:25px; text-align:center;">
             <button class="ui button">템플릿으로 저장</button>
             <button class="ui button" v-on:click="save">저장</button>
             <button class="ui primary button" @click.prevent="goTo">다음페이지</button>
+        </div> -->
+        <div class="cardbox" style="margin:10px 0; padding:25px; text-align:center;">
+            <!-- <button class="ui button" @click.prevent="save">저장</button> -->
+            <button class="ui basic large button" @click="save('timetable')">다음페이지</button>
         </div>
         <!-- content -->
 
@@ -222,8 +226,6 @@ export default {
                 lec_goal : '',
                 lec_effect : '',
                 lec_target: '',
-                lec_startDate: '0000-00-00',
-                lec_endDate: '0000-00-00',
             }, // 강의개요
             tempSummary:{}, // 개요 임시저장
             tempLectures:[], // 임시저장 강의 목록
@@ -324,18 +326,22 @@ export default {
                 var da = [ new Date(tempLec.lec_startDate) , new Date(tempLec.lec_endDate) ]
 
                 // 시작일자 만들기
-                tempLec.lec_startDate =
-                da[0].getFullYear() + '-' +
-                ( da[0].getMonth()+1 < 10 ? '0' : '' ) + (da[0].getMonth()+1) + '-' +
-                ( da[0].getDate() < 10 ? '0' : '' ) + da[0].getDate()
-
+                if (da[0] != null && da[0] != undefined) {
+                    tempLec.lec_startDate =
+                    da[0].getFullYear() + '-' +
+                    ( da[0].getMonth()+1 < 10 ? '0' : '' ) + (da[0].getMonth()+1) + '-' +
+                    ( da[0].getDate() < 10 ? '0' : '' ) + da[0].getDate()
+                }
 
 
                 // 종료일자 만들기
-                tempLec.lec_endDate =
-                da[1].getFullYear() + '-' +
-                ( da[1].getMonth()+1 < 10 ? '0' : '' ) + (da[1].getMonth()+1) + '-' +
-                ( da[1].getDate() < 10 ? '0' : '' ) + da[1].getDate()
+                if (da[1] != null && da[1] != undefined) {
+                    tempLec.lec_endDate =
+                    da[1].getFullYear() + '-' +
+                    ( da[1].getMonth()+1 < 10 ? '0' : '' ) + (da[1].getMonth()+1) + '-' +
+                    ( da[1].getDate() < 10 ? '0' : '' ) + da[1].getDate()
+                }
+
 
                 var std = new Date(tempLec.lec_startDate)
                 var etd = new Date(tempLec.lec_endDate)
@@ -438,7 +444,7 @@ export default {
 
 
         // == 저장 == //
-        save() {
+        save(url) {
             // TEST
             // console.log("this.lec_idx : ", this.lec_idx);
             // console.log(this.summary);
@@ -471,6 +477,8 @@ export default {
                     sessionStorage.setItem('lecture-summary', JSON.stringify(this.summary));
                     sessionStorage.setItem('lecture-idx', this.lec_idx)
                     alert('저장되었습니다.')
+
+                    this.$router.push('/new/'+url)
                 })
                 .catch(err=>{
                     console.log(err)

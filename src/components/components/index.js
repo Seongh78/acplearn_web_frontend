@@ -31,6 +31,9 @@ import TabMenu from './UIComponents/TabMenu'
 // import ScrollChart from './Chart/ScrollChart'
 
 
+import Paginate from 'vuejs-paginate'
+
+
 export {
     Button,
     Card,
@@ -56,5 +59,6 @@ export {
     Loading,
     TabMenu,
     SlideGraph,
-    PolarChart
+    PolarChart,
+    Paginate
 }

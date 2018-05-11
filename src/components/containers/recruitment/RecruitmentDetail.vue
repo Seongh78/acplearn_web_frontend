@@ -4,7 +4,8 @@
         <top-layout bg="true">
             <nav-bar bg="true"/>
             <!-- <page-title mainTitle="RecruitmentDetail" subTitle=" " /> -->
-            <page-title v-bind:mainTitle="recruitment.rec_title" subTitle=" " />
+            <page-title :mainTitle="recruitment.rec_title?recruitment.rec_title:'-'" subTitle=" " />
+
         </top-layout>
 
 
@@ -14,7 +15,6 @@
 
             <!-- <div class="cardbox" style="margin:0; padding: 25px 20px;"> -->
             <div class="cardbox" style="margin:0; padding: 0; border:1px solid #eaeaea;">
-
                 <table class="ui celled table lectureInfo " style="padding:0; border-radius:0; border:none;">
                     <colgroup>
                         <col width="10%;">
@@ -182,7 +182,8 @@ export default {
     created(){
         this.$set(this, 'rec_idx', this.$ro.history.current.params.id)
         this.getRec()
-        this.$set(this, 'applicationFlag', this.applicationCheck())
+        this.applicationCheck()
+        // this.$set(this, 'applicationFlag', this.applicationCheck())
     }, //created()
 
 
@@ -194,11 +195,11 @@ export default {
     methods: {
 
         getRec(){
-            console.log("this.rec_idx : ", this.rec_idx);
+            // console.log("this.rec_idx : ", this.rec_idx);
             this.$http.get('/api/recruitment/'+this.rec_idx)
             .then(resp=>{
-                // console.log(resp);
-                this.$set(this, 'recruitment', resp.data.data)
+                console.log(resp);
+                this.$set(this, 'recruitment', resp.data.rec)
             })
             .catch(err=>{
                 console.log(err);

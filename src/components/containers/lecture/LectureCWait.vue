@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="viewLoadAnimation">
 
         <h1 class="ui header">개설대기강의</h1>
         <hr style="opacity:0.3;">
@@ -124,10 +124,15 @@
 
 <!-- Script -->
 <script>
+import { Paginate } from '../../components'
 const page = 'LectureCWait';
 
 export default {
     name: page,
+
+    components:{
+        Paginate
+    },
 
     created() {
         var ss = window.sessionStorage;
