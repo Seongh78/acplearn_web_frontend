@@ -1,16 +1,12 @@
 <template>
-  <div >
+<div >
 
-
-
-
-
-
-
-
+    <!-- ========== 최상단 ========== -->
     <div class="ui grid">
+
+        <!-- ========== 상단 타이틀 ========== -->
         <div class="eleven wide column">
-            <!-- 타이틀 -->
+        <!-- 타이틀 -->
             <h2 class="ui header" @click.prevent="modal.aadd=true">
                 <div
                     class="ui right pointing  basic label"
@@ -21,39 +17,53 @@
                 {{ lecture.lec_title }}
             </h2>
         </div>
+        <!-- ========== 상단 타이틀 ========== -->
+
+
+
+        <!-- ========== 컨트롤 버튼 그룹 ========== -->
         <div class="five wide column" style="text-align:right;">
-            <!-- 버튼그룹 -->
             <div class="ui basic buttons small">
-                <!-- 임시저장 -->
+
+                <!-- === 임시저장 === -->
                 <div class="ui button basic olive " v-if="lecture.lec_flag=='임시저장'">
                     <i class="icon check circle"></i>승인요청
                 </div>
-                <!-- 진행중 -->
+
+                <!-- === 진행중 === -->
                 <div class="ui button basic red " v-if="lecture.lec_flag=='진행중'">
                     <i class="icon check circle"></i>강의종료
                 </div>
-                <!-- 강의전 -->
+
+                <!-- === 강의전 === -->
                 <div class="ui button basic green " v-if="lecture.lec_flag=='강의전'" style="box-shadow:none;" @click.prevent="lectureStart()">
                     <i class="icon check circle"></i> 강의시작
                 </div>
-                <!-- 수정 -->
+
+                <!-- === 수정 === -->
                 <router-link tag="div" class="ui button" :to="{ path:'/new/summary', query:{flag:lec_idx} }">
                     <i class="icon edit"></i>수정
                     <!-- , query: {flag:'edit'} -->
                 </router-link>
-                <!-- 삭제 -->
+
+                <!-- === 삭제 === -->
                 <div class="ui button" @click.prevent="removeLecture">
                     <i class="icon minus circle"></i>삭제
                 </div>
-              <!-- <div class="ui button">Three</div> -->
+
             </div>
-            <!-- 버튼그룹 -->
         </div>
+        <!-- ========== 컨트롤 버튼 그룹 ========== -->
+
     </div>
+    <!-- ========== 최상단 ========== -->
 
 
 
-    <!-- 강의정보 -->
+
+
+
+    <!-- ========== 강의정보 ========== -->
     <table class="ui celled table lectureInfo">
         <colgroup>
             <col width="10%;">
@@ -83,13 +93,13 @@
             </tr>
             <tr>
                 <td>KPI</td>
-                <!-- <td colspan="3" class="ui tag labels"> -->
                 <td colspan="3">
                         <div class="ui basic button tiny" v-for="k  in  kpi" :title="k.lk_idx">{{ k.cc2_name }}</div>
                 </td>
             </tr>
         </tbody>
     </table>
+    <!-- ========== 강의정보 ========== -->
 
 
 
@@ -116,12 +126,23 @@
 
 
 
-    <!-- 컨텐츠 -->
 
 
 
 
-    <!-- ======================== 강의개요 ============================ -->
+
+
+
+
+
+
+
+
+
+
+    <!-- ========================
+    강의개요
+    ======================== -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==0?'active viewAnimate':'']" >
 
 
@@ -141,7 +162,9 @@
         <p>{{ lecture.lec_target | capitalize }} ppp</p>
         <br>
     </div>
-    <!-- ======================== 강의개요 ============================ -->
+    <!-- ========================
+    강의개요
+     ======================== -->
 
 
 
@@ -165,7 +188,11 @@
 
 
 
-    <!-- ======================== 일정/시간표 ============================ -->
+    <!-- ========================
+
+    일정/시간표
+
+    ======================== -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==1?'active viewAnimate':'']" >
         <h3><i class="align left icon"></i> 강의정보</h3>
         <table class="ui table celled">
@@ -364,7 +391,9 @@
 
 
     </div>
-    <!-- ======================== 일정/시간표 ============================ -->
+    <!-- ========================
+    일정/시간표
+    ======================== -->
 
 
 
@@ -402,18 +431,38 @@
             <colgroup>
                 <col width="15%">
                 <col width="65%">
-                <col width="35%">
+                <col width="20%">
             </colgroup>
             <thead>
                 <tr>
-                    <th class="center aligned">차시/인원</th>
+                    <th class="center aligned">오프라인강의 차시</th>
                     <th class="center aligned">출석률</th>
                     <th class="center aligned">전체평균</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(sess,sid)  in  lecture.sessions">
-                    <td class="center aligned">1차 - 총 145명</td>
+                <tr v-for="(sess,sid)  in  attendanceCount">
+                    <td class="center aligned">{{ sid+1 }}차 강의</td>
+                    <td>
+                        <div class="ui basic olive progress" style="margin:0;">
+                            <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
+                                <div class="progress">{{ sess.avg }}%</div>
+                                <!-- <div class="progress">{{ lecture.sessions[sid].apa=attendancePercent(sid) }}%</div> -->
+                            </div>
+                        </div>
+                    </td>
+                    <td
+                        v-if="sid==0"
+                        v-bind:rowspan="attendanceCount.length"
+                        style="text-align:center;">
+                        <div class="ui small statistic">
+                          <div class="label">평균 출석률</div>
+                          <div class="value">  {{ attendancePercentAvg() }}%</div>
+                        </div>
+                    </td>
+                </tr>
+                <!-- <tr v-for="(sess,sid)  in  lecture.sessions">
+                    <td class="center aligned">{{ sid+1 }}차 강의</td>
                     <td>
                         <div class="ui basic olive progress" style="margin:0;">
                             <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
@@ -430,7 +479,7 @@
                           <div class="value">  {{ attendancePercentAvg() }}%</div>
                         </div>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
         </div>
@@ -500,7 +549,7 @@
                                 <th rowspan="2" class="center aligned">성별</th>
                                 <th
                                     class="center aligned"
-                                    v-bind:colspan="lecture.sessions.length?lecture.sessions.length:0">
+                                    v-bind:colspan="attendanceCount.length">
                                     강의출결
                                 </th>
                             </tr>
@@ -508,8 +557,8 @@
                                 <th
                                     class="center aligned"
                                     style="border-left:1px solid #e1e1e1;"
-                                    v-for="(c1, c2)  in  (lecture.sessions)">
-                                    {{c2+1}}차시
+                                    v-for="(c1, c2)  in  attendanceCount">
+                                    {{c2+1}}차
                                 </th>
                             </tr>
                         </thead>
@@ -547,7 +596,9 @@
 
 
     </div>
-    <!-- ======================== 팀/수강생 ============================ -->
+    <!-- ========================
+    팀/수강생
+    ============================ -->
 
 
 
@@ -570,7 +621,11 @@
 
 
 
-    <!-- ======================== 교육진행 ============================ -->
+    <!-- ========================
+
+    교육진행
+
+    ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==3?'active viewAnimate':'']" >
         <h3>
             <i class="align left icon"></i> 교육진행
@@ -784,7 +839,9 @@
 
 
     </div>
-    <!-- ======================== 교육진행 ============================ -->
+    <!-- ========================
+    교육진행
+    ============================ -->
 
 
 
@@ -811,7 +868,11 @@
 
 
 
-    <!-- ======================== 참여점수 ============================ -->
+    <!-- ========================
+
+    참여점수
+
+    ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==4?'active viewAnimate':'']" >
         <h3>참여점수</h3>
         <table class="ui celled padded table">
@@ -919,7 +980,9 @@
             </tfoot>
         </table>
     </div>
-    <!-- ======================== 참여점수 ============================ -->
+    <!-- ========================
+    참여점수
+    ============================ -->
 
 
 
@@ -1022,7 +1085,7 @@
 
 
         <!-- === 리포트 === -->
-        <div class="ui  tab  active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
+        <div class="ui tab active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
 
             <!-- 리포트 컴포넌트 동적 바인딩 -->
             <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions"></component>
@@ -1060,7 +1123,11 @@
 
 
 
-    <!-- ======================== 리포트 ============================ -->
+    <!-- ========================
+
+    리포트
+
+    ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==6?'active viewAnimate':'']" >
         <br>
         <br>
@@ -1070,7 +1137,9 @@
         <br>
         <br>
     </div>
-    <!-- ======================== 리포트 ============================ -->
+    <!-- ========================
+    리포트
+    ============================ -->
 
 
 
@@ -1089,7 +1158,11 @@
 
 
 
-    <!-- ======================== 설문조사 ============================ -->
+    <!-- ========================
+
+    설문조사
+
+    ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==7?'active viewAnimate':'']" >
         <br>
         <br>
@@ -1099,7 +1172,9 @@
         <br>
         <br>
     </div>
-    <!-- ======================== 설문조사 ============================ -->
+    <!-- ========================
+    설문조사
+    ============================ -->
 
 
 
@@ -1292,7 +1367,7 @@
         <div class="ui comments">
             <div class="comment">
                 <a class="avatar">
-                  <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                  <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png">
                 </a>
                 <div class="content">
                   <a class="author">Matt</a>
@@ -1515,9 +1590,9 @@
         <div class="ui feed" v-else>
             <div class="event" v-for="(comment, cid)  in  personalScore.comments">
                 <div class="label">
-                    <img src="https://cdn2.iconfinder.com/data/icons/scenarium-vol-4/128/006_avatar_worker_employee_man_account_manager_clerk-128.png" v-if="comment.stu_gender=='남'">
-                    <img src="https://cdn2.iconfinder.com/data/icons/scenarium-vol-4/128/019_avatar_woman_girl_female_account_profile_user-128.png" v-if="comment.stu_gender=='여'">
-                    <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg" v-if="comment.stu_gender=='-' ||  comment.stu_gender==null">
+                    <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='남'">
+                    <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='여'">
+                    <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='-' ||  comment.stu_gender==null">
                 </div>
                 <div class="content">
                     <div class="summary">
@@ -1745,7 +1820,6 @@ import {
     PolarChart,
 } from '../../components'
 
-
 // 리포트 뷰
 import {
     ReportAll,
@@ -1758,8 +1832,9 @@ import {
     ReportPersonal,
 } from './Report'
 
-
+// 강의모듈
 import LectureModule from './LectureModule'
+// 로딩싸이클
 import LoadingCycle from '../../components/LoadingCycle'
 
 
@@ -1781,7 +1856,6 @@ export default {
         Comment,
         LectureModule,
         Loading,
-
 
 
         TabMenu,
@@ -1832,6 +1906,7 @@ export default {
             students: [],
             tempStudents:[] ,  // 렌더링 전용 학생목록
             kpi:[],
+            attendanceCount : [], // 출석카운트
             // === 강의기본정보 === //
 
 
@@ -1841,7 +1916,7 @@ export default {
             chooseTeam:{}, // 선택한 그룹 정보
             companyTab:0,
             tab:5, // 현재 활성화 탭
-            attendanceCount : 0, // 출석 카운트
+            // attendanceCount : 0, // 출석 카운트
             avgAttendancePercent : 0, // 평균출석률
 
 
@@ -1884,8 +1959,8 @@ export default {
                 { id: 'department', name: '부서별' , component: 'ReportDepartment', },
                 { id: 'position', name: '직급별' , component: 'ReportPosition' },
                 { id: 'gender', name: '성별' , component: 'ReportGender' },
-                { id: 'age', name: '연령별-개발' , component: 'ReportAge' },
-                { id: 'joinYear', name: '입사연차별-개발' , component: 'ReportJoinYear' },
+                { id: 'age', name: '연령별' , component: 'ReportAge' },
+                { id: 'joinYear', name: '입사연차별' , component: 'ReportJoinYear' },
                 { id: 'personal', name: '개인별' , component: 'ReportPersonal' },
             ],
             personalScore : {
@@ -1909,11 +1984,12 @@ export default {
 
     // ===== Fillters ===== //
     filters: {
-      capitalize: function (value) {
-        if (!value) return ''
-        value = value.toString()
-        return value.charAt(0).toUpperCase() + value.slice(1)
-      }
+        capitalize: function (value) {
+            if (!value) return ''
+
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        }
     },
 
 
@@ -2086,8 +2162,6 @@ export default {
 
         // === 강의정보 조회 === //
         getLecture(id){
-            // alert(typeof id)
-            // return
             this.$http.get('/api/lectures/detail/'+Number(id))
             .then(resp=>{
                 // console.log(resp.data.departments);
@@ -2098,6 +2172,16 @@ export default {
                 this.$set(this, 'groups', resp.data.groups)
                 this.$set(this, 'students', resp.data.students)
                 this.$set(this, 'kpi', resp.data.kpi)
+
+                // 출석회수 구하기
+                var sessKeys = Object.keys(resp.data.lecture.sessions)
+                var attendanceCount = []
+                for(var ii  in  sessKeys){
+                    for(var jj  in  resp.data.lecture.sessions[ii].sessionClass){
+                        this.attendanceCount.push({ idx: ii,  avg: 0 })
+                    }
+                }
+                // this.$set(this, 'attendanceCount', attendanceCount)// 출석회수 입력
 
                 // 액션플랜 - 디폴트설정 - 모든차시선택
                 resp.data.lecture.sessions.forEach((sess)=>{
@@ -2155,12 +2239,14 @@ export default {
 
             // 결과가 0일경우 소수점 X
             if (ff==0 || ff==100.0) {
-                return ff.toFixed(0)
+                ff = ff.toFixed(0)
             }else{
-                return ff.toFixed(1)
+                ff = ff.toFixed(1)
             }//else
 
-            this.attendancePercentAvg()
+            this.attendanceCount[sid].avg = ff
+            return ff
+            // attendanceAvg
         }, // attendancePercent
 
 
@@ -2169,11 +2255,11 @@ export default {
         // 평균 출석률
         attendancePercentAvg(){
             var sum=0,avg=0; // 합, 평균
-            var leng = this.lecture.sessions.length // 차시 수
+            var leng = this.attendanceCount.length // 오프라인 강의 수
             var keys = Object.keys(this.lecture.sessions) // 키
 
-            for(var i=0;  i<keys.length; i++){
-                sum += Number(this.lecture.sessions[i].apa)
+            for(var i=0;  i<leng; i++){
+                sum += Number(this.attendanceCount[i].avg)
             }
 
             avg = sum/leng

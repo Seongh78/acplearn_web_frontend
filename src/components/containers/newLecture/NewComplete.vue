@@ -368,17 +368,25 @@ export default {
                     return
             }// if
 
+
+
             var sessionCount = JSON.parse(lec[1])
             var stdCount = JSON.parse(lec[4])
+            var classCount = 0
+            for (var ii  in  sessionCount) {
+                classCount += sessionCount[ii].sessionClass.length
+            }
+
             var sendData = {
                 lec_idx: this.lec_idx,
                 sessions : JSON.parse(lec[1]),
                 session_count : sessionCount.length,
-                student_count : stdCount.length
+                student_count : stdCount.length,
+                class_count : classCount
             }
 
-            // console.log(sendData);
-            // return
+
+
 
             this.$http.post('/api/lectures/complete', sendData)
             .then(resp=>{

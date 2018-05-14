@@ -25,7 +25,7 @@
                     class="item"
                     v-for="(std, sid)  in  from.students"
                     v-bind:class="[std.stu_idx==thisStudnet?'active':'']"
-                    @click.prevent="thisStudnet = (std.stu_idx)">
+                    @click.prevent="selectStudnetFunc(std.stu_idx)">
                     <img class="ui avatar image opacity5" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_female2-64.png">
                     <div class="content">
                         <div class="header">{{ std.stu_name }}</div>
@@ -39,6 +39,9 @@
 
         <!--PLAN목록 -->
         <div class="twelve wide column">
+
+
+
             <table class="ui table actionPlan selectable single line " style="padding:0;">
                 <colgroup>
                     <col>
@@ -55,10 +58,11 @@
                     </tr>
                 </thead>
                 <tbody v-if="plans.length>0" >
-                    <tr class="viewLoadAnimation"
-                    v-for="(plan, pid)  in  plans"
-                    :key="pid"
-                    v-if="thisStudnet == plan.stu_idx || thisStudnet<0">
+                    <tr
+                        class="viewLoadAnimation"
+                        v-for="(plan, pid)  in  plans"
+                        :key="pid"
+                        v-if="thisStudnet == plan.stu_idx || thisStudnet<0">
                         <td><a>{{ plan.lap_text }}</a> </td>
                         <td class="center aligned"><div class="ui basic label" style="width:75%;">{{ plan.cc2_name }}</div></td>
                         <td class="center aligned">{{ typeof plan.avgSelfScore=='number' ? plan.avgSelfScore.toFixed(1) : 0 }}</td>
@@ -92,7 +96,8 @@ import {
     Loading,
     TabMenu,
     NoContents,
-    SlideGraph
+    SlideGraph,
+    PolarChart,
 } from '../../../components'
 
 
@@ -103,8 +108,11 @@ export default {
 
     // ===== Components ===== //
     components:{
+        Loading,
+        TabMenu,
         NoContents,
         SlideGraph,
+        PolarChart,
     },
 
 
@@ -184,7 +192,12 @@ export default {
             })
         },// === 개별데이터 === //
 
-        
+
+        // === === //
+        selectStudnetFunc(val){
+
+        },
+
 
     },
 

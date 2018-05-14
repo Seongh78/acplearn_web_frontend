@@ -54,10 +54,10 @@ import {
     Loading,
     Chart,
     TabMenu,
-    // SlideGraph,
+    SlideGraph,
     PolarChart,
 } from '../../../components'
-import SlideGraph from '../../../components/Chart/SlideGraph'
+// import SlideGraph from '../../../components/Chart/SlideGraph'
 
 
 
@@ -79,7 +79,7 @@ export default {
         Comment,
         Loading,
         TabMenu,
-        'slide-graph': SlideGraph,
+        SlideGraph,
         PolarChart
     },
 
@@ -170,7 +170,7 @@ export default {
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
         this.$set(this, 'sess', this.sessionData)
-        this.allAvgFunc(null)
+        this.allAvgFunc(this.kpi)
 
     },
 

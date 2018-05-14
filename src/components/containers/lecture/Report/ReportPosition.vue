@@ -69,7 +69,7 @@ export default {
 
 
     // ===== Props ===== //
-    props:['from'],
+    props:['from', 'kpi'],
 
 
 
@@ -92,8 +92,7 @@ export default {
         // console.log(this.position);
 
         this.position.forEach(po=>{
-            console.log(po.stu_position);
-            this.allAvgFunc(po.stu_position)
+            this.allAvgFunc(po.stu_position, this.kpi)
         })
     },
 
@@ -106,16 +105,34 @@ export default {
 
 
 
+    // ===== Watch ===== //
+    watch:{
+        kpi (val){
+            this.position.forEach(po=>{
+                this.allAvgFunc(po.stu_position, val)
+            })
+        }
+    },
+
+
+
+
+
     // ===== Methods ===== //
     methods:{
 
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(val){
+        allAvgFunc(val, kpi=null){
+            /*
+            val : 찾을값
+            kpi : 선택한 kpi
+            session : 차수
+            */
                 console.log(val);
                 var baseURL = '/api/plans/score/'+this.lec_idx+'/position/'+val
-                // var baseURL = '/api/plans/score/position/18/사원'
+                baseURL += kpi != null ? '?kpi='+kpi : ''
 
                 this.$http.get(baseURL)
                 .then(resp=>{

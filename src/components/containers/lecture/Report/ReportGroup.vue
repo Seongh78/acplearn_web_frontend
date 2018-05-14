@@ -92,7 +92,7 @@ export default {
 
 
     // ===== Props ===== //
-    props:['from'],
+    props:['from', 'kpi'],
 
 
 
@@ -104,7 +104,7 @@ export default {
         groups:[],
         chartData:[],
 
-
+        selectKpi:-1
 
     }},
 
@@ -147,8 +147,7 @@ export default {
 
 
 
-    // ===== Watch ===== //
-    // watch()
+
 
 
 
@@ -164,18 +163,40 @@ export default {
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
         this.$set(this, 'groups', this.from.groups)
+        this.$set(this, 'selectKpi', this.kpi)
+
 
         this.groups.forEach(g=>{
-            this.allAvgFunc(g.group_idx)
+            this.allAvgFunc(g.group_idx, this.selectKpi)
         })
+
     },
 
 
 
     // ===== Updated ===== //
     updated(){
-
+        // console.log("this.kpi : ", this.kpi);
     },
+
+
+
+
+
+
+    // ===== Watch ===== //
+    watch:{
+        kpi (val){
+            this.groups.forEach(g=>{
+                this.allAvgFunc(g.group_idx, val)
+            })
+        }
+    },
+
+
+
+
+
 
 
 
@@ -185,19 +206,23 @@ export default {
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(val, session){
+        allAvgFunc(val, kpi){
             /*
             val : 찾을값
+            kpi : 선택한 kpi
             session : 차수
             */
             // base URL - 그룹별
             var baseURL = '/api/plans/score/'+this.lec_idx+'/group/'+val
+            baseURL += kpi != null ? '?kpi='+kpi : ''
+
+            var rid = this.groups.findIndex(g=>{
+                return g.group_idx == val
+            })
+            this.groups[rid].score=[] // 애니메이션처리
 
             this.$http.get(baseURL)
             .then(resp=>{
-                var rid = this.groups.findIndex(g=>{
-                    return g.group_idx == val
-                })
                 this.$set(this.groups[rid], 'score', resp.data.score)
                 this.$set(this.groups[rid], 'kpi', resp.data.kpiAvg)
             })

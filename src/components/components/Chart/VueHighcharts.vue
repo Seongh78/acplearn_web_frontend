@@ -7,8 +7,10 @@
   import Highcharts from 'highcharts'
   import {warn} from './debug'
   export default {
-    props: ['options', 'Highcharts'],
     name: 'VueHighcharts',
+
+    props: ['options', 'Highcharts'],
+
     data () {
       return {
         chart: null

@@ -69,7 +69,7 @@ export default {
 
 
     // ===== Props ===== //
-    props:['from'],
+    props:['from', 'kpi'],
 
 
 
@@ -93,7 +93,7 @@ export default {
 
 
         this.departments.forEach(dep=>{
-            this.allAvgFunc(dep.stu_department)
+            this.allAvgFunc(dep.stu_department, this.kpi)
         })
     },
 
@@ -106,16 +106,32 @@ export default {
 
 
 
+    // ===== Watch ===== //
+    watch:{
+        kpi (val){
+            this.departments.forEach(dep=>{
+                this.allAvgFunc(dep.stu_department, val)
+            })
+        }
+    },
+
+
+
     // ===== Methods ===== //
     methods:{
 
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(val){
+        allAvgFunc(val, kpi=null){
+            /*
+            val : 찾을값
+            kpi : 선택한 kpi
+            session : 차수
+            */
                 // 부서별
                 var baseURL = '/api/plans/score/'+this.lec_idx+'/departments/'+val
-                // var baseURL = '/api/plans/score/departments/18/사원'
+                baseURL += kpi != null ? '?kpi='+kpi : ''
 
                 this.$http.get(baseURL)
                 .then((resp)=>{

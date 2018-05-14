@@ -31,7 +31,7 @@ props
 
 
         <!-- ===== 사전 ===== -->
-        <div style=" margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " >
+        <!-- <div style=" margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " >
             <div class="sessionHeader" style="width:100%; min-width:50px; height:50px; padding:15px 0;">
                 <p>사전</p>
             </div>
@@ -48,14 +48,10 @@ props
                                 <hr class="bgLine">
                                 <hr class="bgLine">
                             </div>
-
-
                             <div class="selfScore" style="margin-left:0;"></div>
-                            <!-- <div class="othersScore"></div> -->
                         </div>
                     </div>
 
-                    <!--  -->
                     <div class="scoreTable">
                         <p class="gapTitle">-</p>
                         <p class="selfTitle">자가</p>
@@ -63,7 +59,7 @@ props
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <!-- <div style="position:fixed; margin-left:-1px;  z-index:99; background:#fff; box-shadow:3px 1px 4.5px 0 rgba(0,0,0, 0.15); " > -->
@@ -85,21 +81,19 @@ props
                                 <hr class="bgLine">
                             </div>
 
-                            <ui class="scoreNumber">
+                            <ul class="scoreNumber">
                                 <li>5</li>
                                 <li>4</li>
                                 <li>3</li>
                                 <li>2</li>
                                 <li>1</li>
-                                <!-- <li>0</li> -->
-                            </ui>
+                            </ul>
 
                             <div class="selfScore" style="margin-left:0;"></div>
-                            <!-- <div class="othersScore"></div> -->
                         </div>
                     </div>
 
-                    <!--  -->
+
                     <div class="scoreTable">
                         <p class="gapTitle">GAP</p>
                         <p class="selfTitle">자가</p>
@@ -190,7 +184,7 @@ props
 
 
         <!-- ===== 평균 ===== -->
-        <div style=" z-index:99; background:#fff; box-shadow:-3px 1px 4.5px 0 rgba(0,0,0, 0.15);" >
+        <!-- <div style=" z-index:99; background:#fff; box-shadow:-3px 1px 4.5px 0 rgba(0,0,0, 0.15);" >
             <div class="sessionHeader" style="width:100%; min-width:80px; height:50px; padding:20px;">
                 <p>평균</p>
             </div>
@@ -213,7 +207,6 @@ props
                         </div>
                     </div>
 
-                    <!--  -->
                     <div class="scoreTable">
                         <p class="gapTitle">{{ (avgOthersAll - avgSelfAll).toFixed(1) }}</p>
                         <p class="selfTitle">{{ avgSelfAll.toFixed(1) }}</p>
@@ -221,7 +214,7 @@ props
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- ===== 평균 ===== -->
 
 
@@ -409,8 +402,8 @@ export default {
                 position: absolute;
                 list-style: none;
                 line-height: 180%;
-                margin-top: -8px;
-                right:-3px;
+                margin-top: -6px;
+                right:-2px;
                 text-align: right;
                 padding-right: 4.5px;
                 font-size: 1.45em;

@@ -54,7 +54,7 @@ import {
     PolarChart,
 } from '../../../components'
 
-const name = ''
+const name = 'ReportGender'
 
 export default {
     name: name,
@@ -69,7 +69,7 @@ export default {
 
 
     // ===== Props ===== //
-    props:['from'],
+    props:['from', 'kpi'],
 
 
 
@@ -92,7 +92,7 @@ export default {
         // console.log(this.position);
 
         this.gender.forEach(g=>{
-            this.allAvgFunc(g.text)
+            this.allAvgFunc(g.text, this.kpi)
         })
     },
 
@@ -100,8 +100,24 @@ export default {
 
     // ===== Updated ===== //
     updated(){
-
+        console.log("this.kpi : ",this.kpi);
     },
+
+
+
+
+
+
+    // ===== Watch ===== //
+    watch:{
+        kpi (val){
+            console.log(val);
+            this.gender.forEach(g=>{
+                this.allAvgFunc(g.text, val)
+            })
+        }
+    },
+
 
 
 
@@ -111,12 +127,14 @@ export default {
 
 
         // === 전체 평균데이터 === //
-        allAvgFunc(val){
+        allAvgFunc(val, kpi){
+                console.log('kpi : ',kpi);
                 var baseURL = '/api/plans/score/'+this.lec_idx+'/gender/'+val
+                baseURL+= (kpi===null) ? '' : '?kpi='+kpi
 
                 this.$http.get(baseURL)
                 .then(resp=>{
-
+                    console.log(123);
                     var rid = this.gender.findIndex(g=>{
                         return g.text == val
                     })
