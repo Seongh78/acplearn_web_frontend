@@ -3,11 +3,20 @@
 
     <div class="fields">
         <!-- 시간 -->
-        <select class="eight wide field hour ui dropdown"  @input="updateTime()" ref="hourPicker" style="border-radius:0;">
+        <select
+            class="eight wide field hour ui dropdown"
+            @input="updateTime()"
+            @change="changeMethod()"
+            ref="hourPicker"
+            style="border-radius:0;">
             <option v-for="(h) in  timeLimit.hour" :value="h">{{h<10?'0':''}}{{ h }}시</option>
         </select>
         <!-- 분 -->
-        <select class="eight wide field minute ui dropdown"  @input="updateTime()" ref="minutePicker">
+        <select
+            class="eight wide field minute ui dropdown"
+            @input="updateTime()"
+            @change="changeMethod()"
+            ref="minutePicker">
             <option v-for="(m) in  timeLimit.minute" :value="m">{{m<10?'0':''}}{{ m }}분</option>
         </select>
     </div>
@@ -94,7 +103,14 @@ export default {
             //     minute : +this.$refs.minutePicker.value
             // })
             this.$emit('input', result)
-        }// updateTime
+        }, // updateTime
+
+
+
+
+        changeMethod(){
+
+        },
 
     }, // methods
 }

@@ -71,7 +71,7 @@
             <!-- 탭 02 - 기업목록 -->
             <div
                 class="ui bottom tab"
-                v-for="company in companies"
+                v-for="(company, comid) in companies"
                 v-bind:class="[thisTab==company.com_code ? 'active viewAnimate':'']" >
 
                     <!-- 기업정보 -->
@@ -87,13 +87,13 @@
                                 <th class="">기업명</th>
                                 <td >{{ company.com_name }}</td>
                                 <th class="borderTop">담당자</th>
-                                <td >{{ company.com_managerName }}</td>
+                                <td >{{ company.mg_name }} {{ company.mg_position?'('+company.mg_name+')' : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="borderTop">업종</th>
                                 <td colspan="">{{ company.com_category }}</td>
                                 <th class="borderTop">연락처</th>
-                                <td >{{ company.com_managerPhone }}</td>
+                                <td >{{ company.mg_phone }}</td>
                             </tr>
                             <tr>
                                 <th class="borderTop">주소</th>
@@ -170,7 +170,7 @@
                 </thead>
                 <!-- 전체 수강생 목록 -->
                 <tbody v-if="tempStudents.length>0">
-                    <tr v-for="std in tempStudents" v-if="std.com_code==thisTab || thisTabAddr<0">
+                    <tr v-for="(std, sid) in tempStudents" v-if="std.com_code==thisTab || thisTabAddr<0">
                         <td class="center aligned">{{ std.com_name }}</td>
                         <td class="center aligned">{{ std.stu_department }}</td>
                         <td class="center aligned">{{ std.stu_position }}</td>
@@ -179,7 +179,8 @@
                         <td class="center aligned">{{ std.stu_phone }}</td>
                         <td class="center aligned">{{ std.stu_joinYear }}</td>
                         <td class="center aligned">
-                            <button type="button" class="ui button basic mini">수정</button>
+                            <!-- <button type="button" class="ui button basic mini" @click.prevent="onEditStudent(std.com_name, sid)">수정</button> -->
+                            <button type="button" class="ui button basic mini" @click.prevent="modal.editStudent=true, editStudent=tempStudents[sid]">수정</button>
                             <button type="button" class="ui button red mini basic">삭제</button>
                         </td>
                     </tr>
@@ -350,13 +351,9 @@
         <h3 slot="header">수강생 등록</h3>
         <div slot="body">
 
-
-
-
             <form class="ui form">
                 <div class="field">
                     <label>소속</label>
-                    <!-- <input type="text" name="first-name" placeholder="First Name" value="(주)아카스타 - 자동기입" disabled> -->
                     <input type="text" name="first-name" placeholder="First Name" v-bind:value="getDefaultCompany(thisTab)" disabled>
                 </div>
 
@@ -452,6 +449,96 @@
 
 
 
+
+
+    <!-- 수강생 개별등록 모달 -->
+    <modal v-if="modal.editStudent" @close="modal.editStudent = false" w="w-40" h="">
+        <h3 slot="header">수강생 수정</h3>
+        <div slot="body">
+
+            <form class="ui form">
+                <div class="field">
+                    <label>소속</label>
+                    <input type="text" name="first-name" placeholder="First Name" v-bind:value="editStudent.com_code" disabled>
+                </div>
+
+                <div class="field">
+                    <label>부서/직급</label>
+                    <div class="two fields">
+                        <div class="field">
+                            <input type="text" name="shipping[first-name]" v-model="editStudent.stu_department" placeholder="부서">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="shipping[last-name]" v-model="editStudent.stu_position" placeholder="직급">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>이름</label>
+                    <input type="text" name="last-name" v-model="editStudent.stu_name" placeholder="이름을 입력해 주세요">
+                </div>
+
+                <div class="field">
+                    <label>연락처</label>
+                    <input type="text" name="last-name" v-model="editStudent.stu_phone" placeholder="이름을 입력해 주세요">
+                </div>
+
+                <div class="field">
+                    <label>성별</label>
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="fruit" tabindex="0" class="hidden" v-model="editStudent.stu_gender">
+                                <label>남자</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="fruit" tabindex="0" class="hidden" v-model="editStudent.stu_gender">
+                                <label>여자</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>입사일</label>
+                    <div class="two fields">
+                        <div class="field">
+                            <date-picker v-model="editStudent.stu_joinYear" format="yyyy-MM-dd" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+        <div slot="footer">
+            <div class="ui two bottom attached buttons">
+                <div class="ui button" @click="modal.editStudent=false, editStudent={
+                    stu_department : '',
+                    stu_position : '',
+                    stu_name : '',
+                    stu_phone : '',
+                    stu_joinYear : '',
+                    stu_gender : ''
+                }">확인</div>
+            </div>
+        </div>
+    </modal>
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- 기업정보수정 -->
     <modal v-if="modal.companyUpdate" @close="modal.companyUpdate = false" w="w-40" h="">
         <h3 slot="header">기업정보 수정</h3>
@@ -484,12 +571,12 @@
 
                 <div class="field">
                     <label>담당자</label>
-                    <input type="text" name="last-name" v-model="companyUpdate.com_mgName" placeholder="이름을 입력해 주세요">
+                    <input type="text" name="last-name" v-model="companyUpdate.mg_name" placeholder="이름을 입력해 주세요">
                 </div>
 
                 <div class="field">
                     <label>담당자 연락처</label>
-                    <input type="text" name="last-name" placeholder=" '-'(하이픈) 없이 입력해 주세요 " v-model="companyUpdate.com_managerPhone">
+                    <input type="text" name="last-name" placeholder=" '-'(하이픈) 없이 입력해 주세요 " v-model="companyUpdate.mg_phone">
                 </div>
 
             </form>
@@ -537,6 +624,7 @@ export default {
             modal:{
                 newCompany : false,
                 newStudent : false,
+                editStudent : false,
                 companyUpdate : false
             },
             thisTab:'f01', //탭
@@ -546,8 +634,9 @@ export default {
             selectSheet:0, // 업로드시트 선택
 
 
-            students:[], // 수강생목록
-            tempStudent:{
+            students : [], // 수강생목록
+            editStudent : {}, //수강생 정보 수정 임시변수
+            tempStudent : {
                 stu_department : '',
                 stu_position : '',
                 stu_name : '',
@@ -986,6 +1075,24 @@ export default {
                 resolve(this.students)
             })//promise
         },  // xlsParser()
+
+
+
+
+
+
+
+
+
+
+
+        onEditStudent(com_code, sid){
+            // alert(JSON.stringify(this.tempStudents[sid]))
+            alert(sid)
+        },
+
+
+
 
 
 

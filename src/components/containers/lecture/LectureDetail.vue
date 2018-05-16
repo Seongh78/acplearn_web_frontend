@@ -1,10 +1,11 @@
 <template>
-<div >
+    <div class="ui grid" style="text-align:center;" v-if="lecture.lec_title==null">
+        <loading style="margin: 0 auto;" />
+    </div>
+<div v-else>
 
     <!-- ========== 최상단 ========== -->
-    <!-- <div class="ui grid" style="text-align:center;" v-if="lecture==null">
-        <loading style="margin: 0 auto;" />
-    </div> -->
+
     <div class="ui grid" >
         <!-- ========== 상단 타이틀 ========== -->
         <div class="eleven wide column">
@@ -25,7 +26,7 @@
 
         <!-- ========== 컨트롤 버튼 그룹 ========== -->
         <div class="five wide column" style="text-align:right;">
-            <div class="ui basic buttons small">
+            <div class="ui basic buttons small" >
 
                 <!-- === 임시저장 === -->
                 <div class="ui button basic olive " v-if="lecture.lec_flag=='임시저장'">
@@ -288,8 +289,15 @@
                 <!-- === 집합교육 - 타이틀 === -->
 
 
+                <div class="sixteen wide column" style="text-align:center;" v-if="sess.ls_timetableFlag<1">
+                    <br>
+                    <no-contents header-text="집합교육 일정이 없습니다." icon="edit" class="viewLoadAnimation" />
+                    <br>
+                </div>
+
+
                 <!-- === 집합교육 - 목록 탭 === -->
-                <div class="three wide column" >
+                <div class="three wide column" v-if="sess.ls_timetableFlag>0">
                     <h3><i class="align left icon"></i> 교육목록</h3>
                     <div class="ui secondary vertical menu" style="width:100%;">
                         <!-- 강의회차 탭-->
@@ -308,7 +316,7 @@
 
 
                 <!-- === 집합교육 - 상세보기 타임라인 === -->
-                <div class="thirteen wide  column ">
+                <div class="thirteen wide  column "  v-if="sess.ls_timetableFlag>0">
                     <h3><i class="align left icon"></i> 시간표</h3>
                     <div
                         class="ui segment tab attached contentTab viewLoadAnimation"
@@ -1897,10 +1905,10 @@ export default {
 
             // === 강의기본정보 === //
             lec_idx:null,
-            lecture: null,
-            // lecture:{
-            //     sessions:[]
-            // },
+            // lecture: null,
+            lecture:{
+                sessions:[]
+            },
             company: {}, // 선택된 기업정보
             companies: [], // 강의에 참여하는 기업들
             departments: [],
