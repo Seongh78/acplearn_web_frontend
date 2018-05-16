@@ -217,7 +217,6 @@
                 <label class="opacity5">액플런 시작일</label>
                 <!-- <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" /> -->
                 <date-picker format="yyyy-MM-dd" v-model="session.ls_aplDate" language="ko" />
-                {{ session.ls_aplDate }}
             </div>
         </div>
         <!-- ===== 회차 헤더 ===== -->
@@ -245,6 +244,12 @@
             <!-- <a class="item" v-for="(class, cid)  in  session">1차</a> -->
             <a
                 class="item"
+                @click.prevent="thisClass=-1"
+                :class="[thisClass==-1?'active':'']">
+                전체
+            </a>
+            <a
+                class="item"
                 v-for="(sClass, cid)  in  session.sessionClass"
                 @click.prevent="thisClass=cid"
                 :class="[thisClass==cid?'active':'']">
@@ -270,6 +275,38 @@
 
 
         <!-- ========= 집합교육 내용 ========= -->
+        <div
+            class="ui bottom  tab  viewLoadAnimation"
+            style="padding:15px;"
+            :class="[thisClass==-1?'active':'']">
+
+            <table class="ui table celled ">
+                <colgroup>
+                    <col>
+                    <col width="18%">
+                    <col width="18%">
+                    <col width="10%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제</th>
+                        <th class="center aligned">교육일자</th>
+                        <th class="center aligned">시간</th>
+                        <th class="center aligned">수정</th>
+                    </tr>
+                </thead>
+                <tr v-for="(sClass, cid)  in  session.sessionClass">
+                    <td>{{ sClass.lsc_title }}</td>
+                    <td class="center aligned">{{ sClass.lsc_date }}</td>
+                    <td class="center aligned">00시간 00분</td>
+                    <td class="center aligned">
+                        <button type="button" class="ui button tiny" @click.prevent="thisClass=cid">수정</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
         <div
             class="ui bottom  tab  viewLoadAnimation"
             :class="[thisClass==cid?'active':'']"

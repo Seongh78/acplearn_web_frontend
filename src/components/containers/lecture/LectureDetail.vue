@@ -2,8 +2,10 @@
 <div >
 
     <!-- ========== 최상단 ========== -->
-    <div class="ui grid">
-
+    <!-- <div class="ui grid" style="text-align:center;" v-if="lecture==null">
+        <loading style="margin: 0 auto;" />
+    </div> -->
+    <div class="ui grid" >
         <!-- ========== 상단 타이틀 ========== -->
         <div class="eleven wide column">
         <!-- 타이틀 -->
@@ -1895,9 +1897,10 @@ export default {
 
             // === 강의기본정보 === //
             lec_idx:null,
-            lecture:{
-                sessions:[]
-            },
+            lecture: null,
+            // lecture:{
+            //     sessions:[]
+            // },
             company: {}, // 선택된 기업정보
             companies: [], // 강의에 참여하는 기업들
             departments: [],

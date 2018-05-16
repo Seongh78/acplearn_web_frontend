@@ -22,8 +22,8 @@
         <div class="ui grid">
             <div class="eleven wide column">
                 <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                    <slide-graph :chart="group.score" />
-                    <!-- <slide-graph :chart="group.score" /> -->
+                    <loading v-if="group.score==null" style="height:373px;" />
+                    <slide-graph :chart="group.score" v-else />
                 </div>
             </div>
 
@@ -219,7 +219,7 @@ export default {
             var rid = this.groups.findIndex(g=>{
                 return g.group_idx == val
             })
-            this.groups[rid].score=[] // 애니메이션처리
+            this.groups[rid].score=null // 애니메이션처리
 
             this.$http.get(baseURL)
             .then(resp=>{

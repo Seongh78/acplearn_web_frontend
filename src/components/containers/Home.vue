@@ -12,7 +12,7 @@
                 <h1 style="font-size:2.95em; font-family: 'Nanum Gothic', cursive; text-align:left; margin-top:0px;">
                     <small>행동변화 혁신 플랫폼</small> Acplearn <br>
                     <a href="#serviceInro">
-                    <button type="button" class="ui  button large detailBtn" style="margin-top:25px;">서비스소개</button>
+                    <button type="button" class="ui  button big detailBtn" style="margin-top:25px;">서비스소개</button>
                     </a>
                 </h1>
                 <!-- <h1 style="font-size:2.2em; font-family: 'Nanum Gothic', cursive; ">성공이란 오래된 습관의 경정체다 - 김승호 <생각의 비밀 중> -</h1> -->

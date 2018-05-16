@@ -23,7 +23,8 @@
         <div class="ui grid">
             <div class="eleven wide column">
                 <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                    <slide-graph :chart="g.score" />
+                    <loading style="height:373px;" v-if="g.score==null" />
+                    <slide-graph :chart="g.score" v-else />
                 </div>
             </div>
 
@@ -131,6 +132,11 @@ export default {
                 console.log('kpi : ',kpi);
                 var baseURL = '/api/plans/score/'+this.lec_idx+'/gender/'+val
                 baseURL+= (kpi===null) ? '' : '?kpi='+kpi
+
+                var rid = this.gender.findIndex(g=>{
+                    return g.text == val
+                })
+                this.gender[rid].score = null
 
                 this.$http.get(baseURL)
                 .then(resp=>{

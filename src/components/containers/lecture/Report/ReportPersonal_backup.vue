@@ -40,16 +40,9 @@
         <!--PLAN목록 -->
         <div class="twelve wide column">
 
-            <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
-                {{ thisStudnet>0 ? filteredStudent.stu_name : '전체' }}
-            </h4>
-            <div class="ui attached segment" style="padding:0 1px; overflow-x: scroll;" v-if="thisStudnet>0">
-                <loading v-if="personalData.score==null" />
-                <slide-graph :chart="personalData.score" v-else />
-            </div>
 
 
-            <table class="ui table actionPlan selectable single line attached" style="padding:0;">
+            <table class="ui table actionPlan selectable single line " style="padding:0;">
                 <colgroup>
                     <col>
                     <col width="18%">
@@ -137,10 +130,6 @@ export default {
         plans : [], // 플랜목록
 
         thisStudnet:-1, // 현재 선택학생
-        personalData:{
-            kpi: null,
-            score: null
-        }, // 선택된 학생의 차트데이터
     }},
 
 
@@ -158,26 +147,6 @@ export default {
     updated(){
 
     },
-
-
-
-
-
-    // ===== Computed ===== //
-    computed:{
-        filteredStudent(){
-            if ( !this.from.students.length || this.thisStudnet<0 ){
-               return []
-            }
-            var rid = this.from.students.findIndex(p =>{
-                 return p.stu_idx == this.thisStudnet
-             })
-            return this.from.students[rid]
-        }
-    },
-
-
-
 
 
 
@@ -224,24 +193,9 @@ export default {
         },// === 개별데이터 === //
 
 
-
-
-
         // === === //
         selectStudnetFunc(val){
-            this.$set(this, 'thisStudnet', val )
-            this.$set(this.personalData, 'score', null)
 
-            var baseURL = '/api/plans/score/'+this.lec_idx+'/personal/'+Number(val)
-
-            this.$http.get(baseURL)
-            .then(resp=>{
-                this.$set(this.personalData, 'score', resp.data.score)
-                // console.log(resp.data);
-            })
-            .catch(err => {
-                this.$set(this.personalData, 'score', [])
-            })
         },
 
 

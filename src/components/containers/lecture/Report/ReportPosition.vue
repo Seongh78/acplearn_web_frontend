@@ -23,7 +23,8 @@
         <div class="ui grid">
             <div class="eleven wide column">
                 <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                    <slide-graph :chart="po.score" />
+                    <loading style="height:373px;" v-if="po.score==null" />
+                    <slide-graph :chart="po.score" v-else />
                 </div>
             </div>
 
@@ -134,12 +135,16 @@ export default {
                 var baseURL = '/api/plans/score/'+this.lec_idx+'/position/'+val
                 baseURL += kpi != null ? '?kpi='+kpi : ''
 
+                // 찾은데이터 푸시할 배열번지 찾기
+                var rid = this.position.findIndex(po=>{
+                    return po.stu_position == val
+                })
+                this.position[rid].score=null
+
                 this.$http.get(baseURL)
                 .then(resp=>{
 
-                    var rid = this.position.findIndex(po=>{
-                        return po.stu_position == val
-                    })
+
                     this.$set(this.position[rid], 'score', resp.data.score)
                     this.$set(this.position[rid], 'kpi', resp.data.kpiAvg)
                 })
