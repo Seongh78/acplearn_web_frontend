@@ -7,6 +7,8 @@
             {{ po.stu_position }}
             &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('position', po.stu_position)">액션플랜보기</button>
             <hr class="opacity3">
+            사전점수 : {{ avgBeforeScore }}
+            <hr class="opacity3">
             <small>
                 <a
                     class="cursorPointer"
@@ -79,7 +81,8 @@ export default {
 
         lec_idx : null , // 강의아이디
         chartData: [],
-        position : []
+        position : [],
+        avgBeforeScore:-1, // 사전점수
 
     }},
 
@@ -147,6 +150,7 @@ export default {
 
                     this.$set(this.position[rid], 'score', resp.data.score)
                     this.$set(this.position[rid], 'kpi', resp.data.kpiAvg)
+                    this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
                 })
                 .catch((err)=>{
                     alert('Error - '+err)

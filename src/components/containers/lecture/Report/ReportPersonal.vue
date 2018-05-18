@@ -141,6 +141,8 @@ export default {
             kpi: null,
             score: null
         }, // 선택된 학생의 차트데이터
+
+        avgBeforeScore:-1, // 사전점수
     }},
 
 
@@ -208,6 +210,7 @@ export default {
                 //누적데이터
                 var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
                 var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                // this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
                 // 모달 ON
                 this.$EventBus.$emit('modal', {
                     name : 'personalGraph',

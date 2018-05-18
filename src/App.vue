@@ -128,6 +128,24 @@
         cursor: pointer !important;
     }
 
+    .nonePadding{
+        padding:0 !important;
+    }
+    .noneMargin{
+        margin:0 !important;
+    }
+    .noneBorder{
+        border:none !important;
+    }
+    .noneBorder-vertical{
+        border-top:none !important;
+        border-bottom:none !important;
+    }
+    .noneBorder-horizental{
+        border-left:none !important;
+        border-right:none !important;
+    }
+
 
     .opacity2{ opacity: .2; }
     .opacity3{ opacity: .3; }

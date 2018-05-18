@@ -5,6 +5,9 @@
     <h4 class="ui block attached header " style="border-top:1px solid #d7d7d7;">
         전체 평균
         &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc()">액션플랜보기</button>
+
+        <hr class="opacity3">
+        사전점수 : {{ avgBeforeScore }}
     </h4>
 
 
@@ -100,7 +103,7 @@ export default {
         sess : [],
         chartData : [], // 차트데이터
         kpiAvg: [],
-
+        avgBeforeScore:-1, // 사전점수
 
 
     }},
@@ -204,6 +207,7 @@ export default {
                 // console.log(resp.data.score);
                 this.$set(this, 'chartData', resp.data.score)
                 this.$set(this, 'kpiAvg', resp.data.kpiAvg)
+                this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
             })
             .catch(err=>{
                 alert('Error - '+err)

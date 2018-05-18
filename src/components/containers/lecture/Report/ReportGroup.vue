@@ -8,6 +8,8 @@
             {{ group.group_name }}(조) 평균
             &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('group', group.group_idx)">액션플랜보기</button>
             <hr class="opacity3">
+            사전점수 : {{ avgBeforeScore }}
+            <hr class="opacity3">
             <small>
                 <a
                     class="cursorPointer"
@@ -104,7 +106,9 @@ export default {
         groups:[],
         chartData:[],
 
-        selectKpi:-1
+        selectKpi:-1,
+
+        avgBeforeScore:-1, // 사전점수
 
     }},
 
@@ -225,6 +229,7 @@ export default {
             .then(resp=>{
                 this.$set(this.groups[rid], 'score', resp.data.score)
                 this.$set(this.groups[rid], 'kpi', resp.data.kpiAvg)
+                this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
             })
             .catch(err=>{
                 alert('Error - '+err)

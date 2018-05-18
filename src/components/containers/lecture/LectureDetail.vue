@@ -24,6 +24,8 @@
 
 
 
+
+
         <!-- ========== 컨트롤 버튼 그룹 ========== -->
         <div class="five wide column" style="text-align:right;">
             <div class="ui basic buttons small" >
@@ -471,25 +473,6 @@
                         </div>
                     </td>
                 </tr>
-                <!-- <tr v-for="(sess,sid)  in  lecture.sessions">
-                    <td class="center aligned">{{ sid+1 }}차 강의</td>
-                    <td>
-                        <div class="ui basic olive progress" style="margin:0;">
-                            <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
-                                <div class="progress">{{ lecture.sessions[sid].apa=attendancePercent(sid) }}%</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td
-                        v-if="sid==0"
-                        v-bind:rowspan="lecture.sessions.length"
-                        style="text-align:center;">
-                        <div class="ui small statistic">
-                          <div class="label">평균 출석률</div>
-                          <div class="value">  {{ attendancePercentAvg() }}%</div>
-                        </div>
-                    </td>
-                </tr> -->
             </tbody>
         </table>
         </div>
@@ -1139,13 +1122,167 @@
 
     ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==6?'active viewAnimate':'']" >
-        <br>
-        <br>
-        <div class="container" style="text-align:center;">
-            <no-contents header-text="리포트 컨텐즈를 준비중입니다." icon="signal" />
+        <div class="container">
+            <report-summary :lecture="lecture" :companies="companies" />
+
+
+            <!-- ===============
+            3. 출석률
+            =============== -->
+            <div class="ui segment" style="padding:50px;">
+                <h2 class="ui dividing header">3. 출석률</h2>
+
+                <div class="" >
+                    <table class="ui celled table" >
+                    <colgroup>
+                        <col width="15%">
+                        <col width="65%">
+                        <col width="20%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="center aligned">오프라인강의 차시</th>
+                            <th class="center aligned">출석률</th>
+                            <th class="center aligned">전체평균</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="center aligned">0차 강의</td>
+                            <td></td>
+                            <td style="text-align:center;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+
+            <!-- ===============
+            4. 교육진행
+            =============== -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">4. 교육진행</h2>
+                <br>
+
+                <!-- === 세션반복 === -->
+                <div class="" v-for="(sess, jj) in lecture.sessions" style="padding-left:25px;">
+                    <!-- == 세션제목 == -->
+                    <h4 class="ui header" >
+                        {{ jj+1 }}회차 - {{ sess.ls_title }}
+                        <div class="sub header"  style="line-height:210%;">
+                            <i class="icon calendar outline"></i>
+                            <b>강의일정 :</b> {{ sess.ls_startDate }}
+                                &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                            <i class="icon clock outline"></i>
+                            <b>시간 :</b> {{ sess.startTime }} ~ {{ sess.endTime }} (00시간)
+                        </div>
+                    </h4>
+                    <!-- <hr class="opacity4"> -->
+                    <!-- == 세션제목 == -->
+
+
+                    <div >
+                        <!-- == 집합교육 반복 == -->
+                        <div v-for="(sClass, scid) in sess.sessionClass">
+                            <!-- == 오프라인 차시 타이틀 == -->
+                            <h3 class="ui top attached header">
+                              {{scid+1}}차 교육{{ sClass.lsc_date }}
+                            </h3>
+                            <!-- == 오프라인 차시 타이틀 == -->
+
+                            <!-- == 커리큘럼 내용 == -->
+                            <div class="ui attached segment nonePadding">
+                                <table class="ui table noneMargin noneBorder celled">
+                                    <colgroup>
+                                        <col width="10%">
+                                    </colgroup>
+                                    <tr v-for="(timetable, tid)  in  sClass.timetables">
+                                        <th class="borderTop center aligned">
+                                            {{ timetable.start ? timetable.start : '00:00' }} ~ {{ timetable.end ? timetable.end : '00:00' }}
+                                        </th>
+                                        <td class="nonePadding">
+
+                                            <table class="ui table celled structured noneBorder" >
+                                                <colgroup>
+                                                    <col width="7%">
+                                                    <col>
+                                                </colgroup>
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="borderTop center aligned">주제</th>
+                                                        <td>{{ timetable.lt_title }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="borderTop center aligned">내용</th>
+                                                        <td style="padding:0;">
+                                                            <table class="ui line table " style="border:none; margin-bottom:0;">
+                                                                <colgroup>
+                                                                    <col width="10%">
+                                                                    <col width="16%">
+                                                                    <col>
+                                                                    <col width="7.5%">
+                                                                    <col width="7.5%">
+                                                                    <col width="12%">
+                                                                </colgroup>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="noneBorder-horizental center aligned">유형</th>
+                                                                        <th class="noneBorder-horizental center aligned">시간</th>
+                                                                        <th class="noneBorder-horizental ">주제</th>
+                                                                        <th class="noneBorder-horizental center aligned">피드</th>
+                                                                        <th class="noneBorder-horizental center aligned">이미지</th>
+                                                                        <th class="noneBorder-horizental center aligned">강사</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr v-for="(module, mid)  in  timetable.modules" class="">
+                                                                        <td class="noneBorder-horizental center aligned">
+                                                                            &nbsp;
+                                                                            <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ module.lm_type=='강의' ? 'blue' :  module.lm_type=='미션' ? 'green' : 'orange' ]">
+                                                                                {{ module.lm_type }}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="noneBorder-horizental center aligned">{{ module.lm_startTime }} ~ {{ module.lm_endTime }}</td>
+                                                                        <td class="noneBorder-horizental">{{ module.lm_title }}</td>
+
+                                                                        <td class="noneBorder-horizental center aligned">
+                                                                            {{ module.lm_textCount }}건
+                                                                        </td>
+                                                                        <td class="noneBorder-horizental center aligned">
+                                                                            {{ module.lm_imgCount }}건
+                                                                        </td>
+
+
+                                                                        <td class="noneBorder-horizental center aligned">{{ module.lm_teacher }}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- == 커리큘럼 내용 == -->
+
+                                <br>
+                                <br>
+                        </div>
+                        <!-- == 집합교육 반복 == -->
+                    </div>
+
+
+                    <br>
+                </div>
+                <!-- === 세션반복 === -->
+
+            </div>
         </div>
-        <br>
-        <br>
     </div>
     <!-- ========================
     리포트
@@ -1690,10 +1827,6 @@
                 <col width="12%">
                 <col width="50%">
                 <col width="15%">
-                <!-- <col width="6%">
-                <col width="6%">
-                <col width="6%">
-                <col width="6%"> -->
             </colgroup>
             <thead>
                 <tr>
@@ -1720,9 +1853,6 @@
             </tbody>
         </table>
         <br>
-
-
-
 
 
 
@@ -1842,6 +1972,9 @@ import {
     ReportPersonal,
 } from './Report'
 
+// 출력용 리포트 뷰
+import { ReportSummary } from './ReportStatic'
+
 // 강의모듈
 import LectureModule from './LectureModule'
 // 로딩싸이클
@@ -1882,7 +2015,10 @@ export default {
         SlideGraph,
         PolarChart,
 
-        LoadingCycle
+        LoadingCycle,
+
+        // 출력용리포트
+        ReportSummary,
     },
 
 
@@ -1926,7 +2062,7 @@ export default {
             groupTab:'' , // 선택한 그룹아이디
             chooseTeam:{}, // 선택한 그룹 정보
             companyTab:0,
-            tab:5, // 현재 활성화 탭
+            tab: 5, // 현재 활성화 탭
             // attendanceCount : 0, // 출석 카운트
             avgAttendancePercent : 0, // 평균출석률
 

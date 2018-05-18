@@ -7,6 +7,8 @@
             {{ dep.stu_department }}
             &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('departments', dep.stu_department)">액션플랜보기</button>
             <hr class="opacity3">
+            사전점수 : {{ avgBeforeScore }}
+            <hr class="opacity3">
             <small>
                 <a
                     class="cursorPointer"
@@ -79,7 +81,8 @@ export default {
 
         lec_idx : null , // 강의아이디
         chartData: [],
-        departments : []
+        departments : [],
+        avgBeforeScore:-1, // 사전점수
 
     }},
 
@@ -145,6 +148,7 @@ export default {
 
                     this.$set(this.departments[rid], 'score', resp.data.score)
                     this.$set(this.departments[rid], 'kpi', resp.data.kpiAvg)
+                    this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
                 })
                 .catch((err)=>{
                     alert('Error - '+err)
