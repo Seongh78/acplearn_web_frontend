@@ -274,10 +274,12 @@ export default {
                 this.$http.get('/api/plans/comments/'+stu_idx)
             ])
             .then(this.$http.spread((resp, resp2)=>{
-
+                console.log(resp);
                 //누적데이터
                 var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
                 var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                // var beforeAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                // this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
                 var comments = resp2.data.comments
 
                 // 모달 ON
