@@ -10,7 +10,7 @@
         <!-- ========== 상단 타이틀 ========== -->
         <div class="eleven wide column">
         <!-- 타이틀 -->
-            <h2 class="ui header" @click.prevent="modal.aadd=true">
+            <h2 class="ui header">
                 <div
                     class="ui right pointing  basic label"
                     style="margin-left:0;"
@@ -1070,7 +1070,33 @@
             </table>
 
             <br>
+            <div class="inline fields" style="font-size:1.1em;">
+                <div class="field">
+                    <h3>평가기준</h3>
+                </div>
+                <div class="two field">
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 하지않음 /
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 조금 /
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 보통 /
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 열심히 /
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                    <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 매우열심히
+                </div>
+            </div>
+
             <br>
+            <br>
+
+
         </div>
         <!-- === 강의차수 === -->
 
@@ -1081,7 +1107,7 @@
         <div class="ui tab active viewLoadAnimation" v-for="(menu, mid)  in  reportMenus" v-if="thisCategory===menu.id">
 
             <!-- 리포트 컴포넌트 동적 바인딩 -->
-            <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions"></component>
+            <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions" :groups="groups"></component>
             <!-- 리포트 컴포넌트 동적 바인딩 -->
 
         </div>
@@ -1680,7 +1706,22 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="center aligned" colspan="5"></th>
+                    <th class="center aligned" colspan="5">
+                        <div class="ui three statistics">
+                            <div class="statistic">
+                                <div class="label">진행률</div>
+                                <div class="value">85<small>%</small></div>
+                            </div>
+                            <div class="statistic">
+                                <div class="label">참여율</div>
+                                <div class="value">92<small>%</small></div>
+                            </div>
+                            <div class="statistic">
+                                <div class="label">성취율</div>
+                                <div class="value">79<small>%</small></div>
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </tfoot>
         </table>
@@ -1693,9 +1734,67 @@
 
         <div class="" style="width:100%;  ">
             <div>
-                <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">전체</h3>
+                <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+                    전체
+                </h3>
+                <!-- === 평가자료 === -->
+                <table class="ui table celled attached segment " >
+                    <colgroup>
+                        <col width="13%">
+                        <col width="20.3%">
+                        <col width="13%">
+                        <col width="20.3%">
+                        <col width="13%">
+                        <col width="20.3%">
+                    </colgroup>
+                    <tr>
+                        <th class="borderTop" >참여일</th>
+                        <td class="">자가:00일(팀:00일</td>
+
+                        <th class="borderTop" >사전점수</th>
+                        <td class="">00점</td>
+
+                        <th class="borderTop" >참여팀원</th>
+                        <td class=""></td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop" >진행율</th>
+                        <td class="">00%</td>
+
+                        <th class="borderTop" >수행평균</th>
+                        <td class="">00</td>
+
+                        <th class="borderTop" >팀원평균</th>
+                        <td class="">00</td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop" >참여율</th>
+                        <td class="">
+                            자가:00%
+                            (팀:00%)
+                        </td>
+
+                        <th class="borderTop" >역량향상</th>
+                        <td class=""></td>
+
+                        <th class="borderTop" >평가GAP</th>
+                        <td class="">00</td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop" >자가성취율</th>
+                        <td class="">00 / 00일</td>
+
+                        <th class="borderTop" >역량향상률</th>
+                        <td class=""></td>
+
+                        <th class="borderTop" >팀원신뢰율</th>
+                        <td class=""></td>
+                    </tr>
+                </table>
+                <!-- === 평가자료 === -->
 
                 <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
+
                     <slide-graph :chart="personalScore.allAvg" style="position:relative;" />
                 </div>
 

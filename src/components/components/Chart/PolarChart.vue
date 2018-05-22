@@ -42,6 +42,7 @@ export default {
         chartData:[], // 차트데이터
 
         options: {
+            // top:110,
             chart: {
                 polar: true,
                 type: 'line'
@@ -68,6 +69,7 @@ export default {
             },
 
             yAxis: {
+
                 gridLineInterpolation: 'polygon',
                 lineWidth: 0,
                 min: 0,
@@ -104,20 +106,23 @@ export default {
             */
             var tempSeries = []
             var tempCategories = []
-            var avgSelfScore=[] , avgOthersScore=[], avgGap=[]
+            var avgSelfScore=[] , avgOthersScore=[], avgGap=[], beforeScore=[]
 
             // 하이차트 데이터 형태로 변환
             var self=0, others=0
             for(var ii  in  cd){
                 // 자가평가 점수
-                self        = (cd[ii].avgSelfScore==null || cd[ii].avgSelfScore==undefined) ? 0 : cd[ii].avgSelfScore
+                self = (cd[ii].avgSelfScore==null || cd[ii].avgSelfScore==undefined) ? 0 : cd[ii].avgSelfScore
                 // 팀원평가 점수
-                others   = (cd[ii].avgOthersScore==null || cd[ii].avgOthersScore==undefined) ? 0 : cd[ii].avgOthersScore
+                others = (cd[ii].avgOthersScore==null || cd[ii].avgOthersScore==undefined) ? 0 : cd[ii].avgOthersScore
+                // 사전평가 점수
+                beforeScore = (cd[ii].avgBeforeScore==null || cd[ii].avgBeforeScore==undefined) ? 0 : cd[ii].avgBeforeScore
 
                 // 임시모델로 푸시
                 avgSelfScore.push( self )
                 avgOthersScore.push(others)
-                avgGap.push( others - self )
+                // avgGap.push( others - self )
+                avgGap.push( beforeScore )
                 // 항목푸시
                 tempCategories.push(cd[ii].cc2_name)
             }// for
@@ -136,7 +141,7 @@ export default {
                     color:'#90ed7d'
                 },
                 {
-                    name: 'GAP',
+                    name: '사전점수',
                     data: avgGap,
                     pointPlacement: 'on',
                     color:'#FF8224'
