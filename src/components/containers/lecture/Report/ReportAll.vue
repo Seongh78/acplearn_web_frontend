@@ -6,69 +6,71 @@
         전체 평균
         &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc()">액션플랜보기</button>
 
-        <hr class="opacity3">
+        <!-- <hr class="opacity3"> -->
         <!-- 사전점수 : {{ avgBeforeScore }} -->
 
-
-
-        <!-- === 평가자료 === -->
-        <table class="ui table noneBorder" style="background:none;" >
-            <colgroup>
-                <col width="10%">
-                <col width="23.3%">
-                <col width="10%">
-                <col width="23.3%">
-                <col width="10%">
-                <col width="23.3%">
-            </colgroup>
-            <tr>
-                <th style="background:none;">참여일</th>
-                <td class="noneBorder">자가:{{ participationSelfScore.length }}일(팀:{{ participationOthersScore.length }}) / {{ filteredScore.length }}일</td>
-
-                <th style="background:none;">사전점수</th>
-                <td class="noneBorder">{{ avgBeforeScore }}점</td>
-
-                <th style="background:none;">참여팀원</th>
-                <td class="noneBorder"></td>
-            </tr>
-            <tr>
-                <th style="background:none;">진행율</th>
-                <td class="noneBorder">{{ participationRate }}%</td>
-
-                <th style="background:none;">수행평균</th>
-                <td class="noneBorder">{{ (selfAvg/participationSelfScore.length).toFixed(1) }}</td>
-
-                <th style="background:none;">팀원평균</th>
-                <td class="noneBorder">{{ (othersAvg/participationOthersScore.length).toFixed(1) }}</td>
-            </tr>
-            <tr>
-                <th style="background:none;">참여율</th>
-                <td class="noneBorder">
-                    자가:{{ ((participationSelfScore.length*100) / filteredScore.length).toFixed(1) }}%
-                    (팀:{{ ((participationOthersScore.length*100) / filteredScore.length).toFixed(1) }}%)
-                </td>
-
-                <th style="background:none;">역량향상</th>
-                <td class="noneBorder"></td>
-
-                <th style="background:none;">평가GAP</th>
-                <td class="noneBorder">{{ ((othersAvg/participationOthersScore.length).toFixed(1) - (selfAvg/participationSelfScore.length).toFixed(1)).toFixed(1) }}</td>
-            </tr>
-            <tr>
-                <th style="background:none;">자가성취율</th>
-                <td class="noneBorder">00 / {{ filteredScore.length }}일</td>
-
-                <th style="background:none;">역량향상률</th>
-                <td class="noneBorder"></td>
-
-                <th style="background:none;">팀원신뢰율</th>
-                <td class="noneBorder"></td>
-            </tr>
-        </table>
-        <!-- === 평가자료 === -->
-
-
     </h4>
+    <!-- === 평가자료 === -->
+    <table class="ui table attached" >
+        <colgroup>
+            <col width="10%">
+            <col width="23.3%">
+            <col width="10%">
+            <col width="23.3%">
+            <col width="10%">
+            <col width="23.3%">
+        </colgroup>
+        <tr>
+            <th>참여일</th>
+            <td>자가:{{ participationSelfScore.length }}(팀:{{ participationOthersScore.length }})일 / {{ filteredScore.length }}일</td>
+
+            <th>사전점수</th>
+            <td>{{ avgBeforeScore }}점</td>
+
+            <th>참여팀원</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th class="borderTop">진행율</th>
+            <td>{{ participationRate }}%</td>
+
+            <th class="borderTop">수행평균</th>
+            <td>{{ (selfAvg/participationSelfScore.length).toFixed(1) }}점</td>
+
+            <th class="borderTop">팀원평균</th>
+            <td>{{ (othersAvg/participationOthersScore.length).toFixed(1) }}점</td>
+        </tr>
+        <tr>
+            <th class="borderTop">참여율</th>
+            <td>
+                자가:{{ ((participationSelfScore.length*100) / filteredScore.length).toFixed(1) }}%
+                (팀:{{ ((participationOthersScore.length*100) / filteredScore.length).toFixed(1) }}%)
+            </td>
+
+            <th class="borderTop">역량향상</th>
+            <td>{{ ((selfAvg/participationSelfScore.length) - avgBeforeScore).toFixed(1) }}점</td>
+
+            <th class="borderTop">평가GAP</th>
+            <td>
+                {{ ((othersAvg/participationOthersScore.length).toFixed(1) - (selfAvg/participationSelfScore.length).toFixed(1)).toFixed(1) }}점
+            </td>
+        </tr>
+        <tr>
+            <th class="borderTop">자가성취율</th>
+            <td>{{ ((selfAvg/participationSelfScore.length)*25).toFixed(1) }}</td>
+
+            <th class="borderTop">역량향상률</th>
+            <td>
+                {{ (((selfAvg/participationSelfScore.length) - avgBeforeScore) * 25).toFixed(1) }}%
+            </td>
+
+            <th class="borderTop">팀원신뢰율</th>
+            <td>
+                {{ (((othersAvg/participationOthersScore.length) *100) / (selfAvg/participationSelfScore.length)).toFixed(1) }}%
+            </td>
+        </tr>
+    </table>
+    <!-- === 평가자료 === -->
 
 
     <div class="ui attached  grid" style="padding:0;">

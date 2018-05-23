@@ -1064,7 +1064,7 @@
                 <tr>
                     <th  class="center aligned borderTop">APL기간</th>
                     <td  class="center aligned" v-for="(sess, jj) in lecture.sessions" >
-                        <label :for="'cs-'+sess.ls_idx">{{sess.ls_startDate}} ~ {{sess.ls_endDate}}</label>
+                        <label :for="'cs-'+sess.ls_idx">{{sess.ls_aplDate}} ~ {{sess.ls_endDate}}</label>
                     </td>
                 </tr>
             </table>
@@ -1148,6 +1148,16 @@
 
     ============================ -->
     <div class="ui bottom attached tab segment viewLoadAnimation" v-bind:class="[tab==6?'active viewAnimate':'']" >
+
+        <h4 class="ui header ">참여기업</h4>
+        <div class="ui secondary  menu">
+            <a class="active item">전체</a>
+            <a class="item" v-for="(com,i) in companies">{{ com.com_name }}</a>
+        </div>
+        <div class="ui visible message">
+            <p><b>URL > </b><a href="#">http://localhost:8081/lectures/processes/18?com=all</a> </p>
+        </div>
+
         <div class="container">
             <report-summary :lecture="lecture" :companies="companies" />
 
@@ -1157,7 +1167,6 @@
             =============== -->
             <div class="ui segment" style="padding:50px;">
                 <h2 class="ui dividing header">3. 출석률</h2>
-
                 <div class="" >
                     <table class="ui celled table" >
                     <colgroup>
@@ -1173,10 +1182,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="center aligned">0차 강의</td>
-                            <td></td>
-                            <td style="text-align:center;"></td>
+                        <tr v-for="(sess,sid)  in  attendanceCount">
+                            <td class="center aligned">{{ sid+1 }}차 강의</td>
+                            <td>
+                                <div class="ui basic olive progress" style="margin:0;">
+                                    <div  class="bar" v-bind:style="{ width: attendancePercent(sid) + '%' }">
+                                        <div class="progress">{{ sess.avg }}%</div>
+                                        <!-- <div class="progress">{{ lecture.sessions[sid].apa=attendancePercent(sid) }}%</div> -->
+                                    </div>
+                                </div>
+                            </td>
+                            <td
+                                v-if="sid==0"
+                                v-bind:rowspan="attendanceCount.length"
+                                style="text-align:center;">
+                                <div class="ui small statistic">
+                                  <div class="label">평균 출석률</div>
+                                  <div class="value">  {{ attendancePercentAvg() }}%</div>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -1308,6 +1332,56 @@
                 <!-- === 세션반복 === -->
 
             </div>
+
+
+            <!-- ===============
+            5. 액션플랜
+            =============== -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">5. 액션플랜</h2>
+                <div class="" style="margin: 50px 0;">
+                    <div class="field">
+                        <h3>평가기준</h3>
+                    </div>
+                    <div class="two field">
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 하지않음 /
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 조금 /
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 보통 /
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 열심히 /
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i>
+                        <i class="icon ratingScore star select" style="color:#F2CB61; margin-right:-5px;"></i> 매우열심히
+                    </div>
+                </div>
+
+                <!-- 전체 -->
+                <div class="">
+                    <!-- <component
+                        is="ReportAll"
+                        :kpi="actionplanKpi"
+                        :checked-sessions="checkedSessions"
+                        :groups="groups">
+                    </component> -->
+                </div>
+                <div class="" v-for="(menu, mid)  in  reportMenus" >
+                    {{ menu }}
+                    <!-- 리포트 컴포넌트 동적 바인딩 -->
+                    <!-- <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions" :groups="groups"></component> -->
+                    <!-- 리포트 컴포넌트 동적 바인딩 -->
+
+                </div>
+            </div>
+
+
+
         </div>
     </div>
     <!-- ========================
@@ -2205,8 +2279,8 @@ export default {
                 { id: 'department', name: '부서별' , component: 'ReportDepartment', },
                 { id: 'position', name: '직급별' , component: 'ReportPosition' },
                 { id: 'gender', name: '성별' , component: 'ReportGender' },
-                { id: 'age', name: '연령별' , component: 'ReportAge' },
-                { id: 'joinYear', name: '입사연차별' , component: 'ReportJoinYear' },
+                // { id: 'age', name: '연령별' , component: 'ReportAge' },
+                // { id: 'joinYear', name: '입사연차별' , component: 'ReportJoinYear' },
                 { id: 'personal', name: '개인별' , component: 'ReportPersonal' },
             ],
             personalScore : {
@@ -2419,6 +2493,9 @@ export default {
                 this.$set(this, 'students', resp.data.students)
                 this.$set(this, 'kpi', resp.data.kpi)
 
+
+
+
                 // 출석회수 구하기
                 var sessKeys = Object.keys(resp.data.lecture.sessions)
                 var attendanceCount = []
@@ -2428,6 +2505,15 @@ export default {
                     }
                 }
                 // this.$set(this, 'attendanceCount', attendanceCount)// 출석회수 입력
+
+
+                // Static 출석률 만들기
+                for(var sid  in  attendanceCount){
+                    this.attendancePercent(sid)
+                }
+                // this.attendancePercentAvg() // 전체평균
+
+
 
                 // 액션플랜 - 디폴트설정 - 모든차시선택
                 resp.data.lecture.sessions.forEach((sess)=>{
@@ -2460,6 +2546,11 @@ export default {
 
 
         // ========== 출석 ========== //
+        // 출석률만들기 함수
+        attendanceAllFunc(){
+
+        },
+
 
         // 출석데이터 파서
         attendanceParser(atd){
