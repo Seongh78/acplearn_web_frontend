@@ -4,6 +4,7 @@
     <!-- 전체 - 통계  -->
     <h4 class="ui block attached header " style="border-top:1px solid #d7d7d7;">
         전체 평균
+        <!-- {{ analysis }} -->
         <!-- &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc()">액션플랜보기</button> -->
 
         <!-- <hr class="opacity3"> -->
@@ -11,7 +12,7 @@
 
     </h4>
     <!-- === 평가자료 === -->
-    <!-- <table class="ui table attached" >
+    <table class="ui table attached" >
         <colgroup>
             <col width="10%">
             <col width="23.3%">
@@ -22,54 +23,48 @@
         </colgroup>
         <tr>
             <th>참여일</th>
-            <td>자가:{{ participationSelfScore.length }}(팀:{{ participationOthersScore.length }})일 / {{ filteredScore.length }}일</td>
+            <td>자가: {{ analysis.selfParticipationDay }} 일(팀: {{ analysis.othersParticipationDay }}) / {{ analysis.participationDay }} 일</td>
 
             <th>사전점수</th>
-            <td>{{ avgBeforeScore }}점</td>
+            <td>{{ analysis.avgBeforeScore }}점</td>
 
             <th>참여팀원</th>
             <td></td>
         </tr>
         <tr>
             <th class="borderTop">진행율</th>
-            <td>{{ participationRate }}%</td>
+            <td>{{ analysis.participationRate }}%</td>
 
             <th class="borderTop">수행평균</th>
-            <td>{{ (selfAvg/participationSelfScore.length).toFixed(1) }}점</td>
+            <td>{{ analysis.selfParticipationAvg }}점</td>
 
             <th class="borderTop">팀원평균</th>
-            <td>{{ (othersAvg/participationOthersScore.length).toFixed(1) }}점</td>
+            <td>{{ analysis.othersParticipationAvg }}점</td>
         </tr>
         <tr>
             <th class="borderTop">참여율</th>
             <td>
-                자가:{{ ((participationSelfScore.length*100) / filteredScore.length).toFixed(1) }}%
-                (팀:{{ ((participationOthersScore.length*100) / filteredScore.length).toFixed(1) }}%)
+                자가:{{ ((analysis.selfParticipationDay*100) / analysis.participationDay).toFixed(1) }}%
+                (팀:{{ ((analysis.othersParticipationDay*100) / analysis.participationDay).toFixed(1) }}%)
             </td>
 
             <th class="borderTop">역량향상</th>
-            <td>{{ ((selfAvg/participationSelfScore.length) - avgBeforeScore).toFixed(1) }}점</td>
+            <td>{{ (analysis.selfParticipationAvg - analysis.avgBeforeScore).toFixed(1) }}점</td>
 
             <th class="borderTop">평가GAP</th>
-            <td>
-                {{ ((othersAvg/participationOthersScore.length).toFixed(1) - (selfAvg/participationSelfScore.length).toFixed(1)).toFixed(1) }}점
-            </td>
+            <td> {{ (analysis.othersParticipationAvg - analysis.selfParticipationAvg).toFixed(1) }}점</td>
         </tr>
         <tr>
             <th class="borderTop">자가성취율</th>
-            <td>{{ ((selfAvg/participationSelfScore.length)*25).toFixed(1) }}</td>
+            <td>{{ (analysis.selfParticipationAvg*25) }}%</td>
 
             <th class="borderTop">역량향상률</th>
-            <td>
-                {{ (((selfAvg/participationSelfScore.length) - avgBeforeScore) * 25).toFixed(1) }}%
-            </td>
+            <td>{{ ((analysis.selfParticipationAvg - analysis.avgBeforeScore)*25).toFixed(1) }}%</td>
 
             <th class="borderTop">팀원신뢰율</th>
-            <td>
-                {{ (((othersAvg/participationOthersScore.length) *100) / (selfAvg/participationSelfScore.length)).toFixed(1) }}%
-            </td>
+            <td>{{ ((analysis.othersParticipationAvg*100) / analysis.selfParticipationAvg).toFixed(1) }}%</td>
         </tr>
-    </table> -->
+    </table>
     <!-- === 평가자료 === -->
 
 
@@ -178,6 +173,8 @@ export default {
         participationRate:0, //참여율
         participationDay:0, //참여일수
         acplearnDay:0, //총일수
+
+        analysis:{}, // 통계데이터
 
     }},
 
@@ -307,6 +304,40 @@ export default {
                 this.$set(this, 'participationRate', resp.data.participationRate)
                 this.$set(this, 'participationDay', resp.data.participationDay)
                 this.$set(this, 'acplearnDay', resp.data.acplearnDay)
+
+
+                // 자가평균
+                var selfParticipationAvg=0
+                var selfParticipationDay = resp.data.score.filter((sc)=>{
+                    if (sc.avgSelfScore != null) {
+                        selfParticipationAvg += sc.avgSelfScore
+                        return true
+                    }
+                })
+                // 팀원평균
+                var othersParticipationAvg=0
+                var othersParticipationDay = resp.data.score.filter((sc)=>{
+                    if(sc.avgOthersScore != null){
+                        othersParticipationAvg += sc.avgOthersScore
+                        return true
+                    }
+                })
+
+                selfParticipationAvg = (selfParticipationAvg/selfParticipationDay.length).toFixed(1)
+                othersParticipationAvg = (othersParticipationAvg/othersParticipationDay.length).toFixed(1)
+
+                // 통계표 만들기
+                this.$set(this, 'analysis', {
+                    participationDay : resp.data.score.length,
+                    selfParticipationDay: selfParticipationDay.length,
+                    othersParticipationDay: othersParticipationDay.length,
+                    participationRate: resp.data.participationRate,
+                    avgBeforeScore: resp.data.avgBeforeScore,
+                    selfParticipationAvg,
+                    othersParticipationAvg
+                })
+
+                // console.log(this.analysis);
 
             })
             .catch(err=>{

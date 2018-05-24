@@ -1297,26 +1297,58 @@
                                                                         <th class="noneBorder-horizental center aligned">강사</th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody>
-                                                                    <tr v-for="(module, mid)  in  timetable.modules" class="">
-                                                                        <td class="noneBorder-horizental center aligned">
+                                                                <tbody v-for="(module, mid)  in  timetable.modules">
+                                                                    <tr class="" @click="accordionOpen(module.lm_idx)">
+
+                                                                        <td class="center aligned borderTop noneBorder-horizental">
                                                                             &nbsp;
                                                                             <div class="ui label small middle aligned horizontal" style="margin-top:5px; padding:5px 8px;" v-bind:class="[ module.lm_type=='강의' ? 'blue' :  module.lm_type=='미션' ? 'green' : 'orange' ]">
                                                                                 {{ module.lm_type }}
                                                                             </div>
                                                                         </td>
-                                                                        <td class="noneBorder-horizental center aligned">{{ module.lm_startTime }} ~ {{ module.lm_endTime }}</td>
-                                                                        <td class="noneBorder-horizental">{{ module.lm_title }}</td>
-
-                                                                        <td class="noneBorder-horizental center aligned">
+                                                                        <td class="center aligned borderTop noneBorder-horizental">
+                                                                            {{ module.lm_startTime }} ~ {{ module.lm_endTime }}
+                                                                        </td>
+                                                                        <td class="noneBorder-horizental borderTop">
+                                                                            {{ module.lm_title }}
+                                                                        </td>
+                                                                        <td class="center aligned borderTop noneBorder-horizental">
                                                                             {{ module.lm_textCount }}건
                                                                         </td>
-                                                                        <td class="noneBorder-horizental center aligned">
+                                                                        <td class="center aligned borderTop noneBorder-horizental">
                                                                             {{ module.lm_imgCount }}건
                                                                         </td>
-
-
-                                                                        <td class="noneBorder-horizental center aligned">{{ module.lm_teacher }}</td>
+                                                                        <td class="noneBorder-horizental borderTop center aligned">
+                                                                            {{ module.lm_teacher }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <!-- 해당 모듈에 대한 피드들  -->
+                                                                    <tr v-bind:style="{'display' : (module.comments.length>0 ? '' : 'none') }">
+                                                                        <td colspan="6" style="padding:0 27px 20px 27px; border-top:none;">
+                                                                            <div class="ui divider" style="margin-top:0;"></div>
+                                                                            <!-- 강의모듈이 토론/미션일경우 그룹별 정보조회 가능 -->
+                                                                            <div class="ui feed">
+                                                                                <div class="event" v-for="(comment, cmid)  in  comments">
+                                                                                    <div class="label">
+                                                                                      <img src="https://cdn2.iconfinder.com/data/icons/scenarium-vol-4/128/019_avatar_woman_girl_female_account_profile_user-128.png">
+                                                                                    </div>
+                                                                                    <div class="content">
+                                                                                        <div class="summary">
+                                                                                            <a class="user">
+                                                                                                {{ comment.stu_name }}
+                                                                                                <a class="ui green circular label mini" v-if="comment.lc_flag=='강사'">강사님의 응원글</a>
+                                                                                            </a><div class="date">{{ comment.lc_date }}</div>
+                                                                                            <br>
+                                                                                            {{ comment.lc_text }}
+                                                                                        </div>
+                                                                                        <div class="extra" v-if="comment.lc_img">
+                                                                                            <a><img :src="comment.lc_img" width="270"></a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                  </div>
+                                                                            </div>
+                                                                            <br>
+                                                                        </td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
