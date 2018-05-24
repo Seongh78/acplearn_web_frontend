@@ -12,8 +12,11 @@
             <br>
             <small style="color:#a1a1a1;">액션플랜러닝 기업용 보고서</small>
         </h1>
-        <hr class="opacity3">
 
+
+        <h4>강의기간<br>{{ lecture.lec_startDate }} ~ {{ lecture.lec_endDate }}</h4>
+        <hr class="opacity3">
+        <br>
         <h4><참여기업></h4>
         <span v-for="(com,i) in companies">
             <div class="ui basic tiny" @click.prevent="modal.companyDetail = true, companyDetailFunc(com.com_code)">
