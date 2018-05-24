@@ -1151,11 +1151,18 @@
 
         <h4 class="ui header ">참여기업</h4>
         <div class="ui secondary  menu">
-            <a class="active item">전체</a>
-            <a class="item" v-for="(com,i) in companies">{{ com.com_name }}</a>
+            <a
+                class=" item"
+                v-bind:class="[reportSelectCompany==0 ? 'active' : '']"
+                @click.prevent="reportSelectCompany = 0">전체</a>
+            <a
+                class="item"
+                v-bind:class="[reportSelectCompany==com.com_code ? 'active' : '']"
+                v-for="(com,i) in companies"
+                @click.prevent="reportSelectCompany = com.com_code">{{ com.com_name }}</a>
         </div>
         <div class="ui visible message">
-            <p><b>URL > </b><a href="#">http://localhost:8081/lectures/processes/18?com=all</a> </p>
+            <p><b>URL > </b><a href="#">http://www.actiongo.co.kr/lectures/report/18/com/{{reportSelectCompany==0?'all':reportSelectCompany}}</a> </p>
         </div>
 
         <div class="container">
@@ -1205,6 +1212,11 @@
                     </tbody>
                 </table>
                 </div>
+                <br>
+
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 4 -</h5>
             </div>
 
 
@@ -1330,15 +1342,108 @@
                     <br>
                 </div>
                 <!-- === 세션반복 === -->
-
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 5 -</h5>
             </div>
 
 
             <!-- ===============
-            5. 액션플랜
+            5. 참여점수
             =============== -->
             <div class="ui segment" style="padding:50px; font-weight:bold;">
-                <h2 class="ui dividing header">5. 액션플랜</h2>
+                <h2 class="ui dividing header">5. 참여점수</h2>
+
+                <table class="ui celled padded table">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="50%">
+                        <col width="15%">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="single line center aligned">팀명</th>
+                            <th>개별점수</th>
+                            <th class="single line center aligned">개인합계</th>
+                            <th class="single line center aligned">팀점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  v-for="(group, gid)  in  groups" :key="gid" >
+                            <td class="single line center aligned">
+                                <h3 class="ui center aligned header grey">{{ group.group_name }}</h3>
+                            </td>
+
+                            <td class="nonePadding" >
+                                <table class="ui table noneBorder celled">
+                                    <colgroup>
+                                        <col width="15%">
+                                        <col width="25%">
+                                        <col width="20%">
+                                        <col width="20%">
+                                    </colgroup>
+                                    <tr v-for="(std, stdId)  in  students" v-if="std.group_idx==group.group_idx ">
+                                        <td class="center aligned">{{ std.stu_score<10?'0':'' }}{{ std.stu_score }}</b>점</td>
+                                        <td class="center aligned">{{std.stu_company}}</td>
+                                        <td class="center aligned">{{std.stu_department}}</td>
+                                        <td class="center aligned">{{std.stu_position}}</td>
+                                        <td class="center aligned">{{std.stu_name}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="center aligned">
+                                <h4 class="ui header grey">{{ personalScoreSumFunc(group.group_idx) }}점</h4>
+                            </td>
+                            <td class="center aligned">
+                                <h4 class="ui header grey">{{ group.group_score }}점</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center aligned">
+                                <h4 class="ui center aligned header grey">팀 미지정</h4>
+                            </td>
+                            <td>
+
+                                <div class="ui middle aligned divided list">
+                                    <div class="item"  v-for="(std, stdId)  in  students" v-if="std.group_idx==undefined || std.group_idx==''">
+                                        <i class="  middle aligned icon" style="color:#BDBDBD; margin-right:17px;">
+                                            <b>{{ std.stu_score<10?'0':'' }}{{ std.stu_score }}</b>점
+                                        </i>
+                                        </i>
+                                        <div class="content">
+                                            <div class="header">{{std.stu_name}}</div>
+                                            {{std.stu_department}} - {{std.stu_position}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td colspan="2" class="center aligned">0</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="center aligned">평균</th>
+                            <th class="center aligned">-</th>
+                            <th class="center aligned">{{ personalScoreAllSumFunc() }}점</th>
+                            <th class="center aligned">{{ teamScoreSumFunc() }}점</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 6 -</h5>
+            </div>
+
+            <!-- ===============
+            6. 액션플랜
+            =============== -->
+            <!-- === 액션플랜 - 전체 === -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="" style="margin: 50px 0;">
                     <div class="field">
                         <h3>평가기준</h3>
@@ -1364,23 +1469,82 @@
 
                 <!-- 전체 -->
                 <div class="">
-                    <!-- <component
-                        is="ReportAll"
-                        :kpi="actionplanKpi"
-                        :checked-sessions="checkedSessions"
-                        :groups="groups">
-                    </component> -->
+                    <report-all2 :checked-sessions="checkedSessions" />
+                    <br>
                 </div>
-                <div class="" v-for="(menu, mid)  in  reportMenus" >
-                    {{ menu }}
-                    <!-- 리포트 컴포넌트 동적 바인딩 -->
-                    <!-- <component :is="menu.component" :from="menu.from" :kpi="actionplanKpi" :checked-sessions="checkedSessions" :groups="groups"></component> -->
-                    <!-- 리포트 컴포넌트 동적 바인딩 -->
 
-                </div>
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 7 -</h5>
             </div>
 
+            <!-- === 액션플랜 - 조별 === -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">6. 액션플랜</h2>
+                <div class="">
+                        <h3>조별 점수</h3>
+                        <component is="ReportGroup" :from="{ groups, students}" :checked-sessions="checkedSessions" ></component>
+                    <br>
+                </div>
 
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 8 -</h5>
+            </div>
+
+            <!-- === 액션플랜 - 부서별 === -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">6. 액션플랜</h2>
+                <div class="">
+                    <h3>부서별 점수</h3>
+                    <component is="ReportDepartment" :from="{departments, students}" :checked-sessions="checkedSessions" ></component>
+                    <br>
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 9 -</h5>
+            </div>
+
+            <!-- === 액션플랜 - 직급별 === -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">6. 액션플랜</h2>
+                <div class="">
+                    <h3>직급별 점수</h3>
+                    <component is="ReportPosition" :from="{position, students}" :checked-sessions="checkedSessions" ></component>
+                    <br>
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 10 -</h5>
+            </div>
+
+            <!-- === 액션플랜 - 성별 === -->
+            <div class="ui segment" style="padding:50px; font-weight:bold;">
+                <h2 class="ui dividing header">6. 액션플랜</h2>
+                <div class="">
+                    <h3>성별 점수</h3>
+                    <component is="ReportGender" :from="{gender: [
+                            {text:'남', socre:[], kpi:[]},
+                            {text:'여', socre:[], kpi:[]},
+                        ], students}" :checked-sessions="checkedSessions" ></component>
+
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 11 -</h5>
+            </div>
+
+                            <!-- <div class="" v-for="(menu, mid)  in  reportMenus" >
+                                {{ menu }}
+                            </div> -->
 
         </div>
     </div>
@@ -2146,7 +2310,10 @@ import {
 } from './Report'
 
 // 출력용 리포트 뷰
-import { ReportSummary } from './ReportStatic'
+import {
+    ReportSummary ,
+    ReportAll2
+} from './ReportStatic'
 
 // 강의모듈
 import LectureModule from './LectureModule'
@@ -2192,6 +2359,7 @@ export default {
 
         // 출력용리포트
         ReportSummary,
+        ReportAll2,
     },
 
 
@@ -2235,7 +2403,7 @@ export default {
             groupTab:'' , // 선택한 그룹아이디
             chooseTeam:{}, // 선택한 그룹 정보
             companyTab:0,
-            tab: 5, // 현재 활성화 탭
+            tab: 6, // 현재 활성화 탭
             // attendanceCount : 0, // 출석 카운트
             avgAttendancePercent : 0, // 평균출석률
 
@@ -2292,6 +2460,11 @@ export default {
             checkedSessions : [], // 선택된 차시
             checkedPlanSessions : [], // 선택된 차시 - 차시별액션플랜 모달에 있음
           // === 액션플랜 === //
+
+
+          // === 리포트 === //
+          reportSelectCompany : 0, // 기업선택
+          // === 리포트 === //
 
         }
     },// data
@@ -2880,6 +3053,55 @@ export default {
 
 
         // ========== 액션플랜 ========== //
+
+
+
+
+
+
+
+
+
+        // ========== 리포트 ========== //
+
+        // == 팀점수 합 == //
+        teamScoreSumFunc(){
+            var sum = 0
+            var keys = Object.keys(this.groups)
+            for(var ii  in  keys){
+                sum += this.groups[ii].group_score
+            }
+            return sum
+        },
+
+        // == 개인점수 총 합 == //
+        personalScoreAllSumFunc(){
+            var sum = 0
+            var keys = Object.keys(this.students)
+            for(var ii  in  keys){
+                sum += this.students[ii].stu_score
+            }
+
+            return sum
+        },
+
+        // == 팀별 개인점수 합 == //
+        personalScoreSumFunc(gid){
+            /*
+            gid : 그룹의 아이디
+            */
+            console.log("gid : ", gid);
+            var sum = 0
+            var keys = Object.keys(this.students)
+            for(var ii  in  keys){
+                if (this.students[ii].group_idx == gid){
+                    sum += this.students[ii].stu_score
+                }
+            }
+
+            return sum
+        },
+        // ========== 리포트 ========== //
 
 
 

@@ -5,14 +5,16 @@
 
 
 
-    <div class="ui segment" style="padding:100px 55px 30px 55px; text-align:center;">
+    <div class="ui segment" style="padding:250px 55px 30px 55px; text-align:center;">
+        <hr class="opacity3">
         <h1>
             {{ lecture.lec_title }}
             <br>
             <small style="color:#a1a1a1;">액션플랜러닝 기업용 보고서</small>
         </h1>
-        <br>
-        <h5 ><참여기업></h5>
+        <hr class="opacity3">
+
+        <h4><참여기업></h4>
         <span v-for="(com,i) in companies">
             <div class="ui basic tiny" @click.prevent="modal.companyDetail = true, companyDetailFunc(com.com_code)">
             {{ com.com_name }}
@@ -21,7 +23,15 @@
         <br>
         <br>
         <br>
-        <hr class="opacity3">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
         <h4>(주)비전플랜</h4>
     </div>
 
@@ -46,6 +56,12 @@
 
         <h3>4) 강의대상</h3>
         <p>{{ lecture.lec_target | capitalize }}</p>
+
+
+        <br>
+        <br>
+        <br>
+        <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 2 -</h5>
     </div>
 
 
@@ -206,6 +222,10 @@
 
         </div>
 
+        <br>
+        <br>
+        <br>
+        <h5 style=" color: #a1a1a1; text-align:center; margin-bottom: -25px;">- 3 -</h5>
     </div>
 
 

@@ -9,7 +9,7 @@
                 <br>
                 <br>
                 <p style="text-align:left; font-family: 'Nanum Gothic', cursive; font-size:1.25em;">작은 습관부터 업무까지 <br>나만의 플랜을 설계하고 성취해 보세요</p>
-                <h1 style="font-size:2.95em; font-family: 'Nanum Gothic', cursive; text-align:left; margin-top:0px;">
+                <h1 style="font-size:3.25em; font-family: 'Nanum Gothic', cursive; text-align:left; margin-top:0px;">
                     <small>행동변화 혁신 플랫폼</small> Acplearn <br>
                     <a href="#serviceInro">
                     <button type="button" class="ui  button big detailBtn" style="margin-top:25px;">서비스소개</button>

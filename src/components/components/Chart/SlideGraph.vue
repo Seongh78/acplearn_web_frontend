@@ -283,16 +283,16 @@ export default {
     methods:{
 
         // 전체평균
-        avgFunc(){
-            var sumSelf = 0, sumOthers=0
-            // var temp = Object.keys(this.chart)
-            for(var ii  in  this.chart){
-                sumSelf+=Number(this.chart[ii].avgSelfScore)
-                sumOthers+=Number(this.chart[ii].avgOthersScore)
-            }
-            this.$set(this, 'avgSelfAll', sumSelf / this.chart.length)
-            this.$set(this, 'avgOthersAll', sumOthers / this.chart.length)
-        }//
+        // avgFunc(){
+        //     var sumSelf = 0, sumOthers=0
+        //     // var temp = Object.keys(this.chart)
+        //     for(var ii  in  this.chart){
+        //         sumSelf+=Number(this.chart[ii].avgSelfScore)
+        //         sumOthers+=Number(this.chart[ii].avgOthersScore)
+        //     }
+        //     this.$set(this, 'avgSelfAll', sumSelf / this.chart.length)
+        //     this.$set(this, 'avgOthersAll', sumOthers / this.chart.length)
+        // }//
 
     },
 
