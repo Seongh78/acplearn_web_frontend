@@ -86,6 +86,40 @@
                 </tbody>
             </table>
 
+
+
+            <!-- === Feeds === -->
+            <div class="ui feed">
+                <div class="event" v-for="(comment, cid)  in  comments">
+                    <div class="label">
+                        <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='남'">
+                        <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='여'">
+                        <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='-' ||  comment.stu_gender==null">
+                    </div>
+                    <div class="content">
+                        <div class="summary">
+                            <a class="user">
+                                {{ comment.stu_name }}
+                                <a class="ui green circular label mini" v-if="comment.ac_flag=='강사'">강사님의 응원글</a>
+                            </a><div class="date">{{ comment.ac_date }}</div>
+                            <br>
+                            {{ comment.ac_contents }}
+                        </div>
+                        <div class="extra" v-if="comment.ac_img">
+                            <a><img :src="comment.ac_img" width="270"></a>
+                        </div>
+                        <div class="meta">
+                            <a class="like"><i class="like icon"></i> 0 Likes</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- === Feeds === -->
+
+
+
+
         </div>
         <!--PLAN목록 -->
 
@@ -143,6 +177,8 @@ export default {
         }, // 선택된 학생의 차트데이터
 
         avgBeforeScore:-1, // 사전점수
+
+        comments : [],
     }},
 
 
@@ -205,21 +241,27 @@ export default {
         // === 개별데이터 === //
         personalGraph(stu_idx){
 
-            this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx)
-            .then(resp=>{
+
+            this.$http.all([
+                this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx),
+                this.$http.get('/api/plans/comments/'+stu_idx)
+            ])
+            .then(this.$http.spread((resp, resp2)=>{
                 //누적데이터
                 var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
                 var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
-                // this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
+                var comments = resp2.data.comments
+
+                this.$set(this, 'comments', comments)
                 // 모달 ON
-                this.$EventBus.$emit('modal', {
-                    name : 'personalGraph',
-                    stu_idx,
-                    score : resp.data.plans,
-                    kpiAvg,
-                    allAvg
-                })
-            })
+                // this.$EventBus.$emit('modal', {
+                //     name : 'personalGraph',
+                //     stu_idx,
+                //     score : resp.data.plans,
+                //     kpiAvg,
+                //     allAvg
+                // })
+            }))
             .catch(err=>{
                 console.log(err);
                 alert('Error - personal plans')
@@ -241,6 +283,7 @@ export default {
             .then(resp=>{
                 this.$set(this.personalData, 'score', resp.data.score)
                 // console.log(resp.data);
+                this.personalGraph(Number(val))
             })
             .catch(err => {
                 this.$set(this.personalData, 'score', [])

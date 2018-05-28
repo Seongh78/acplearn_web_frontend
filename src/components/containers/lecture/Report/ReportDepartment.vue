@@ -1,17 +1,20 @@
 <template lang="html">
 <div class="">
 
+
+    <loading v-if="departments==undefined || departments==null" />
+
     <!-- 직급별 - 통계 -->
-    <div v-for="(dep, gid)  in  departments" :key="gid">
+    <div v-for="(dep, did)  in  departments" :key="did">
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
-            {{ dep.stu_department }}
-            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('departments', dep.stu_department)">액션플랜보기</button>
+            {{ dep.title }}
+            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('departments', dep.title)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
                 <a
                     class="cursorPointer"
                     v-for="(std,stdId) in  from.students"
-                    v-if="std.stu_department==dep.stu_department"
+                    v-if="std.stu_department==dep.title"
                     @click.prevent="personalGraph(std.stu_idx)">
                      [{{ std.stu_name }}] &nbsp;
                 </a>
@@ -31,46 +34,46 @@
             </colgroup>
             <tr>
                 <th>참여일</th>
-                <td>자가: {{ dep.analysis.selfParticipationDay }} 일(팀: {{ dep.analysis.othersParticipationDay }}) / {{ dep.analysis.participationDay }} 일</td>
+                <td>자가: {{ dep.participationSelfDay }} 일(팀: {{ dep.participationOthersDay }}) / {{ dep.score.length }} 일</td>
 
                 <th>사전점수</th>
-                <td>{{ dep.analysis.avgBeforeScore }}점</td>
+                <td>{{ kpiAvgFunc(did) }}점</td>
 
                 <th>참여팀원</th>
                 <td></td>
             </tr>
             <tr>
                 <th class="borderTop">진행율</th>
-                <td>{{ dep.analysis.participationRate }}%</td>
+                <td>{{  }}%</td>
 
                 <th class="borderTop">수행평균</th>
-                <td>{{ dep.analysis.selfParticipationAvg }}점</td>
+                <td>{{ dep.avgSelfScore }}점</td>
 
                 <th class="borderTop">팀원평균</th>
-                <td>{{ dep.analysis.othersParticipationAvg }}점</td>
+                <td>{{ dep.avgOthersScore }}점</td>
             </tr>
             <tr>
                 <th class="borderTop">참여율</th>
                 <td>
-                    자가:{{ ((dep.analysis.selfParticipationDay*100) / dep.analysis.participationDay).toFixed(1) }}%
-                    (팀:{{ ((dep.analysis.othersParticipationDay*100) / dep.analysis.participationDay).toFixed(1) }}%)
+                    자가:{{ dep.participationSelfRate }}%
+                    (팀:{{ dep.participationOthersRate }}%)
                 </td>
 
                 <th class="borderTop">역량향상</th>
-                <td>{{ (dep.analysis.selfParticipationAvg - dep.analysis.avgBeforeScore).toFixed(1) }}점</td>
+                <td>{{ (dep.avgSelfScore - kpiAvgFunc(did)).toFixed(1) }}점</td>
 
                 <th class="borderTop">평가GAP</th>
-                <td> {{ (dep.analysis.othersParticipationAvg - dep.analysis.selfParticipationAvg).toFixed(1) }}점</td>
+                <td> {{ (dep.avgOthersScore - dep.avgSelfScore).toFixed(1) }}점</td>
             </tr>
             <tr>
                 <th class="borderTop">자가성취율</th>
-                <td>{{ (dep.analysis.selfParticipationAvg*25) }}%</td>
+                <td>{{ (dep.avgSelfScore*25) }}%</td>
 
                 <th class="borderTop">역량향상률</th>
-                <td>{{ ((dep.analysis.selfParticipationAvg - dep.analysis.avgBeforeScore)*25).toFixed(1) }}%</td>
+                <td>{{ ((dep.avgSelfScore - kpiAvgFunc(did))*25).toFixed(1) }}%</td>
 
                 <th class="borderTop">팀원신뢰율</th>
-                <td>{{ ((dep.analysis.othersParticipationAvg*100) / dep.analysis.selfParticipationAvg).toFixed(1) }}%</td>
+                <td>{{ ((dep.avgOthersScore*100) / dep.avgSelfScore).toFixed(1) }}%</td>
             </tr>
         </table>
         <!-- === 평가자료 === -->
@@ -80,14 +83,14 @@
         <div class="ui grid">
             <div class="eleven wide column">
                 <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                    <loading style="height:373px;" v-if="dep.score==null" />
-                    <slide-graph :chart="dep.score" v-else />
+                    <!-- <loading style="height:373px;" v-if="dep.score==null" /> -->
+                    <slide-graph :chart="dep.score"  />
                 </div>
             </div>
 
             <div class="five wide column">
-                <loading v-if="dep.kpi==undefined || dep.kpi==null" />
-                <polar-chart :data="dep.kpi" size="100%" v-else></polar-chart>
+                <!-- <loading v-if="dep.kpi==undefined || dep.kpi==null" /> -->
+                <polar-chart :data="dep.kpiAvg" size="100%" ></polar-chart>
             </div>
         </div>
 
@@ -136,8 +139,18 @@ export default {
 
         lec_idx : null , // 강의아이디
         chartData: [],
-        departments : [],
+        departments : null,
         avgBeforeScore:-1, // 사전점수
+
+        analysis:{ // 통계데이터
+            participationDay : null,
+            selfParticipationDay: null,
+            othersParticipationDay: null,
+            participationRate: null,
+            avgBeforeScore: null,
+            selfParticipationAvg: null,
+            othersParticipationAvg: null
+        },
 
     }},
 
@@ -147,13 +160,11 @@ export default {
     created(){
         var lid = this.$router.history.current.params.id
         this.$set(this, 'lec_idx', lid)
-        this.$set(this, 'departments', this.from.departments)
+        // this.$set(this, 'departments', this.from.departments)
 
 
 
-        this.departments.forEach(dep=>{
-            this.allAvgFunc(dep.stu_department, this.kpi)
-        })
+        this.allAvgFunc(this.kpi)
     },
 
 
@@ -169,7 +180,7 @@ export default {
     watch:{
         kpi (val){
             this.departments.forEach(dep=>{
-                this.allAvgFunc(dep.stu_department, val)
+                this.allAvgFunc(val)
             })
         }
     },
@@ -180,66 +191,66 @@ export default {
     methods:{
 
 
+        // === kpi 평균 === //
+        kpiAvgFunc(did){
+            var keys = Object.keys(this.departments[did].kpiAvg)
+            var avg=0
+            for(var ii  in  keys){
+                avg += this.departments[did].kpiAvg[ii].avgBeforeScore == null ? 0 : this.departments[did].kpiAvg[ii].avgBeforeScore;
+            }
+            // console.log(avg);
+
+            return (avg / this.departments[did].kpiAvg.length).toFixed(1)
+        },
+
+
+
+
 
         // === 전체 평균데이터 === //
-        allAvgFunc(val, kpi=null){
+        allAvgFunc(kpi=null){
             /*
             val : 찾을값
             kpi : 선택한 kpi
             session : 차수
             */
                 // 부서별
-                var baseURL = '/api/plans/score/'+this.lec_idx+'/departments/'+val
+                // var baseURL = '/api/plans/score/'+this.lec_idx+'/departments/'+val
+                var baseURL = '/api/plans/score2/'+this.lec_idx+'/departments'
                 baseURL += kpi != null ? '?kpi='+kpi : ''
 
                 // 찾은데이터 푸시할 배열번지 찾기
-                var rid = this.departments.findIndex(po=>{
-                    return po.stu_department == val
-                })
-                this.departments[rid].score=null
+                // var rid = this.departments.findIndex(po=>{
+                //     return po.stu_department == val
+                // })
+                this.departments=null
 
                 this.$http.get(baseURL)
                 .then((resp)=>{
+                    var data = resp.data.classificationArray
 
-                    this.$set(this.departments[rid], 'score', resp.data.score)
-                    this.$set(this.departments[rid], 'kpi', resp.data.kpiAvg)
-                    this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
+                    // 평균구하기 로직(자가, 팀원)
+                    var selfScore=0, othersScore=0;
+                    for(var ii  in  data){
+                        selfScore=0
+                        othersScore=0
+                        for(var jj  in  data[ii].score){ // 점수찾기
+                            selfScore       += data[ii].score[jj].avgSelfScore == null ? 0 : data[ii].score[jj].avgSelfScore
+                            othersScore  += data[ii].score[jj].avgOthersScore == null ? 0 : data[ii].score[jj].avgOthersScore
+                        }// for
+                        data[ii].avgSelfScore = (selfScore / data[ii].participationSelfDay).toFixed(1)
+                        data[ii].avgOthersScore = (othersScore / data[ii].participationOthersDay).toFixed(1)
+                    }// for
 
-                    // 자가평균
-                    var selfParticipationAvg=0
-                    var selfParticipationDay = resp.data.score.filter((sc)=>{
-                        if (sc.avgSelfScore != null) {
-                            selfParticipationAvg += sc.avgSelfScore
-                            return true
-                        }
-                    })
-                    // 팀원평균
-                    var othersParticipationAvg=0
-                    var othersParticipationDay = resp.data.score.filter((sc)=>{
-                        if(sc.avgOthersScore != null){
-                            othersParticipationAvg += sc.avgOthersScore
-                            return true
-                        }
-                    })
 
-                    selfParticipationAvg = (selfParticipationAvg/selfParticipationDay.length).toFixed(1)
-                    othersParticipationAvg = (othersParticipationAvg/othersParticipationDay.length).toFixed(1)
+                    this.$set(this, 'departments', data)
 
-                    // 통계표 만들기
-                    this.$set(this.departments[rid], 'analysis', {
-                        participationDay : resp.data.score.length,
-                        selfParticipationDay: selfParticipationDay.length,
-                        othersParticipationDay: othersParticipationDay.length,
-                        participationRate: resp.data.participationRate,
-                        avgBeforeScore: resp.data.avgBeforeScore,
-                        selfParticipationAvg,
-                        othersParticipationAvg
-                    })
 
                 })
                 .catch((err)=>{
                     alert('Error - '+err)
                     console.log(err);
+                    this.departments=[]
                 })
         },
 

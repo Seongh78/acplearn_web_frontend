@@ -1,17 +1,19 @@
 <template lang="html">
 <div class="">
 
+    <loading v-if="gender==undefined || gender==null" />
+
     <!-- 직급별 - 통계 -->
     <div v-for="(g, gid)  in  gender" :key="gid">
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
-            {{ g.text }}
-            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('gender', g.text)">액션플랜보기</button>
+            {{ g.title }}
+            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('gender', g.title)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
                 <a
                     class="cursorPointer"
                     v-for="(std,stdId) in  from.students"
-                    v-if="std.stu_gender===g.text"
+                    v-if="std.stu_gender===g.title"
                     @click.prevent="personalGraph(std.stu_idx)">
                      [{{ std.stu_name }}] &nbsp;
                 </a>
@@ -30,46 +32,46 @@
             </colgroup>
             <tr>
                 <th>참여일</th>
-                <td>자가: {{ g.analysis.selfParticipationDay }} 일(팀: {{ g.analysis.othersParticipationDay }}) / {{ g.analysis.participationDay }} 일</td>
+                <td>자가: {{ g.participationSelfDay }} 일(팀: {{ g.participationOthersDay }}) / {{ g.score.length }} 일</td>
 
                 <th>사전점수</th>
-                <td>{{ g.analysis.avgBeforeScore }}점</td>
+                <td>{{ kpiAvgFunc(gid) }}점</td>
 
                 <th>참여팀원</th>
                 <td></td>
             </tr>
             <tr>
                 <th class="borderTop">진행율</th>
-                <td>{{ g.analysis.participationRate }}%</td>
+                <td>{{  }}%</td>
 
                 <th class="borderTop">수행평균</th>
-                <td>{{ g.analysis.selfParticipationAvg }}점</td>
+                <td>{{ g.avgSelfScore }}점</td>
 
                 <th class="borderTop">팀원평균</th>
-                <td>{{ g.analysis.othersParticipationAvg }}점</td>
+                <td>{{ g.avgOthersScore }}점</td>
             </tr>
             <tr>
                 <th class="borderTop">참여율</th>
                 <td>
-                    자가:{{ ((g.analysis.selfParticipationDay*100) / g.analysis.participationDay).toFixed(1) }}%
-                    (팀:{{ ((g.analysis.othersParticipationDay*100) / g.analysis.participationDay).toFixed(1) }}%)
+                    자가:{{ g.participationSelfRate }}%
+                    (팀:{{ g.participationOthersRate }}%)
                 </td>
 
                 <th class="borderTop">역량향상</th>
-                <td>{{ (g.analysis.selfParticipationAvg - g.analysis.avgBeforeScore).toFixed(1) }}점</td>
+                <td>{{ (g.avgSelfScore - kpiAvgFunc(gid)).toFixed(1) }}점</td>
 
                 <th class="borderTop">평가GAP</th>
-                <td> {{ (g.analysis.othersParticipationAvg - g.analysis.selfParticipationAvg).toFixed(1) }}점</td>
+                <td> {{ (g.avgOthersScore - g.avgSelfScore).toFixed(1) }}점</td>
             </tr>
             <tr>
                 <th class="borderTop">자가성취율</th>
-                <td>{{ (g.analysis.selfParticipationAvg*25) }}%</td>
+                <td>{{ (g.avgSelfScore*25) }}%</td>
 
                 <th class="borderTop">역량향상률</th>
-                <td>{{ ((g.analysis.selfParticipationAvg - g.analysis.avgBeforeScore)*25).toFixed(1) }}%</td>
+                <td>{{ ((g.avgSelfScore - kpiAvgFunc(gid))*25).toFixed(1) }}%</td>
 
                 <th class="borderTop">팀원신뢰율</th>
-                <td>{{ ((g.analysis.othersParticipationAvg*100) / g.analysis.selfParticipationAvg).toFixed(1) }}%</td>
+                <td>{{ ((g.avgOthersScore*100) / g.avgSelfScore).toFixed(1) }}%</td>
             </tr>
         </table>
         <!-- === 평가자료 === -->
@@ -79,14 +81,14 @@
         <div class="ui grid">
             <div class="eleven wide column">
                 <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                    <loading style="height:373px;" v-if="g.score==null" />
-                    <slide-graph :chart="g.score" v-else />
+                    <!-- <loading style="height:373px;" v-if="g.score==null" /> -->
+                    <slide-graph :chart="g.score"  />
                 </div>
             </div>
 
             <div class="five wide column">
-                <loading v-if="g.kpi.length<1" />
-                <polar-chart :data="g.kpi" size="100%" v-else></polar-chart>
+                <!-- <loading v-if="g.kpiAvg.length<1" /> -->
+                <polar-chart :data="g.kpiAvg" size="100%" ></polar-chart>
             </div>
         </div>
 
@@ -135,8 +137,18 @@ export default {
 
         lec_idx : null , // 강의아이디
         chartData: [],
-        gender : [],
+        gender : null,
         avgBeforeScore:-1, // 사전점수
+
+        analysis:{ // 통계데이터
+            participationDay : null,
+            selfParticipationDay: null,
+            othersParticipationDay: null,
+            participationRate: null,
+            avgBeforeScore: null,
+            selfParticipationAvg: null,
+            othersParticipationAvg: null
+        },
 
     }},
 
@@ -149,9 +161,7 @@ export default {
         this.$set(this, 'gender', this.from.gender)
         // console.log(this.position);
 
-        this.gender.forEach(g=>{
-            this.allAvgFunc(g.text, this.kpi)
-        })
+            this.allAvgFunc(this.kpi)
     },
 
 
@@ -171,7 +181,7 @@ export default {
         kpi (val){
             // console.log(val);
             this.gender.forEach(g=>{
-                this.allAvgFunc(g.text, val)
+                this.allAvgFunc(val)
             })
         }
     },
@@ -184,57 +194,46 @@ export default {
 
 
 
+        // === kpi 평균 === //
+        kpiAvgFunc(gid){
+            var keys = Object.keys(this.gender[gid].kpiAvg)
+            var avg=0
+            for(var ii  in  keys){
+                avg += this.gender[gid].kpiAvg[ii].avgBeforeScore == null ? 0 : this.gender[gid].kpiAvg[ii].avgBeforeScore;
+            }
+            // console.log(avg);
+
+            return (avg / this.gender[gid].kpiAvg.length).toFixed(1)
+        },
+
+
+
         // === 전체 평균데이터 === //
-        allAvgFunc(val, kpi){
-                // console.log('kpi : ',kpi);
-                var baseURL = '/api/plans/score/'+this.lec_idx+'/gender/'+val
+        allAvgFunc(kpi){
+                var baseURL = '/api/plans/score2/'+this.lec_idx+'/gender'
                 baseURL+= (kpi===null) ? '' : '?kpi='+kpi
 
-                var rid = this.gender.findIndex(g=>{
-                    return g.text == val
-                })
-                this.gender[rid].score = null
+                this.gender = null
 
                 this.$http.get(baseURL)
                 .then(resp=>{
-                    // console.log(123);
-                    var rid = this.gender.findIndex(g=>{
-                        return g.text == val
-                    })
-                    this.$set(this.gender[rid], 'score', resp.data.score)
-                    this.$set(this.gender[rid], 'kpi', resp.data.kpiAvg)
-                    this.$set(this, 'avgBeforeScore', resp.data.avgBeforeScore)
+                    var data = resp.data.classificationArray
 
-                    // 자가평균
-                    var selfParticipationAvg=0
-                    var selfParticipationDay = resp.data.score.filter((sc)=>{
-                        if (sc.avgSelfScore != null) {
-                            selfParticipationAvg += sc.avgSelfScore
-                            return true
-                        }
-                    })
-                    // 팀원평균
-                    var othersParticipationAvg=0
-                    var othersParticipationDay = resp.data.score.filter((sc)=>{
-                        if(sc.avgOthersScore != null){
-                            othersParticipationAvg += sc.avgOthersScore
-                            return true
-                        }
-                    })
+                    // 평균구하기 로직(자가, 팀원)
+                    var selfScore=0, othersScore=0;
+                    for(var ii  in  data){
+                        selfScore=0
+                        othersScore=0
+                        for(var jj  in  data[ii].score){ // 점수찾기
+                            selfScore       += data[ii].score[jj].avgSelfScore == null ? 0 : data[ii].score[jj].avgSelfScore
+                            othersScore  += data[ii].score[jj].avgOthersScore == null ? 0 : data[ii].score[jj].avgOthersScore
+                        }// for
+                        data[ii].avgSelfScore = (selfScore / data[ii].participationSelfDay).toFixed(1)
+                        data[ii].avgOthersScore = (othersScore / data[ii].participationOthersDay).toFixed(1)
+                    }// for
 
-                    selfParticipationAvg = (selfParticipationAvg/selfParticipationDay.length).toFixed(1)
-                    othersParticipationAvg = (othersParticipationAvg/othersParticipationDay.length).toFixed(1)
 
-                    // 통계표 만들기
-                    this.$set(this.gender[rid], 'analysis', {
-                        participationDay : resp.data.score.length,
-                        selfParticipationDay: selfParticipationDay.length,
-                        othersParticipationDay: othersParticipationDay.length,
-                        participationRate: resp.data.participationRate,
-                        avgBeforeScore: resp.data.avgBeforeScore,
-                        selfParticipationAvg,
-                        othersParticipationAvg
-                    })
+                    this.$set(this, 'gender', data)
 
                 })
                 .catch((err)=>{

@@ -174,7 +174,15 @@ export default {
         participationDay:0, //참여일수
         acplearnDay:0, //총일수
 
-        analysis:{}, // 통계데이터
+        analysis:{ // 통계데이터
+            participationDay : null,
+            selfParticipationDay: null,
+            othersParticipationDay: null,
+            participationRate: null,
+            avgBeforeScore: null,
+            selfParticipationAvg: null,
+            othersParticipationAvg: null
+        },
 
     }},
 

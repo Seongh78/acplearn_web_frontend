@@ -1400,6 +1400,7 @@
                             <th>개별점수</th>
                             <th class="single line center aligned">개인합계</th>
                             <th class="single line center aligned">팀점수</th>
+                            <th class="single line center aligned">총점</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1516,7 +1517,7 @@
                 <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="">
                         <h3>조별 점수</h3>
-                        <component is="ReportGroup" :from="{ groups, students}" :checked-sessions="checkedSessions" ></component>
+                        <component is="ReportGroup" :from="{ groups, students: students}" :checked-sessions="checkedSessions" ></component>
                     <br>
                 </div>
 
@@ -1561,10 +1562,8 @@
                 <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="">
                     <h3>성별 점수</h3>
-                    <component is="ReportGender" :from="{gender: [
-                            {text:'남', socre:[], kpi:[]},
-                            {text:'여', socre:[], kpi:[]},
-                        ], students}" :checked-sessions="checkedSessions" ></component>
+                    <component is="ReportGender" kpi="" :from="{gender: [ {text:'남', socre:[], kpi:[]}, {text:'여', socre:[], kpi:[]}, ], students}" :checked-sessions="checkedSessions" ></component>
+                    <!-- <component is="ReportGender" :from="{gender: [ {text:'남', socre:[], kpi:[]}, {text:'여', socre:[], kpi:[]}, ], students}" :checked-sessions="checkedSessions" ></component> -->
 
                 </div>
 
@@ -2435,7 +2434,7 @@ export default {
             groupTab:'' , // 선택한 그룹아이디
             chooseTeam:{}, // 선택한 그룹 정보
             companyTab:0,
-            tab: 6, // 현재 활성화 탭
+            tab: 5, // 현재 활성화 탭
             // attendanceCount : 0, // 출석 카운트
             avgAttendancePercent : 0, // 평균출석률
 
@@ -3122,7 +3121,7 @@ export default {
             /*
             gid : 그룹의 아이디
             */
-            console.log("gid : ", gid);
+            // console.log("gid : ", gid);
             var sum = 0
             var keys = Object.keys(this.students)
             for(var ii  in  keys){

@@ -132,9 +132,7 @@
             <!-- 강의회차 탭-->
             <h4
                 class="item"
-                v-for="(sClass, scid) in sess.sessionClass"
-                v-bind:class="[classTab==scid?'active':'']"
-                @click.prevent="classTab=scid">
+                v-for="(sClass, scid) in sess.sessionClass">
                 {{scid+1}}차 교육 - {{ sClass.lsc_date }}
             </h4>
             <!-- 강의회차 탭-->
@@ -307,6 +305,18 @@ export default {
         //
 
     }},
+
+
+
+    // ===== Fillters ===== //
+    filters: {
+        capitalize: function (value) {
+            if (!value) return ''
+
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+    },
 
 
 
