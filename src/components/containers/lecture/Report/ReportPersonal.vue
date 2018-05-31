@@ -25,7 +25,8 @@
                     class="item"
                     v-for="(std, sid)  in  from.students"
                     v-bind:class="[std.stu_idx==thisStudnet?'active':'']"
-                    @click.prevent="selectStudnetFunc(std.stu_idx)">
+                    @click.prevent="personalGraph(std.stu_idx)">
+                    <!-- @click.prevent="selectStudnetFunc(std.stu_idx)"> -->
                     <img class="ui avatar image opacity5" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_female2-64.png">
                     <div class="content">
                         <div class="header">{{ std.stu_name }}</div>
@@ -40,57 +41,169 @@
         <!--PLAN목록 -->
         <div class="twelve wide column">
 
-            <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
-                {{ thisStudnet>0 ? filteredStudent.stu_name : '전체' }}
-            </h4>
-            <div class="ui attached segment" style="padding:0 1px; overflow-x: scroll;" v-if="thisStudnet>0">
-                <loading v-if="personalData.score==null" />
-                <slide-graph :chart="personalData.score" v-else />
+            <!-- ====================
+            전체통계
+            ==================== -->
+            <div class="" style="width:100%;  ">
+                <div>
+                    <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+                        {{ thisStudnet>0 ? filteredStudent.stu_name : '전체' }}
+                    </h3>
+                    <!-- === 평가자료 === -->
+                    <table class="ui table celled attached segment " >
+                        <colgroup>
+                            <col width="13%">
+                            <col width="20.3%">
+                            <col width="13%">
+                            <col width="20.3%">
+                            <col width="13%">
+                            <col width="20.3%">
+                        </colgroup>
+                        <tr>
+                            <th class="borderTop" >참여일</th>
+                            <td class="">자가:00일(팀:00일</td>
+
+                            <th class="borderTop" >사전점수</th>
+                            <td class="">00점</td>
+
+                            <th class="borderTop" >참여팀원</th>
+                            <td class=""></td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop" >진행률</th>
+                            <td class="">00%</td>
+
+                            <th class="borderTop" >수행평균</th>
+                            <td class="">00</td>
+
+                            <th class="borderTop" >팀원평균</th>
+                            <td class="">00</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop" >참여율</th>
+                            <td class="">
+                                자가:00%
+                                (팀:00%)
+                            </td>
+
+                            <th class="borderTop" >역량향상</th>
+                            <td class=""></td>
+
+                            <th class="borderTop" >평가GAP</th>
+                            <td class="">00</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop" >자가성취율</th>
+                            <td class="">00 / 00일</td>
+
+                            <th class="borderTop" >역량향상률</th>
+                            <td class=""></td>
+
+                            <th class="borderTop" >팀원신뢰율</th>
+                            <td class=""></td>
+                        </tr>
+                    </table>
+                    <!-- === 평가자료 === -->
+
+                    <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
+
+                        <loading v-if="personalData.allAvg==null" />
+                        <slide-graph :chart="personalData.allAvg" v-else />
+                    </div>
+
+                    <br>
+                    <br>
+                    <br>
+                </div>
             </div>
 
 
-            <table class="ui table actionPlan selectable single line attached" style="padding:0;">
-                <colgroup>
-                    <col>
-                    <col width="18%">
-                    <col width="12%">
-                    <col width="12%">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th >플랜명</th>
-                        <th class="center aligned">KPI</th>
-                        <th class="center aligned">자가평가</th>
-                        <th class="center aligned">팀원평가</th>
-                    </tr>
-                </thead>
-                <tbody v-if="plans.length>0" >
-                    <tr
-                        class="viewLoadAnimation"
-                        v-for="(plan, pid)  in  plans"
-                        :key="pid"
-                        v-if="thisStudnet == plan.stu_idx || thisStudnet<0">
-                        <td><a>{{ plan.lap_text }}</a> </td>
-                        <td class="center aligned"><div class="ui basic label" style="width:75%;">{{ plan.cc2_name }}</div></td>
-                        <td class="center aligned">{{ typeof plan.avgSelfScore=='number' ? plan.avgSelfScore.toFixed(1) : 0 }}</td>
-                        <td class="center aligned">{{ typeof plan.avgOthersScore=='number' ? plan.avgOthersScore.toFixed(1) : 0 }}</td>
-                    </tr>
-                </tbody>
-
-                <tbody class="viewLoadAnimation" v-else>
-                    <tr>
-                        <td colspan="5"class="center aligned">
-                            <no-contents header-text="해당 회차에 저장된 플랜이 없습니다" icon="users" size="size1" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
 
 
+            <!-- ====================
+            플랜목록
+            ==================== -->
+            <div style="width:100%;"  v-if="personalData.allAvg==null">
+                <loading  />
+            </div>
+            <div style="width:100%;" v-else>
+                <div v-for="(sc, scId)  in  personalData.plans" :key="scId">
+                    <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
+                        {{ sc.lap_text }}
+                        <div class="ui basic label small">KPI: {{ sc.cc2_name }}</div>
+                    </h3>
+                    <!-- === 평가자료 === -->
+                    <table class="ui table celled attached segment " >
+                        <colgroup>
+                            <col width="13%">
+                            <col width="20.3%">
+                            <col width="13%">
+                            <col width="20.3%">
+                            <col width="13%">
+                            <col width="20.3%">
+                        </colgroup>
+                        <tr>
+                            <th class="borderTop" >참여일</th>
+                            <td class="">자가:{{ sc.participationSelfDay }}일(팀:{{ sc.participationOthersDay }})일</td>
 
-            <!-- === Feeds === -->
+                            <th class="borderTop" >사전점수</th>
+                            <td class="">{{ sc.lap_beforeScore }}점</td>
+
+                            <th class="borderTop" >참여팀원</th>
+                            <td class=""></td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop" >진행률</th>
+                            <td class="">{{ sc.progressRate }}%</td>
+
+                            <th class="borderTop" >수행평균</th>
+                            <td class="">{{ sc.selfAvg }}점</td>
+
+                            <th class="borderTop" >팀원평균</th>
+                            <td class="">{{ sc.othersAvg }}점</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop" >참여율</th>
+                            <td class="">
+                                자가:{{ sc.participationSelfRate }}(팀:{{ sc.participationOthersDay }})%
+                            </td>
+
+                            <th class="borderTop" >역량향상</th>
+                            <td class="">{{ sc.selfAvg - sc.lap_beforeScore }}점</td>
+
+                            <th class="borderTop" >평가GAP</th>
+                            <td class="">{{ sc.othersAvg - sc.selfAvg }}점</td>
+                        </tr>
+                        <tr>
+                            <th class="borderTop" >자가성취율</th>
+                            <td class="">{{ (sc.selfAvg*25).toFixed(1) }}%</td>
+
+                            <th class="borderTop" >역량향상률</th>
+                            <td class="">{{ ((sc.selfAvg - sc.lap_beforeScore)*25).toFixed(1) }}점</td>
+
+                            <th class="borderTop" >팀원신뢰율</th>
+                            <td class="">{{ ((sc.othersAvg*100) / sc.selfAvg).toFixed(1) }}%</td>
+                        </tr>
+                    </table>
+                    <!-- === 평가자료 === -->
+
+                    <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
+                        <slide-graph :chart="sc.score" style="position:relative;" />
+                    </div>
+
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            </div>
+
+
+
+            <!-- ====================
+            코멘트
+            ==================== -->
             <div class="ui feed">
-                <div class="event" v-for="(comment, cid)  in  comments">
+                <div class="event" v-for="(comment, cid)  in  personalData.comments">
                     <div class="label">
                         <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='남'">
                         <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='여'">
@@ -115,7 +228,7 @@
                 </div>
 
             </div>
-            <!-- === Feeds === -->
+
 
 
 
@@ -173,7 +286,11 @@ export default {
         thisStudnet:-1, // 현재 선택학생
         personalData:{
             kpi: null,
-            score: null
+            score: null,
+
+            allAvg: null,
+            kpiAvg:null,
+            plans:null,
         }, // 선택된 학생의 차트데이터
 
         avgBeforeScore:-1, // 사전점수
@@ -240,31 +357,40 @@ export default {
 
         // === 개별데이터 === //
         personalGraph(stu_idx){
-
+            this.$set(this.personalData, 'allAvg',         null) // 전체
+            this.$set(this.personalData, 'kpiAvg',        null) // KPI별
+            this.$set(this.personalData, 'plans',           null) // 플랜별
+            this.$set(this.personalData, 'comments',  null) // 코멘트
 
             this.$http.all([
                 this.$http.get('/api/plans/personal/'+this.lec_idx+'/'+stu_idx),
                 this.$http.get('/api/plans/comments/'+stu_idx)
             ])
             .then(this.$http.spread((resp, resp2)=>{
+
                 //누적데이터
-                var allAvg = resp.data.allAvg.length<1 ? [] : resp.data.allAvg
-                var kpiAvg = resp.data.kpiAvg.length<1 ? [] : resp.data.kpiAvg
+                var allAvg      = resp.data.allAvg.length   <1 ? [] : resp.data.allAvg
+                var kpiAvg     = resp.data.kpiAvg.length  <1 ? [] : resp.data.kpiAvg
+                var plans        = resp.data.plans.length     <1 ? [] : resp.data.plans
                 var comments = resp2.data.comments
 
-                this.$set(this, 'comments', comments)
-                // 모달 ON
-                // this.$EventBus.$emit('modal', {
-                //     name : 'personalGraph',
-                //     stu_idx,
-                //     score : resp.data.plans,
-                //     kpiAvg,
-                //     allAvg
-                // })
+                // 모델로 푸시
+                this.$set(this.personalData, 'allAvg',         allAvg) // 전체
+                this.$set(this.personalData, 'kpiAvg',        kpiAvg) // KPI별
+                this.$set(this.personalData, 'plans',           plans) // 플랜별
+                this.$set(this.personalData, 'comments',  comments) // 코멘트
+
+                this.$set( this, 'thisStudnet', stu_idx )
+
             }))
             .catch(err=>{
                 console.log(err);
                 alert('Error - personal plans')
+                // 빈배열 삽입
+                this.$set(this.personalData, 'allAvg',         []) // 전체
+                this.$set(this.personalData, 'kpiAvg',        []) // KPI별
+                this.$set(this.personalData, 'plans',           []) // 플랜별
+                this.$set(this.personalData, 'comments',  []) // 코멘트
             })
         },// === 개별데이터 === //
 

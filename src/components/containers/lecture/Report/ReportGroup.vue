@@ -9,7 +9,7 @@
 
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ group.title }}(조) 평균
-            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('group', group.group_idx)">액션플랜보기</button>
+            &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('group', group.title)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
                 <a
@@ -43,7 +43,7 @@
                 <td></td>
             </tr>
             <tr>
-                <th class="borderTop">진행율</th>
+                <th class="borderTop">진행률</th>
                 <td>{{  }}%</td>
 
                 <th class="borderTop">수행평균</th>
@@ -241,6 +241,10 @@ export default {
             this.allAvgFunc(this.selectKpi)
 
     },
+
+
+
+
 
 
 

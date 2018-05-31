@@ -31,7 +31,7 @@
             <td></td>
         </tr>
         <tr>
-            <th class="borderTop">진행율</th>
+            <th class="borderTop">진행률</th>
             <td>{{ participationRate }}%</td>
 
             <th class="borderTop">수행평균</th>
@@ -76,7 +76,7 @@
     <div class="ui attached  grid" style="padding:0;">
         <div class="eleven wide column">
             <div class="ui attached segment" style="padding:0; overflow-x:scroll;" >
-                <slide-graph :chart="filteredScore"></slide-graph>
+                <slide-graph :chart="filteredScore" marginTop="50"></slide-graph>
 
                 <!-- <ul>
                     <li v-for="cs  in  filteredScore" >{{ cs }}</li>

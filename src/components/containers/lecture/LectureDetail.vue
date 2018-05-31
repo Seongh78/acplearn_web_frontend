@@ -1211,6 +1211,65 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <table class="ui celled table">
+                    <colgroup>
+                        <col width="13%">
+                        <col width="18%">
+                        <col width="15%">
+                        <col width="7%">
+                        <col width="12%">
+                        <col width="5%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">팀</th>
+                            <th rowspan="2">소속</th>
+                            <th rowspan="2">부서</th>
+                            <th rowspan="2" class="center aligned">직급</th>
+                            <th rowspan="2" class="center aligned">이름</th>
+                            <th rowspan="2" class="center aligned">성별</th>
+                            <th
+                                class="center aligned"
+                                v-bind:colspan="attendanceCount.length">
+                                강의출결
+                            </th>
+                        </tr>
+                        <tr>
+                            <th
+                                class="center aligned"
+                                style="border-left:1px solid #e1e1e1;"
+                                v-for="(c1, c2)  in  attendanceCount">
+                                {{c2+1}}차
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(std, stdId)  in  students"
+                            :title="std.stu_idx">
+                            <td> {{ std.group_idx }} </td>
+                            <td>{{ std.com_name  }}</td>
+                            <td>{{ std.stu_department }}</td>
+                            <td class="center aligned">{{ std.stu_position }}</td>
+                            <td class="center aligned">{{ std.stu_name }}</td>
+                            <td class="center aligned">-</td>
+                            <!-- 출석관리 -->
+                            <td
+                                class="center aligned ui form"
+                                v-for="(atd, atdId)  in  attendanceParser(std.stu_attendance)">
+                                <div class="inline field">
+                                    <span v-if="atd === 1" style="color:#21ba45;"><b>출석</b></span>
+                                    <span v-else style="color:#db2828;"><b>결석</b></span>
+                                    <!-- <div class="ui checkbox " @click.prevent="attendanceCheck(stdId, atdId)">
+                                        <input type="checkbox" tabindex="0" class="hidden" :checked="atd">
+                                        <label></label>
+                                    </div> -->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
                 <br>
 
@@ -1432,6 +1491,9 @@
                             <td class="center aligned">
                                 <h4 class="ui header grey">{{ group.group_score }}점</h4>
                             </td>
+                            <td class="center aligned">
+                                <h4 class="ui header grey">{{ personalScoreSumFunc(group.group_idx) + group.group_score }}점</h4>
+                            </td>
                         </tr>
                         <tr>
                             <td class="center aligned">
@@ -1452,17 +1514,18 @@
                                     </div>
                                 </div>
                             </td>
-                            <td colspan="2" class="center aligned">0</td>
+                            <td colspan="3" class="center aligned">0</td>
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <!-- <tfoot>
                         <tr>
                             <th class="center aligned">평균</th>
                             <th class="center aligned">-</th>
                             <th class="center aligned">{{ personalScoreAllSumFunc() }}점</th>
                             <th class="center aligned">{{ teamScoreSumFunc() }}점</th>
+                            <th class="center aligned">{{ 0 }}점</th>
                         </tr>
-                    </tfoot>
+                    </tfoot> -->
                 </table>
 
                 <br>
@@ -1502,7 +1565,7 @@
 
                 <!-- 전체 -->
                 <div class="">
-                    <report-all2 :checked-sessions="checkedSessions" />
+                    <!-- <report-all2 :checked-sessions="checkedSessions" /> -->
                     <br>
                 </div>
 
@@ -1517,7 +1580,7 @@
                 <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="">
                         <h3>조별 점수</h3>
-                        <component is="ReportGroup" :from="{ groups, students: students}" :checked-sessions="checkedSessions" ></component>
+                        <!-- <component is="ReportGroup" :from="{ groups, students: students}" :checked-sessions="checkedSessions" ></component> -->
                     <br>
                 </div>
 
@@ -1532,7 +1595,7 @@
                 <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="">
                     <h3>부서별 점수</h3>
-                    <component is="ReportDepartment" :from="{departments, students}" :checked-sessions="checkedSessions" ></component>
+                    <!-- <component is="ReportDepartment" :from="{departments, students}" :checked-sessions="checkedSessions" ></component> -->
                     <br>
                 </div>
 
@@ -1547,7 +1610,7 @@
                 <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="">
                     <h3>직급별 점수</h3>
-                    <component is="ReportPosition" :from="{position, students}" :checked-sessions="checkedSessions" ></component>
+                    <!-- <component is="ReportPosition" :from="{position, students}" :checked-sessions="checkedSessions" ></component> -->
                     <br>
                 </div>
 
@@ -1562,7 +1625,7 @@
                 <h2 class="ui dividing header">6. 액션플랜</h2>
                 <div class="">
                     <h3>성별 점수</h3>
-                    <component is="ReportGender" kpi="" :from="{gender: [ {text:'남', socre:[], kpi:[]}, {text:'여', socre:[], kpi:[]}, ], students}" :checked-sessions="checkedSessions" ></component>
+                    <!-- <component is="ReportGender" kpi="" :from="{gender: [ {text:'남', socre:[], kpi:[]}, {text:'여', socre:[], kpi:[]}, ], students}" :checked-sessions="checkedSessions" ></component> -->
                     <!-- <component is="ReportGender" :from="{gender: [ {text:'남', socre:[], kpi:[]}, {text:'여', socre:[], kpi:[]}, ], students}" :checked-sessions="checkedSessions" ></component> -->
 
                 </div>
@@ -1933,10 +1996,10 @@
 
         <table class="ui table celled" style="padding:0;">
             <colgroup>
-                <col width="9%">
-                <col width="25%">
-                <col width="9%">
-                <col width="25%">
+                <col width="11%">
+                <col width="22%">
+                <col width="11%">
+                <col width="22%">
             </colgroup>
             <thead>
                 <tr>
@@ -1949,9 +2012,9 @@
                     <td>{{ personalProfile.stu_name }} </td>
                     <th class="borderTop center aligned">소속</th>
                     <td>{{ personalProfile.com_name }}</td>
-                    <td rowspan="5">
+                    <td rowspan="5" style="padding:0;">
                         <!-- KPI차트 -->
-                        <polar-chart :data="personalProfile.kpiAvg" />
+                        <polar-chart :data="personalProfile.kpiAvg" style="height:300px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -1968,31 +2031,11 @@
                 </tr>
                 <tr>
                     <th class="borderTop center aligned">플랜</th>
-                    <td>{{ personalScore.length }}개 진행중</td>
+                    <td>{{ personalScore.score.length }}개 진행중</td>
                     <th class="borderTop center aligned">점수</th>
                     <td>{{ personalProfile.stu_score }}점</td>
                 </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th class="center aligned" colspan="5">
-                        <div class="ui three statistics">
-                            <div class="statistic">
-                                <div class="label">진행률</div>
-                                <div class="value">85<small>%</small></div>
-                            </div>
-                            <div class="statistic">
-                                <div class="label">참여율</div>
-                                <div class="value">92<small>%</small></div>
-                            </div>
-                            <div class="statistic">
-                                <div class="label">성취율</div>
-                                <div class="value">79<small>%</small></div>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
         </table>
         <br>
 
@@ -2080,6 +2123,61 @@
                     {{ sc.lap_text }}
                     <div class="ui basic label small">KPI: {{ sc.cc2_name }}</div>
                 </h3>
+                <!-- === 평가자료 === -->
+                <table class="ui table celled attached segment " >
+                    <colgroup>
+                        <col width="13%">
+                        <col width="20.3%">
+                        <col width="13%">
+                        <col width="20.3%">
+                        <col width="13%">
+                        <col width="20.3%">
+                    </colgroup>
+                    <tr>
+                        <th class="borderTop" >참여일</th>
+                        <td class="">자가:00일(팀:00일</td>
+
+                        <th class="borderTop" >사전점수</th>
+                        <td class="">00점</td>
+
+                        <th class="borderTop" >참여팀원</th>
+                        <td class=""></td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop" >진행율</th>
+                        <td class="">00%</td>
+
+                        <th class="borderTop" >수행평균</th>
+                        <td class="">00</td>
+
+                        <th class="borderTop" >팀원평균</th>
+                        <td class="">00</td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop" >참여율</th>
+                        <td class="">
+                            자가:00%
+                            (팀:00%)
+                        </td>
+
+                        <th class="borderTop" >역량향상</th>
+                        <td class=""></td>
+
+                        <th class="borderTop" >평가GAP</th>
+                        <td class="">00</td>
+                    </tr>
+                    <tr>
+                        <th class="borderTop" >자가성취율</th>
+                        <td class="">00 / 00일</td>
+
+                        <th class="borderTop" >역량향상률</th>
+                        <td class=""></td>
+
+                        <th class="borderTop" >팀원신뢰율</th>
+                        <td class=""></td>
+                    </tr>
+                </table>
+                <!-- === 평가자료 === -->
 
                 <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
                     <slide-graph :chart="sc.score" style="position:relative;" />
@@ -2134,19 +2232,29 @@
         <!-- 댓글 입력 -->
         <form class="ui reply form ">
             <div class="inline fields">
-                <div class="fourteen wide field">
+
+                <div class="one wide field" style="padding-right: 5px;">
+                    <button type="button" class="ui button basic " style="width:100%; height:75px; padding:18px; ">
+                        <i class="icon camera"></i>
+                    </button>
+                    <!-- <div class="ui basic labeled small submit icon button">
+                        <i class="icon camera"></i> 사진
+                    </div> -->
+                </div>
+
+                <div class="thirteen wide field">
                     <textarea placeholder="개발테스트기능 - 댓글을 입력해 주세요" rows="3"></textarea>
                 </div>
+
                 <div class="two wide field" style="padding:0; height:100%;">
                     <button type="button" class="ui button green" style="width:100%; height:75px;">등록</button>
                 </div>
+
             </div>
 
 
 
-            <div class="ui basic labeled small submit icon button">
-                <i class="icon camera"></i> 사진
-            </div>
+
 
         </form>
 
@@ -2572,6 +2680,7 @@ export default {
 
                 case 'planList': // 플랜리스트
                     this.plans =  data.plans
+                    // console.log(data.plans);
                     // 초기 전체선택을 위한 데이터
                     this.lecture.sessions.forEach((sess)=>{
                         this.checkedPlanSessions.push(sess.ls_idx)
@@ -2721,7 +2830,7 @@ export default {
 
                 // 액션플랜 - 디폴트설정 - 모든차시선택
                 resp.data.lecture.sessions.forEach((sess)=>{
-                    console.log(sess);
+                    // console.log(sess);
                     this.checkedSessions.push({
                         ls_idx : sess.ls_idx,
                         ls_startDate : sess.ls_startDate,
@@ -2997,7 +3106,7 @@ export default {
             // return
             this.$http.get("/api/plans/18")
             .then(resp=>{
-                console.log(resp.data.plans);
+                // console.log(resp.data.plans);
                 // this.$set(this, 'plans', resp.data.plans)
                 this.plans = resp.data.plans
             })

@@ -529,7 +529,7 @@ router.beforeEach((to, from, next)=>{
         }
         axios.get('/api/users/session')
             .then(resp=>{
-                console.log(resp);
+                // console.log(resp);
                 next()
             })
             .catch(err=>{

@@ -43,7 +43,7 @@
                 <td></td>
             </tr>
             <tr>
-                <th class="borderTop">진행율</th>
+                <th class="borderTop">진행률</th>
                 <td>{{  }}%</td>
 
                 <th class="borderTop">수행평균</th>

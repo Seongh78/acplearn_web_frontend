@@ -1,7 +1,7 @@
 <template lang="html">
 <div class="">
 
-    <highcharts :options="options" style="height:240px;"></highcharts>
+    <highcharts :options="options" style="height:300px;"></highcharts>
 
 </div>
 </template>
@@ -14,7 +14,8 @@ export default {
     // ===== Props ===== //
     props:[
         'data', // 차트데이터
-        'size' // 크기  단위:%
+        'size', // 크기  단위:%
+        'marginTop'
     ],
 
 
@@ -28,6 +29,12 @@ export default {
         // 크기를 수동으로 입력했을경우
         if (this.size) {
             this.$set(this.options.pane, 'size', this.size)
+            // console.log('this.options.pane.size : ',this.options.pane.size);
+        }
+
+        // Margin top size
+        if (this.marginTop) {
+            this.$set(this.options.chart, 'marginTop', this.marginTop)
             // console.log('this.options.pane.size : ',this.options.pane.size);
         }
     },
@@ -45,7 +52,8 @@ export default {
             // top:110,
             chart: {
                 polar: true,
-                type: 'line'
+                type: 'line',
+                marginTop:50
             },
 
             title: {
@@ -54,7 +62,7 @@ export default {
             },
 
             pane: {
-                size: '75%'
+                // size: '75%'
             },
 
             credits: {
