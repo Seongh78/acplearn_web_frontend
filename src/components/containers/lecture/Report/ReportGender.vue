@@ -7,6 +7,7 @@
     <div v-for="(g, gid)  in  gender" :key="gid">
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ g.title }}
+            (참여한 플랜 : {{ g.scorePlanCount }} / {{g.planCount}}개)
             &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('gender', g.title)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
@@ -19,6 +20,7 @@
                 </a>
             </small>
         </h4>
+
 
         <!-- === 평가자료 === -->
         <table class="ui table attached" >
@@ -35,10 +37,10 @@
                 <td>자가: {{ g.participationSelfDay }} 일(팀: {{ g.participationOthersDay }}) / {{ g.score.length }} 일</td>
 
                 <th>사전점수</th>
-                <td>{{ kpiAvgFunc(gid) }}점</td>
+                <td>{{ g.lap_beforeScore }}점</td>
 
                 <th>참여팀원</th>
-                <td></td>
+                <td>{{ g.scorerCount }} / {{ g.personCount }}명</td>
             </tr>
             <tr>
                 <th class="borderTop">진행률</th>
@@ -65,7 +67,7 @@
             </tr>
             <tr>
                 <th class="borderTop">자가성취율</th>
-                <td>{{ (g.avgSelfScore*25) }}%</td>
+                <td>{{ (g.avgSelfScore*25).toFixed(1) }}%</td>
 
                 <th class="borderTop">역량향상률</th>
                 <td>{{ ((g.avgSelfScore - kpiAvgFunc(gid))*25).toFixed(1) }}%</td>
@@ -179,10 +181,7 @@ export default {
     // ===== Watch ===== //
     watch:{
         kpi (val){
-            // console.log(val);
-            this.gender.forEach(g=>{
-                this.allAvgFunc(val)
-            })
+            this.allAvgFunc(val)
         }
     },
 
@@ -218,6 +217,8 @@ export default {
                 this.$http.get(baseURL)
                 .then(resp=>{
                     var data = resp.data.classificationArray
+
+                    console.log(data);
 
                     // 평균구하기 로직(자가, 팀원)
                     var selfScore=0, othersScore=0;

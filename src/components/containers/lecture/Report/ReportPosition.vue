@@ -9,6 +9,7 @@
     <div v-for="(po, pid)  in  position" :key="pid">
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ po.title }}
+            (참여한 플랜 : {{ po.scorePlanCount }} / {{po.planCount}}개)
             &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('position', po.title)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
@@ -38,10 +39,10 @@
                 <td>자가: {{ po.participationSelfDay }} 일(팀: {{ po.participationOthersDay }}) / {{ po.score.length }} 일</td>
 
                 <th>사전점수</th>
-                <td>{{ kpiAvgFunc(pid) }}점</td>
+                <td>{{ po.lap_beforeScore }}점</td>
 
                 <th>참여팀원</th>
-                <td></td>
+                <td>{{ po.scorerCount }} / {{ po.personCount }}명</td>
             </tr>
             <tr>
                 <th class="borderTop">진행률</th>
@@ -68,7 +69,7 @@
             </tr>
             <tr>
                 <th class="borderTop">자가성취율</th>
-                <td>{{ (po.avgSelfScore*25) }}%</td>
+                <td>{{ (po.avgSelfScore*25).toFixed(1) }}%</td>
 
                 <th class="borderTop">역량향상률</th>
                 <td>{{ ((po.avgSelfScore - kpiAvgFunc(pid))*25).toFixed(1) }}%</td>
@@ -177,9 +178,7 @@ export default {
     // ===== Watch ===== //
     watch:{
         kpi (val){
-            this.position.forEach(dep=>{
-                this.allAvgFunc(val)
-            })
+            this.allAvgFunc(val)
         }
     },
 

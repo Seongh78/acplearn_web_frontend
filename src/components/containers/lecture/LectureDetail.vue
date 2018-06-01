@@ -2043,7 +2043,6 @@
 
         <div class="ui horizontal divider"> <h4>플랜별 통계</h4> </div>
         <br>
-
         <div class="" style="width:100%;  ">
             <div>
                 <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
@@ -2118,75 +2117,24 @@
 
         <!-- <h3 class="ui header">플랜 정보</h3> -->
         <div class="" style="width:100%;  ">
-            <div v-for="(sc, scId)  in  personalScore.score" :key="scId">
-                <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
-                    {{ sc.lap_text }}
-                    <div class="ui basic label small">KPI: {{ sc.cc2_name }}</div>
-                </h3>
-                <!-- === 평가자료 === -->
-                <table class="ui table celled attached segment " >
-                    <colgroup>
-                        <col width="13%">
-                        <col width="20.3%">
-                        <col width="13%">
-                        <col width="20.3%">
-                        <col width="13%">
-                        <col width="20.3%">
-                    </colgroup>
-                    <tr>
-                        <th class="borderTop" >참여일</th>
-                        <td class="">자가:00일(팀:00일</td>
-
-                        <th class="borderTop" >사전점수</th>
-                        <td class="">00점</td>
-
-                        <th class="borderTop" >참여팀원</th>
-                        <td class=""></td>
-                    </tr>
-                    <tr>
-                        <th class="borderTop" >진행율</th>
-                        <td class="">00%</td>
-
-                        <th class="borderTop" >수행평균</th>
-                        <td class="">00</td>
-
-                        <th class="borderTop" >팀원평균</th>
-                        <td class="">00</td>
-                    </tr>
-                    <tr>
-                        <th class="borderTop" >참여율</th>
-                        <td class="">
-                            자가:00%
-                            (팀:00%)
-                        </td>
-
-                        <th class="borderTop" >역량향상</th>
-                        <td class=""></td>
-
-                        <th class="borderTop" >평가GAP</th>
-                        <td class="">00</td>
-                    </tr>
-                    <tr>
-                        <th class="borderTop" >자가성취율</th>
-                        <td class="">00 / 00일</td>
-
-                        <th class="borderTop" >역량향상률</th>
-                        <td class=""></td>
-
-                        <th class="borderTop" >팀원신뢰율</th>
-                        <td class=""></td>
-                    </tr>
-                </table>
-                <!-- === 평가자료 === -->
-
-                <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
-                    <slide-graph :chart="sc.score" style="position:relative;" />
-                </div>
-
-                <br>
-                <br>
-                <br>
-            </div>
+            <summary-table
+                style="margin-bottom:45px;"
+                v-for="(sc, scId)  in  personalScore.score"
+                :key="scId"
+                :title="sc.lap_text"
+                :kpi="sc.cc2_name"
+                :data="{
+                    participationSelfDay : sc.participationSelfDay,
+                    participationOthersDay : sc.participationOthersDay,
+                    participationSelfRate : sc.participationSelfRate,
+                    participationOthersRate : sc.participationOthersRate,
+                    lap_beforeScore : sc.lap_beforeScore,
+                    progressRate : sc.progressRate,
+                    selfAvg : sc.selfAvg,
+                    othersAvg : sc.othersAvg,
+                    score : sc.score,
+                }"
+            />
         </div>
 
 
@@ -2434,6 +2382,7 @@ import {
     TabMenu,
     SlideGraph,
     PolarChart,
+    SummaryTable
 } from '../../components'
 
 // 리포트 뷰
@@ -2493,6 +2442,7 @@ export default {
 
         SlideGraph,
         PolarChart,
+        SummaryTable,
 
         LoadingCycle,
 

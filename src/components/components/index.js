@@ -24,6 +24,7 @@ import Loading from './Loading'
 
 import SlideGraph from './Chart/SlideGraph'
 import PolarChart from './Chart/PolarChart'
+import SummaryTable from './Chart/SummaryTable'
 
 // 탭 - 메뉴
 import TabMenu from './UIComponents/TabMenu'
@@ -60,5 +61,6 @@ export {
     TabMenu,
     SlideGraph,
     PolarChart,
+    SummaryTable,
     Paginate
 }

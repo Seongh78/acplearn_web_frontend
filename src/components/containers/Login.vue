@@ -7,7 +7,7 @@
         </router-link>
     <div class="cardbox" style="margin-top:55px; margin:0; border:1px solid #eaeaea;">
 
-        <form class="ui form">
+        <form class="ui form" v-on:submit.prevent="onSubmit">
           <div class="field">
             <input v-model="usr.id" type="text" v-on:keyup="saveIdFunc" placeholder="아이디를 입력해 주세요">
           </div>
@@ -20,7 +20,7 @@
               <label>아이디 기억하기</label>
             </div>
           </div>
-          <button class="ui button basic" style="width:100%; " type="button" @click="login">로그인</button>
+          <button class="ui button basic" style="width:100%; " type="submit" @click="login">로그인</button>
         </form>
         <p style="margin:17px 0 7px 0;">아직 회원이 아니라면 <router-link :to="{path:'/join'}"  style="text-decoration:underline; font-weigt:bold; "> 간편 회원가입 </router-link></p>
     </div>

@@ -127,12 +127,30 @@
                 <loading  />
             </div>
             <div style="width:100%;" v-else>
-                <div v-for="(sc, scId)  in  personalData.plans" :key="scId">
+                <summary-table
+                    style="margin-bottom:45px;"
+                    v-for="(sc, scId)  in  personalData.plans"
+                    :key="scId"
+                    :title="sc.lap_text"
+                    :kpi="sc.cc2_name"
+                    :data="{
+                        participationSelfDay : sc.participationSelfDay,
+                        participationOthersDay : sc.participationOthersDay,
+                        participationSelfRate : sc.participationSelfRate,
+                        participationOthersRate : sc.participationOthersRate,
+                        lap_beforeScore : sc.lap_beforeScore,
+                        progressRate : sc.progressRate,
+                        selfAvg : sc.selfAvg,
+                        othersAvg : sc.othersAvg,
+                        score : sc.score,
+                    }"
+                />
+                <!-- <div v-for="(sc, scId)  in  personalData.plans" :key="scId">
                     <h3 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
                         {{ sc.lap_text }}
                         <div class="ui basic label small">KPI: {{ sc.cc2_name }}</div>
                     </h3>
-                    <!-- === 평가자료 === -->
+
                     <table class="ui table celled attached segment " >
                         <colgroup>
                             <col width="13%">
@@ -165,7 +183,7 @@
                         <tr>
                             <th class="borderTop" >참여율</th>
                             <td class="">
-                                자가:{{ sc.participationSelfRate }}(팀:{{ sc.participationOthersDay }})%
+                                자가:{{ sc.participationSelfRate }}(팀:{{ sc.participationOthersRate }})%
                             </td>
 
                             <th class="borderTop" >역량향상</th>
@@ -185,7 +203,7 @@
                             <td class="">{{ ((sc.othersAvg*100) / sc.selfAvg).toFixed(1) }}%</td>
                         </tr>
                     </table>
-                    <!-- === 평가자료 === -->
+
 
                     <div class="ui attached segment" style="width:100%; padding:0; overflow-x: scroll; position:relative;">
                         <slide-graph :chart="sc.score" style="position:relative;" />
@@ -194,7 +212,7 @@
                     <br>
                     <br>
                     <br>
-                </div>
+                </div> -->
             </div>
 
 
@@ -202,7 +220,14 @@
             <!-- ====================
             코멘트
             ==================== -->
-            <div class="ui feed">
+            <div class="ui horizontal divider"> <h4>피드</h4> </div>
+            <!-- <hr class="opacity3"> -->
+            <div style="text-align:center;" v-if="personalData.comments===null">
+                <loading  />
+                <!-- <no-contents header-text="등록된 피드가 없습니다2222222." /> -->
+            </div>
+            <div class="ui feed" v-else>
+                <!-- {{ personalData.comments.length }} -->
                 <div class="event" v-for="(comment, cid)  in  personalData.comments">
                     <div class="label">
                         <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-128.png" v-if="comment.stu_gender=='남'">
@@ -252,6 +277,7 @@ import {
     NoContents,
     SlideGraph,
     PolarChart,
+    SummaryTable,
 } from '../../../components'
 
 
@@ -267,6 +293,7 @@ export default {
         NoContents,
         SlideGraph,
         PolarChart,
+        SummaryTable
     },
 
 

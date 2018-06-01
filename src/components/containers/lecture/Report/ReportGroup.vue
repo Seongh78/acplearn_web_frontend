@@ -9,6 +9,7 @@
 
         <h4 class="ui block attached header" style="border-top:1px solid #d7d7d7;">
             {{ group.title }}(조) 평균
+            (참여한 플랜 : {{ g.scorePlanCount }} / {{g.planCount}}개)
             &nbsp;&nbsp;<button type="button" class="ui button blue mini" @click.prevent="getPlanListFunc('group', group.title)">액션플랜보기</button>
             <hr class="opacity3">
             <small>
@@ -37,10 +38,10 @@
                 <td>자가: {{ group.participationSelfDay }} 일(팀: {{ group.participationOthersDay }}) / {{ group.score.length }} 일</td>
 
                 <th>사전점수</th>
-                <td>{{ kpiAvgFunc(gid) }}점</td>
+                <td>{{ group.lap_beforeScore }}점</td>
 
                 <th>참여팀원</th>
-                <td></td>
+                <td>{{ group.scorerCount }} / {{ group.personCount }}명</td>
             </tr>
             <tr>
                 <th class="borderTop">진행률</th>
@@ -67,7 +68,7 @@
             </tr>
             <tr>
                 <th class="borderTop">자가성취율</th>
-                <td>{{ (group.avgSelfScore*25) }}%</td>
+                <td>{{ (group.avgSelfScore*25).toFixed(1) }}%</td>
 
                 <th class="borderTop">역량향상률</th>
                 <td>{{ ((group.avgSelfScore - kpiAvgFunc(gid))*25).toFixed(1) }}%</td>
@@ -261,9 +262,7 @@ export default {
     // ===== Watch ===== //
     watch:{
         kpi (val){
-            this.groups.forEach(g=>{
-                this.allAvgFunc(val)
-            })
+            this.allAvgFunc(val)
         }
     },
 
